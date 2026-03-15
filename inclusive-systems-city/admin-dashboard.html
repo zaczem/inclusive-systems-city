@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inclusive Systems City Admin Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Source Sans 3", "Segoe UI", sans-serif;
+      background: #edf2f6;
+      color: #152531;
+    }
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    .panel {
+      background: #fff;
+      border: 1px solid #c7d1db;
+      border-radius: 16px;
+      padding: 1rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.94rem;
+      margin-top: 1rem;
+    }
+    th, td {
+      border: 1px solid #d6dfe7;
+      padding: 0.55rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f4f8fb;
+    }
+    .muted {
+      color: #4a6174;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="panel">
+      <h1>Inclusive Systems City Admin Dashboard</h1>
+      <p class="muted">Structured research log export for room-based sessions.</p>
+      <p id="summary"><strong>Total records:</strong> 0</p>
+      <p><a id="csv-link" href="/api/admin/logs.csv">Download CSV</a></p>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Session UUID</th>
+              <th>Room ID</th>
+              <th>Participant UUID</th>
+              <th>Role</th>
+              <th>Crisis ID</th>
+              <th>Pre-vote</th>
+              <th>Final decision</th>
+              <th>Vote shift</th>
+              <th>Consensus time</th>
+              <th>Indicator delta</th>
+              <th>Confidence score</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <script>
+    async function load() {
+      const response = await fetch('/api/admin/logs', { credentials: 'same-origin' });
+      if (!response.ok) {
+        document.getElementById('summary').innerHTML = '<strong>Unable to load logs.</strong>';
+        return;
+      }
+      const data = await response.json();
+      document.getElementById('summary').innerHTML = `<strong>Total records:</strong> ${data.total}`;
+      const tbody = document.getElementById('rows');
+      tbody.innerHTML = '';
+      for (const item of data.items || []) {
+        const tr = document.createElement('tr');
+        const cells = [
+          item.sessionUUID,
+          item.roomID,
+          item.participantUUID,
+          item.role,
+          item.crisisID,
+          item.preVote,
+          item.finalDecision,
+          item.voteShift ? 'Yes' : 'No',
+          item.consensusTimeMs || '',
+          item.indicatorDelta,
+          item.confidenceScore
+        ];
+        for (const value of cells) {
+          const td = document.createElement('td');
+          td.textContent = value == null ? '' : String(value);
+          tr.appendChild(td);
+        }
+        tbody.appendChild(tr);
+      }
+    }
+    load();
+  </script>
+</body>
+</html>

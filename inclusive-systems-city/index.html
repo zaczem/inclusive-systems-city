@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inclusive Systems City</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-header" role="banner">
+    <div class="header-copy">
+      <p class="eyebrow">Collaborative City Strategy Game</p>
+      <h1>Inclusive Systems City</h1>
+      <p class="subtitle">A cooperative city-management simulation where every round tests inclusion, resilience, and public trust.</p>
+      <p class="institutional-line">Designed by Zacharoula Zempili<br>PhD Researcher, KTH Royal Institute of Technology</p>
+    </div>
+    <div class="header-meta" aria-label="Simulation format">
+      <p><strong>Format:</strong> 2-5 players per room</p>
+      <p><strong>Protocol:</strong> Polling architecture</p>
+      <p><strong>Standard:</strong> Inclusive design aligned, WCAG 2.1 AA oriented interface</p>
+      <button id="toggle-contrast" type="button" aria-pressed="false">High contrast mode: Off</button>
+    </div>
+  </header>
+
+  <div class="content-shell">
+    <nav class="tabs-nav" aria-label="Inclusive Systems City sections">
+      <div class="tablist" role="tablist" aria-label="Inclusive Systems City tabs" aria-orientation="horizontal">
+        <button id="tab-overview" role="tab" aria-selected="true" aria-controls="panel-overview" tabindex="0" class="tab-btn">Overview</button>
+        <button id="tab-how" role="tab" aria-selected="false" aria-controls="panel-how" tabindex="-1" class="tab-btn">How to Play</button>
+        <button id="tab-roles" role="tab" aria-selected="false" aria-controls="panel-roles" tabindex="-1" class="tab-btn">Roles</button>
+        <button id="tab-interaction" role="tab" aria-selected="false" aria-controls="panel-interaction" tabindex="-1" class="tab-btn">Interaction Preferences</button>
+        <button id="tab-simulation" role="tab" aria-selected="false" aria-controls="panel-simulation" tabindex="-1" class="tab-btn">Simulation</button>
+      </div>
+    </nav>
+
+    <main id="main-content">
+    <section id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" class="tabpanel is-active">
+      <section class="hero panel" aria-labelledby="overview-title">
+        <div>
+          <p class="city-label">Mission Briefing</p>
+          <h2 id="overview-title">Steer the city through cascading civic technology crises.</h2>
+          <p>
+            Each room progresses through twenty scenarios. Participants act in defined institutional roles, cast secret
+            pre-votes, review aggregate divergence, deliberate under time pressure, and commit to a final decision that
+            shifts citywide system indicators.
+          </p>
+        </div>
+        <ol class="phase-strip" aria-label="Round phases">
+          <li>Crisis reveal</li>
+          <li>Secret pre-vote</li>
+          <li>Aggregated reveal</li>
+          <li>Timed deliberation</li>
+          <li>Final decision</li>
+          <li>Indicator update simulation</li>
+        </ol>
+      </section>
+      <section class="info-grid">
+        <article class="panel info-card">
+          <h2>What This Game Trains</h2>
+          <p>Inclusive Systems City is a cooperative strategy game about institutional decision-making under inclusive design pressure.</p>
+          <ul class="plain-list">
+            <li>Inclusive governance trade-offs</li>
+            <li>Consensus under uncertainty</li>
+            <li>Risk balancing across legal, technical, and social dimensions</li>
+            <li>Confidence-aware decision logging for research and reflection</li>
+          </ul>
+        </article>
+        <article class="panel info-card">
+          <h2>Standards Alignment</h2>
+          <ul class="plain-list">
+            <li>WCAG 2.1 AA-aware interaction design</li>
+            <li>Accessible keyboard and focus behavior</li>
+            <li>High contrast mode and semantic structure</li>
+            <li>Institutional framing suitable for research and teaching contexts</li>
+          </ul>
+        </article>
+        <article class="panel info-card">
+          <h2>Learning Outcomes</h2>
+          <ul class="plain-list">
+            <li>Interpret inclusive design crises as cross-functional governance problems rather than isolated defects.</li>
+            <li>Compare private judgment, group deliberation, and final consensus under time pressure.</li>
+            <li>Recognize how inclusion, legal exposure, technical debt, public trust, and budget interact over time.</li>
+            <li>Use confidence scoring as a reflection tool for decision quality and uncertainty.</li>
+          </ul>
+        </article>
+        <article class="panel info-card">
+          <h2>Research Context</h2>
+          <p>This simulation supports structured observation of collaborative decision-making in inclusive design governance contexts.</p>
+          <ul class="plain-list">
+            <li>Room-based participation with unique roles</li>
+            <li>Private pre-votes and final decisions</li>
+            <li>Vote shift tracking and divergence index calculation</li>
+            <li>Consensus timing and indicator deltas</li>
+            <li>Confidence score export for post-session analysis</li>
+          </ul>
+        </article>
+      </section>
+    </section>
+
+    <section id="panel-how" role="tabpanel" aria-labelledby="tab-how" class="tabpanel" hidden>
+      <article class="panel info-card">
+        <h2>How to Play</h2>
+        <p>This guide walks through the full experience in the order players encounter it, so first-time participants know what each screen means and why each step exists.</p>
+        <div class="guide-grid">
+          <article class="guide-step-card">
+            <p class="city-label">Step 1</p>
+            <h3>Enter a Room</h3>
+            <p><strong>What you will see:</strong> the options to start a new game or join a running game, plus role selection.</p>
+            <p><strong>What you do:</strong> choose a display name, pick a unique role, and either create a room or join with a Room ID.</p>
+            <p><strong>Why this step exists:</strong> every player enters the simulation from a different institutional perspective, so the room needs a clear role structure before discussion begins.</p>
+            <p class="guide-note"><strong>Note:</strong> each role can be assigned to only one player in the room. If you choose a role that is already taken, the system will ask you to pick a different one before you can continue.</p>
+          </article>
+
+          <article class="guide-step-card">
+            <p class="city-label">Step 2</p>
+            <h3>Wait in the Lobby</h3>
+            <p><strong>What you will see:</strong> the Lobby panel, the current team, room readiness, and the City Systems baseline scores.</p>
+            <p><strong>What you do:</strong> confirm who is in the room, check your role, and wait for the host to begin the session.</p>
+            <p><strong>Why this step exists:</strong> the lobby is the staging area that makes sure the team is complete and everyone starts from the same baseline conditions.</p>
+            <p class="guide-note"><strong>Note:</strong> this is the right moment to check that your role is correct. If you joined with the wrong role or wrong room, it is better to leave and re-enter before the session starts.</p>
+          </article>
+
+          <article class="guide-step-card">
+            <p class="city-label">Step 3</p>
+            <h3>Crisis Reveal</h3>
+            <p><strong>What you will see:</strong> a new crisis scenario, its category, and a set of response options.</p>
+            <p><strong>What you do:</strong> read the scenario carefully and compare the available response options before committing to a position.</p>
+            <p><strong>Why this step exists:</strong> it introduces the institutional problem the team must govern together under pressure.</p>
+            <p class="guide-note"><strong>Note:</strong> do not rush past this screen. The response options may sound similar, but they often produce very different downstream effects on the City Systems indicators.</p>
+          </article>
+
+          <article class="guide-step-card">
+            <p class="city-label">Step 4</p>
+            <h3>Secret Individual Pre-Vote</h3>
+            <p><strong>What you will see:</strong> the same response options in a private voting form, plus a confidence rating from 1 to 5.</p>
+            <p><strong>What you do:</strong> choose the option you personally support before group discussion begins and record how confident you feel.</p>
+            <p><strong>Why this step exists:</strong> it captures each player’s initial judgment before social influence changes the discussion.</p>
+            <p class="guide-note"><strong>Note:</strong> your pre-vote is not recorded until you submit both an option and a confidence rating. If one of these is missing, the system will not accept the entry.</p>
+          </article>
+
+          <article class="guide-step-card">
+            <p class="city-label">Step 5</p>
+            <h3>Aggregated Reveal</h3>
+            <p><strong>What you will see:</strong> the team’s initial voting pattern, without exposing who chose what, plus divergence metrics.</p>
+            <p><strong>What you do:</strong> review where the group is aligned and where opinions differ.</p>
+            <p><strong>Why this step exists:</strong> it helps the team understand whether consensus is close or whether real disagreement still needs to be worked through.</p>
+            <p class="guide-note"><strong>Note:</strong> the aggregated reveal does not identify individual players. It is meant to guide discussion, not expose who voted for which option.</p>
+          </article>
+
+          <article class="guide-step-card">
+            <p class="city-label">Step 6</p>
+            <h3>Timed Deliberation</h3>
+            <p><strong>What you will see:</strong> a discussion area where the team can exchange short notes, with the timer shown only if enabled.</p>
+            <p><strong>What you do:</strong> explain your reasoning, challenge assumptions, and negotiate a shared response.</p>
+            <p><strong>Why this step exists:</strong> the simulation is about collaborative governance, so the discussion phase is where trade-offs become visible and negotiable.</p>
+            <p class="guide-note"><strong>Note:</strong> in timed mode, phases advance automatically when the countdown ends. In untimed mode, the phase waits until every member of the room has chosen to continue, so the whole group still moves together.</p>
+          </article>
+
+          <article class="guide-step-card">
+            <p class="city-label">Step 7</p>
+            <h3>Final Decision</h3>
+            <p><strong>What you will see:</strong> the final voting form with the same options and a second confidence rating.</p>
+            <p><strong>What you do:</strong> submit your final choice after discussion and indicate how confident you are now.</p>
+            <p><strong>Why this step exists:</strong> it shows whether players changed their minds, how consensus formed, and how discussion affected confidence.</p>
+            <p class="guide-note"><strong>Note:</strong> your final decision is also only saved after both fields are completed. If you change your mind during discussion, make sure the currently selected option is still the one you want before submitting.</p>
+          </article>
+
+          <article class="guide-step-card">
+            <p class="city-label">Step 8</p>
+            <h3>Explanation, Impact, and System Update</h3>
+            <p><strong>What you will see:</strong> the expert explanation, the impact summary, and the updated City Systems indicators.</p>
+            <p><strong>What you do:</strong> review what the chosen response means and observe how the city indicators shift.</p>
+            <p><strong>Why this step exists:</strong> this is where the game connects decisions to consequences across inclusion, legal risk, trust, stability, and budget.</p>
+            <p class="guide-note"><strong>Note:</strong> some indicators are healthier when they go up, while others are healthier when they go down. Read the indicator guidance carefully before assuming every larger number is better.</p>
+          </article>
+
+          <article class="guide-step-card">
+            <p class="city-label">Step 9</p>
+            <h3>Continue Across Twenty Crises</h3>
+            <p><strong>What you will see:</strong> the round counter and the City Systems evolving over time.</p>
+            <p><strong>What you do:</strong> repeat the cycle for each new crisis while watching how earlier decisions shape later conditions.</p>
+            <p><strong>Why this step exists:</strong> the simulation is cumulative, so patterns emerge across the full session rather than from one crisis alone.</p>
+            <p class="guide-note"><strong>Note:</strong> before the round begins, agree as a group whether you want timed play or untimed play. Timed play creates automatic transitions, while untimed play requires all members to signal readiness before the next step opens.</p>
+          </article>
+        </div>
+      </article>
+    </section>
+
+    <section id="panel-interaction" role="tabpanel" aria-labelledby="tab-interaction" class="tabpanel" hidden>
+      <article class="panel info-card">
+        <h2>Interaction Preferences</h2>
+        <p class="assistive-note">These settings apply across the full interface and are stored on this device.</p>
+        <div class="preferences-grid">
+          <label class="toggle-row" for="pref-contrast">
+            <span>High contrast mode</span>
+            <input id="pref-contrast" type="checkbox">
+          </label>
+          <p class="preference-note">Increase contrast while preserving the game layout and readability.</p>
+
+          <label class="toggle-row" for="pref-motion">
+            <span>Reduce motion</span>
+            <input id="pref-motion" type="checkbox">
+          </label>
+          <p class="preference-note">Limit motion and hover animation effects across the interface.</p>
+
+          <label class="toggle-row" for="pref-timer">
+            <span>Show round timer</span>
+            <input id="pref-timer" type="checkbox">
+          </label>
+          <p class="preference-note">Keep the countdown hidden unless you explicitly want time pressure cues during play.</p>
+
+          <label for="pref-font-scale">Font scale</label>
+          <input id="pref-font-scale" type="range" min="95" max="130" value="100" step="5" aria-valuemin="95" aria-valuemax="130">
+          <output id="pref-font-scale-value" for="pref-font-scale">100%</output>
+
+          <label class="toggle-row" for="pref-emphasis">
+            <span>Focused decision cards</span>
+            <input id="pref-emphasis" type="checkbox">
+          </label>
+          <p class="preference-note">Adds stronger outlines and separation around scenario choices and key panels.</p>
+        </div>
+        <div class="button-row top-gap">
+          <button id="reset-preferences" type="button">Reset preferences</button>
+        </div>
+      </article>
+    </section>
+
+    <section id="panel-roles" role="tabpanel" aria-labelledby="tab-roles" class="tabpanel" hidden>
+      <article class="panel info-card">
+        <h2>Roles</h2>
+        <div class="role-grid">
+          <article class="role-card"><h3>Inclusive Design Lead</h3><p>Advocates for inclusive access and implementation quality.</p></article>
+          <article class="role-card"><h3>Legal Counsel</h3><p>Tracks compliance exposure, accountability, and regulatory risk.</p></article>
+          <article class="role-card"><h3>Chief Technology Officer</h3><p>Focuses on systems stability, technical debt, and delivery feasibility.</p></article>
+          <article class="role-card"><h3>Community Advocate</h3><p>Represents public trust, lived experience, and social legitimacy.</p></article>
+          <article class="role-card"><h3>Budget Director</h3><p>Balances fiscal limits with sustainable long-term investment.</p></article>
+        </div>
+      </article>
+    </section>
+
+    <section id="panel-simulation" role="tabpanel" aria-labelledby="tab-simulation" class="tabpanel" hidden>
+      <section id="setup-shell" class="setup-grid" aria-label="Room setup and participation">
+        <article class="panel">
+          <h2>Start a New Game</h2>
+          <form id="create-room-form" class="stack-form">
+            <label for="create-name">Display name</label>
+            <input id="create-name" name="displayName" maxlength="40" required>
+
+            <label for="create-role">Choose your role</label>
+            <div class="field-with-note">
+              <select id="create-role" name="role" required aria-describedby="create-role-note"></select>
+              <p id="create-role-note" class="field-note" hidden aria-live="polite"></p>
+            </div>
+
+            <label for="create-max-players">Squad size</label>
+            <select id="create-max-players" name="maxPlayers" required>
+              <option value="2">2 players</option>
+              <option value="3">3 players</option>
+              <option value="4" selected>4 players</option>
+              <option value="5">5 players</option>
+            </select>
+
+            <button class="primary-button" type="submit">Create room</button>
+          </form>
+        </article>
+
+        <article class="panel">
+          <h2>Join a Running Game</h2>
+          <form id="join-room-form" class="stack-form">
+            <label for="join-room-id">Room ID</label>
+            <input id="join-room-id" name="roomId" maxlength="8" autocomplete="off" required>
+
+            <label for="join-name">Display name</label>
+            <input id="join-name" name="displayName" maxlength="40" required>
+
+            <label for="join-role">Choose your role</label>
+            <div class="field-with-note">
+              <select id="join-role" name="role" required aria-describedby="join-role-note"></select>
+              <p id="join-role-note" class="field-note" hidden aria-live="polite"></p>
+            </div>
+
+            <button class="primary-button" type="submit">Join room</button>
+          </form>
+        </article>
+
+        <article class="panel setup-status-panel" aria-labelledby="setup-status-title">
+          <h2 id="setup-status-title">Room Snapshot</h2>
+          <p id="setup-status-kicker" class="city-label">No active room</p>
+          <dl class="setup-status-grid">
+            <div>
+              <dt>Room ID</dt>
+              <dd id="setup-room-id">Not connected</dd>
+            </div>
+            <div>
+              <dt>Participants</dt>
+              <dd id="setup-participants">0 of 0</dd>
+            </div>
+            <div>
+              <dt>Readiness</dt>
+              <dd id="setup-readiness">Create or join a room to begin.</dd>
+            </div>
+          </dl>
+          <p id="setup-room-note" class="assistive-note">This panel updates as soon as you create or join a room so you can immediately see capacity and start status.</p>
+        </article>
+      </section>
+
+      <p id="app-status" class="status-banner" role="status" aria-live="polite">Create or join a room to begin.</p>
+
+      <section id="workspace" class="workspace" hidden aria-label="Simulation workspace">
+      <section class="workspace-section workspace-static-section" aria-labelledby="workspace-static-title">
+        <div class="workspace-section-head">
+          <p class="city-label">Always visible</p>
+          <h2 id="workspace-static-title">Room and system context</h2>
+          <p class="assistive-note">These panels stay available throughout the game so you can always see your room details, your team, and the current City Systems baseline.</p>
+        </div>
+        <section class="support-grid" aria-label="Session support panels">
+          <article class="panel support-panel mission-control-panel">
+            <h2>Mission Control</h2>
+            <p class="assistive-note">This panel shows your room details and gives you session actions such as copying the room code, waiting for the host, or leaving the room.</p>
+            <dl class="meta-list">
+              <div><dt>Room ID</dt><dd id="room-id-value">-</dd></div>
+              <div><dt>Session UUID</dt><dd id="session-uuid-value">-</dd></div>
+              <div><dt>Your role</dt><dd id="participant-role-value">-</dd></div>
+              <div><dt>Round</dt><dd id="round-value">-</dd></div>
+            </dl>
+            <div class="button-row">
+              <button id="copy-room-id" type="button">Copy room ID</button>
+              <button id="leave-room" class="danger-button" type="button">Leave room</button>
+            </div>
+            <p id="start-room-status" class="session-status-text" hidden></p>
+            <button id="start-room" class="primary-button" type="button" hidden>Launch mission</button>
+            <p id="start-room-note" class="assistive-note"></p>
+          </article>
+
+          <article class="panel support-panel response-team-panel">
+            <h2>Response Team</h2>
+            <ul id="participant-list" class="participant-list"></ul>
+            <p class="assistive-note">Roles remain unique per room to support structured deliberation.</p>
+          </article>
+
+          <article class="panel support-panel city-systems-panel">
+            <h2>City Systems</h2>
+            <p id="indicator-summary" class="assistive-note">City Systems are the simulation indicators that track the health of the city. Scores run from 0 to 100.</p>
+            <div id="indicator-grid" class="indicator-grid compact-indicator-grid"></div>
+          </article>
+        </section>
+      </section>
+
+      <section class="workspace-section workspace-dynamic-section" aria-labelledby="workspace-dynamic-title">
+        <div class="workspace-section-head">
+          <p class="city-label">Changes each round</p>
+          <h2 id="workspace-dynamic-title">Live round workspace</h2>
+          <p class="assistive-note">This is the active part of the simulation. The content here updates as the room moves from the lobby to scenario review, voting, deliberation, and outcome updates.</p>
+        </div>
+      <section class="main-panel">
+        <article class="panel phase-panel" aria-labelledby="phase-title">
+          <div class="phase-head">
+            <div>
+              <div class="phase-head-kicker">
+                <p class="city-label">Live Round</p>
+                <p id="phase-round-kicker" class="phase-round-kicker">Round 1 of 20</p>
+              </div>
+              <h2 id="phase-title">Lobby</h2>
+            </div>
+            <p id="room-alert" class="phase-head-status" role="status" aria-live="polite"></p>
+          </div>
+
+          <div class="phase-layout">
+            <div class="phase-main">
+              <section id="lobby-panel" class="phase-content">
+                <h3>Team assembly</h3>
+                <p class="assistive-note">The lobby is the waiting room before the active round begins. Players can review roles, room readiness, and wait for the host to start.</p>
+                <p id="lobby-summary">
+                  Rooms support two to five participants. The host can start once the minimum participant count has joined.
+                </p>
+              </section>
+
+              <section id="crisis-panel" class="phase-content" hidden aria-labelledby="crisis-title">
+                <div class="scenario-instructions-card" aria-label="What to do now">
+                  <p class="scenario-instructions-label">Instructions</p>
+                  <h3 class="scenario-instructions-title">What to do now</h3>
+                  <p>Read the scenario carefully, compare the response options below, and choose the one you believe best fits the city's needs before moving to the next step.</p>
+                  <p class="assistive-note">If the options feel similar, slow down and focus on what each response is likely to change across the City Systems indicators.</p>
+                </div>
+                <div class="scenario-briefing-card">
+                  <p class="scenario-briefing-label">Read this scenario first</p>
+                  <p id="crisis-category" class="scenario-tag"></p>
+                  <h3 id="crisis-title">Incoming event</h3>
+                  <p id="crisis-description" class="scenario-reading-copy"></p>
+                </div>
+                <div id="option-list" class="option-list"></div>
+              </section>
+
+              <section id="prevote-panel" class="phase-content" hidden aria-labelledby="prevote-title">
+                <h3 id="prevote-title">Secret individual pre-vote</h3>
+                <p>Submit your initial preference privately before group deliberation begins.</p>
+                <form id="prevote-form" class="stack-form">
+                  <fieldset>
+                    <legend>Select one option</legend>
+                    <div id="prevote-options" class="option-picker"></div>
+                  </fieldset>
+
+                  <label for="prevote-confidence">Confidence rating</label>
+                  <select id="prevote-confidence" required>
+                    <option value="">Select confidence</option>
+                    <option value="1">1 - Low confidence</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5 - High confidence</option>
+                  </select>
+
+                  <button class="primary-button" type="submit">Submit pre-vote</button>
+                </form>
+                <p id="prevote-status" class="assistive-note"></p>
+              </section>
+
+              <section id="aggregate-panel" class="phase-content" hidden aria-labelledby="aggregate-title">
+                <h3 id="aggregate-title">Signal board</h3>
+                <p>Initial positions are displayed without naming individual participants.</p>
+                <div id="aggregate-chart" class="aggregate-chart"></div>
+                <dl class="metric-grid">
+                  <div><dt>Divergence index</dt><dd id="divergence-value">0.00</dd></div>
+                  <div><dt>Pre-votes logged</dt><dd id="prevote-count-value">0</dd></div>
+                </dl>
+              </section>
+
+              <section id="deliberation-panel" class="phase-content" hidden aria-labelledby="deliberation-title">
+                <h3 id="deliberation-title">Strategy discussion</h3>
+                <p class="scenario-reading-copy">Use the shared note stream to coordinate a final institutional response at a pace that works for your group.</p>
+                <form id="message-form" class="message-form">
+                  <label for="message-input">Deliberation note</label>
+                  <textarea id="message-input" maxlength="280" rows="4"></textarea>
+                  <button type="submit">Post note</button>
+                </form>
+                <ul id="message-list" class="message-list" aria-live="polite"></ul>
+              </section>
+
+              <section id="final-panel" class="phase-content" hidden aria-labelledby="final-title">
+                <h3 id="final-title">Commit your move</h3>
+                <p>Commit to your final vote after reviewing the aggregate signal and deliberation notes.</p>
+                <form id="final-form" class="stack-form">
+                  <fieldset>
+                    <legend>Select final option</legend>
+                    <div id="final-options" class="option-picker"></div>
+                  </fieldset>
+
+                  <label for="final-confidence">Confidence rating</label>
+                  <select id="final-confidence" required>
+                    <option value="">Select confidence</option>
+                    <option value="1">1 - Low confidence</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5 - High confidence</option>
+                  </select>
+
+                  <button class="primary-button" type="submit">Lock in final vote</button>
+                </form>
+                <p id="final-status" class="assistive-note"></p>
+              </section>
+
+              <section id="expert-explanation-panel" class="phase-content" hidden aria-labelledby="expert-explanation-title">
+                <h3 id="expert-explanation-title">Expert explanation</h3>
+                <p id="expert-explanation-text"></p>
+                <div class="reveal-grid">
+                  <article class="reveal-card" aria-labelledby="impact-title">
+                    <h4 id="impact-title">Impact</h4>
+                    <p id="impact-text"></p>
+                  </article>
+                  <article class="reveal-card" aria-labelledby="confidence-title">
+                    <h4 id="confidence-title">Recorded confidence</h4>
+                    <p id="confidence-score-text"></p>
+                  </article>
+                </div>
+              </section>
+
+              <section id="update-panel" class="phase-content" hidden aria-labelledby="update-title">
+                <h3 id="update-title">City response outcome</h3>
+                <p id="decision-summary"></p>
+                <p id="outcome-reasoning" class="assistive-note"></p>
+                <p class="scenario-instructions-label">City Systems shift</p>
+                <p class="assistive-note">These indicator changes show how the final room decision affected the health of the city systems in this round.</p>
+                <dl class="metric-grid">
+                  <div><dt>Consensus timing</dt><dd id="consensus-time-value">-</dd></div>
+                  <div><dt>Vote shifts</dt><dd id="vote-shift-value">0</dd></div>
+                  <div><dt>Divergence index</dt><dd id="update-divergence-value">0.00</dd></div>
+                </dl>
+                <div id="delta-grid" class="delta-grid"></div>
+              </section>
+
+              <section id="complete-panel" class="phase-content" hidden aria-labelledby="complete-title">
+                <h3 id="complete-title">Campaign complete</h3>
+                <p id="complete-summary"></p>
+                <div class="complete-top-layout">
+                  <section class="complete-scores-column" aria-labelledby="complete-score-heading">
+                    <p id="complete-score-heading" class="complete-section-title">Final team score: <span id="complete-score-inline">-</span></p>
+                    <p class="assistive-note">These end-of-campaign scores summarize how the team finished across the city systems after all twenty crises.</p>
+                  </section>
+                  <article class="scenario-instructions-card complete-recommendations-card" aria-labelledby="complete-recommendations-title">
+                    <p class="scenario-instructions-label">Expert recommendations</p>
+                    <h3 id="complete-recommendations-title" class="scenario-instructions-title">What to consider next time</h3>
+                    <p id="complete-verdict-text"></p>
+                    <ul id="complete-recommendations-list" class="plain-list"></ul>
+                  </article>
+                </div>
+                <section class="complete-categories-section" aria-labelledby="complete-categories-title">
+                  <p id="complete-categories-title" class="complete-section-title">Final category scores</p>
+                  <div id="complete-indicator-grid" class="indicator-grid complete-indicator-grid"></div>
+                </section>
+                <div class="reveal-grid complete-grid">
+                  <article class="reveal-card" aria-labelledby="complete-strengths-title">
+                    <h4 id="complete-strengths-title">What the team handled well</h4>
+                    <ul id="complete-strengths-list" class="plain-list"></ul>
+                  </article>
+                  <article class="reveal-card" aria-labelledby="complete-watch-title">
+                    <h4 id="complete-watch-title">What still needs attention</h4>
+                    <ul id="complete-watch-list" class="plain-list"></ul>
+                  </article>
+                </div>
+              </section>
+
+              <div id="phase-ready-bar" class="phase-ready-bar" hidden>
+                <div>
+                  <p class="scenario-instructions-label">Next step</p>
+                  <p id="phase-ready-prompt" class="phase-ready-prompt">When you are ready, confirm to continue with the group.</p>
+                  <p id="phase-ready-status" class="assistive-note"></p>
+                </div>
+                <button id="phase-ready-button" class="primary-button" type="button" hidden>Ready to continue</button>
+              </div>
+            </div>
+
+            <aside id="phase-guide-sidebar" class="phase-guide-sidebar" aria-labelledby="phase-guide-title">
+              <div class="phase-guide-card">
+                <p class="city-label">Round guide</p>
+                <h3 id="phase-guide-title">How to read this tracker</h3>
+                <p class="assistive-note">These steps show the full round sequence. The highlighted step is your current phase, and the list stays visible so you can always see what just happened and what comes next.</p>
+              </div>
+              <ol id="phase-tracker" class="phase-tracker" aria-label="Round progress"></ol>
+            </aside>
+            <aside id="phase-timer-sidebar" class="phase-timer-sidebar" aria-labelledby="phase-timer-card-title">
+              <div class="phase-guide-card phase-timer-card" aria-labelledby="phase-timer-card-title">
+                <p class="city-label">Round timer</p>
+                <h3 id="phase-timer-card-title">Time support</h3>
+                <p id="phase-mode-note" class="assistive-note">Timed mode moves the round forward automatically. Untimed mode waits until the whole group is ready.</p>
+                <p id="phase-deadline-label" class="assistive-note">Waiting for host</p>
+                <p id="phase-timer" class="timer-readout">--</p>
+                <button id="phase-timer-toggle" class="timer-toggle-button" type="button" aria-pressed="false">Turn on timer</button>
+              </div>
+            </aside>
+          </div>
+        </article>
+      </section>
+      </section>
+      </section>
+    </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
