@@ -1,0 +1,9 @@
+{
+  "name": "inclusive-decision-lab",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Inclusive Decision Lab local static server",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
