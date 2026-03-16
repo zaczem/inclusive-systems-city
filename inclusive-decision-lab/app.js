@@ -47,6 +47,8 @@ const state = {
   history: [],
   hiddenEffects: [],
   reflection: null,
+  awaitingNext: false,
+  pendingEndResult: null,
   settings: {
     reducedMotion: false,
     largeText: false,
@@ -56,18 +58,19 @@ const state = {
     largeSpacing: false,
     enhancedReadability: false,
     anonymizedMode: false,
-    researchMode: false,
+    researchMode: true,
     auditMode: false,
   },
   sessionUUID: "",
   participantCode: "",
   consentGiven: false,
-  userRole: "public",
+  userRole: "research",
   sessionStartedAt: null,
   scenarioStartedAt: null,
   activeSpeech: null,
   finalReport: null,
   focusBeforeModal: null,
+  dashboardOpen: false,
 };
 
 const ui = {
@@ -75,13 +78,19 @@ const ui = {
   simulationShell: document.getElementById("simulation-shell"),
   participantCode: document.getElementById("participant-code"),
   consentCheckbox: document.getElementById("consent-checkbox"),
+  consentStatus: document.getElementById("consent-status"),
   beginSimulation: document.getElementById("begin-simulation"),
+  dashboard: document.getElementById("decision-dashboard"),
+  dashboardToggle: document.getElementById("dashboard-toggle"),
+  dashboardBackdrop: document.getElementById("dashboard-backdrop"),
   roundCounter: document.getElementById("round-counter"),
   indicatorGrid: document.getElementById("indicator-grid"),
   scenarioCategory: document.getElementById("scenario-category"),
+  scenarioProgress: document.getElementById("scenario-progress"),
   scenarioTitle: document.getElementById("scenario-title"),
   scenarioDescription: document.getElementById("scenario-description"),
   choiceList: document.getElementById("choice-list"),
+  nextQuestion: document.getElementById("next-question"),
   reflectionPanel: document.getElementById("reflection-panel"),
   reflectionContent: document.getElementById("reflection-content"),
   effectsPanel: document.getElementById("effects-panel"),
@@ -91,6 +100,7 @@ const ui = {
   endScreen: document.getElementById("end-screen"),
   endTitle: document.getElementById("end-title"),
   endSummary: document.getElementById("end-summary"),
+  closeEndScreen: document.getElementById("close-end-screen"),
   exportJSON: document.getElementById("export-json"),
   exportReport: document.getElementById("export-report"),
   exportCaseStudy: document.getElementById("export-case-study"),
@@ -136,6 +146,25 @@ function uuidv4() {
 function formatToggle(button, label, on) {
   button.setAttribute("aria-pressed", String(on));
   button.textContent = `${label}: ${on ? "On" : "Off"}`;
+}
+
+function setDashboardOpen(open) {
+  state.dashboardOpen = open;
+  document.body.classList.toggle("dashboard-open", open);
+  ui.dashboardToggle.setAttribute("aria-expanded", String(open));
+  ui.dashboardToggle.setAttribute("aria-label", open ? "Close decision dashboard" : "Open decision dashboard");
+  ui.dashboardToggle.querySelector("span[aria-hidden='true']").textContent = open ? "‹" : "›";
+  ui.dashboardToggle.querySelector(".dashboard-toggle-label").textContent = open ? "Hide Dashboard" : "Open Dashboard";
+  ui.dashboardBackdrop.hidden = !open;
+}
+
+function updateConsentUI() {
+  const ready = ui.consentCheckbox.checked;
+  ui.beginSimulation.disabled = !ready;
+  ui.consentStatus.textContent = ready
+    ? "Consent confirmed. You can now begin the simulation."
+    : "Consent is required before the simulation can begin.";
+  ui.consentStatus.classList.toggle("is-ready", ready);
 }
 
 function downloadFile(filename, content, type) {
@@ -241,6 +270,9 @@ function renderDashboard() {
     const previous = state.lastIndicators[key];
     const trend = value > previous ? "↑" : value < previous ? "↓" : "→";
     const status = getIndicatorStatus(key, value);
+    const compactSummary = INDICATOR_META[key].positiveHigh
+      ? (value >= 70 ? "Currently supporting system resilience." : value >= 40 ? "Needs continued attention." : "Needs urgent corrective action.")
+      : (value <= 30 ? "Currently contained." : value <= 60 ? "Should be monitored closely." : "Creating significant governance pressure.");
     const article = document.createElement("article");
     article.className = "indicator-card";
     article.innerHTML = `
@@ -252,7 +284,7 @@ function renderDashboard() {
         <p class="status-badge ${status.className}" aria-label="Status ${status.label}">${status.icon} ${status.label}</p>
       </div>
       <div class="progress" aria-hidden="true"><span style="width:${value}%"></span></div>
-      <p>${INDICATOR_META[key].meaning}</p>
+      <p class="indicator-brief">${compactSummary}</p>
       <details class="indicator-details">
         <summary>What this means</summary>
         <p>High value: ${INDICATOR_META[key].positiveHigh ? "more stable" : "more severe"} condition.</p>
@@ -284,21 +316,64 @@ function buildPlainSummary(delta) {
   return { improved, worsened, watch };
 }
 
-function buildStrategicReflection(choice, delta, hiddenText) {
+function scoreProjectedIndicators(indicators) {
+  return (
+    indicators.accessibility * 1.4 +
+    (100 - indicators.legalRisk) * 1.5 +
+    indicators.trust * 1.25 +
+    (100 - indicators.technicalDebt) * 1.1 +
+    indicators.budget * 0.8
+  );
+}
+
+function buildRecommendationRationale(choice, delta) {
   const summary = buildPlainSummary(delta);
-  const improvedText = summary.improved.length ? summary.improved.join(", ") : "No indicator improved materially";
-  const worsenedText = summary.worsened.length ? summary.worsened.join(", ") : "No indicator worsened materially";
+  const improved = summary.improved.join(", ");
+  const worsened = summary.worsened.join(", ");
+  if (improved && worsened) {
+    return `This option is recommended because it improves ${improved} while containing trade-offs in ${worsened}.`;
+  }
+  if (improved) {
+    return `This option is recommended because it strengthens ${improved} without creating major new pressures.`;
+  }
+  return "This option is recommended because it preserves the most stable overall governance position across the indicators.";
+}
+
+function getRecommendedChoice(scenario, baseIndicators) {
+  let best = null;
+  for (const option of scenario.choices) {
+    const afterDirect = updateIndicators(baseIndicators, option.effects || {});
+    const afterHidden = updateIndicators(afterDirect, option.hiddenEffects || {});
+    const afterDrift = applyDriftRules(afterHidden);
+    const delta = {};
+    Object.keys(INITIAL_INDICATORS).forEach((key) => {
+      delta[key] = afterDrift[key] - baseIndicators[key];
+    });
+    const score = scoreProjectedIndicators(afterDrift);
+    if (!best || score > best.score) {
+      best = {
+        choice: option,
+        score,
+        delta,
+        rationale: buildRecommendationRationale(option, delta),
+      };
+    }
+  }
+  return best;
+}
+
+function buildStrategicReflection(choice, delta, hiddenText, scenario, indicatorBefore) {
+  const summary = buildPlainSummary(delta);
   const advanced = `This decision prioritizes ${choice.text.toLowerCase()} within a constrained governance environment. The immediate trade-offs emerged because institutional capacity, legal exposure, stakeholder confidence, and technical maintenance pressures do not move independently. A longer-term effect may emerge if these tensions continue to reinforce one another through drift conditions.`;
   const plain = `This choice changes several parts of the system at once. Some areas improve now, but other areas may weaken later. Watch ${summary.watch} next.`;
-  return { advanced, plain, summary, hiddenText };
+  const recommended = getRecommendedChoice(scenario, indicatorBefore);
+  const alignment = recommended?.choice?.text === choice.text
+    ? "Your choice matched the recommended policy response for this scenario."
+    : `A stronger policy response would have been: ${recommended?.choice?.text || "Not available"}.`;
+  return { advanced, plain, summary, hiddenText, recommended, alignment };
 }
 
 function renderReflection() {
-  if (state.settings.researchMode) {
-    ui.reflectionPanel.hidden = true;
-    ui.effectsPanel.hidden = true;
-    return;
-  }
   ui.reflectionPanel.hidden = false;
   ui.effectsPanel.hidden = state.settings.lowComplexity;
   if (!state.reflection) {
@@ -309,6 +384,11 @@ function renderReflection() {
   const text = state.settings.plainLanguage || state.settings.lowComplexity ? state.reflection.plain : state.reflection.advanced;
   ui.reflectionContent.innerHTML = `
     <p>${text}</p>
+    <div class="recommendation-block">
+      <p><strong>Recommended answer:</strong> ${state.reflection.recommended?.choice?.text || "Not available"}</p>
+      <p><strong>Why:</strong> ${state.reflection.recommended?.rationale || "No recommendation rationale available."}</p>
+      <p><strong>Comparison:</strong> ${state.reflection.alignment}</p>
+    </div>
     <ul>
       <li>What improved: ${state.reflection.summary.improved.join(", ") || "No major improvement"}</li>
       <li>What worsened: ${state.reflection.summary.worsened.join(", ") || "No major decline"}</li>
@@ -326,7 +406,10 @@ function renderReflection() {
 function renderScenario() {
   const scenario = state.scenarios[state.currentScenarioIndex];
   if (!scenario) return;
+  state.awaitingNext = false;
+  state.pendingEndResult = null;
   ui.scenarioCategory.textContent = scenario.category;
+  ui.scenarioProgress.textContent = `Question ${state.currentScenarioIndex + 1} of ${TOTAL_ROUNDS}`;
   ui.scenarioTitle.textContent = scenario.title;
   ui.scenarioDescription.textContent = scenario.description;
   ui.choiceList.innerHTML = "";
@@ -339,6 +422,8 @@ function renderScenario() {
     button.addEventListener("click", () => onDecision(choice, scenario));
     ui.choiceList.appendChild(button);
   });
+  ui.nextQuestion.hidden = true;
+  ui.nextQuestion.textContent = "Next Question";
   ui.scenarioTitle.focus();
   ui.statusRegion.textContent = `Round ${state.currentScenarioIndex + 1}. New scenario loaded.`;
 }
@@ -385,13 +470,72 @@ function classifyMaturity(score) {
   return "Reactive";
 }
 
+function getScoreBand(score) {
+  if (score >= 80) return "Strong";
+  if (score >= 60) return "Competent";
+  if (score >= 40) return "Developing";
+  return "Fragile";
+}
+
+function buildFinalEvaluation(score, maturity, result) {
+  const strengths = [];
+  const concerns = [];
+  const advice = [];
+
+  if (state.indicators.accessibility >= 65) strengths.push("You maintained a comparatively strong accessibility baseline.");
+  else concerns.push("Accessibility performance remained too exposed to deterioration.");
+
+  if (state.indicators.legalRisk <= 35) strengths.push("Legal exposure stayed relatively contained.");
+  else concerns.push("Legal exposure remained too high and should have been reduced earlier.");
+
+  if (state.indicators.trust >= 60) strengths.push("Stakeholder trust was protected across a meaningful portion of the simulation.");
+  else concerns.push("Stakeholder trust did not reach a resilient level.");
+
+  if (state.indicators.technicalDebt <= 40) strengths.push("Technical debt was kept within a more manageable range.");
+  else concerns.push("Technical debt accumulated and likely constrained future governance options.");
+
+  if (state.indicators.budget <= 25) {
+    advice.push("Protect budget earlier so corrective action remains available later in the simulation.");
+  }
+  if (state.indicators.legalRisk > 40) {
+    advice.push("Prioritize decisions that reduce legal risk before pressure compounds through drift.");
+  }
+  if (state.indicators.technicalDebt > 45) {
+    advice.push("Invest earlier in structural remediation instead of repeated short-term patching.");
+  }
+  if (state.indicators.trust < 60) {
+    advice.push("Choose more transparent and participatory actions to strengthen stakeholder trust.");
+  }
+  if (state.indicators.accessibility < 65) {
+    advice.push("Favor decisions that improve accessibility even when they create short-term budget pressure.");
+  }
+  if (!advice.length) {
+    advice.push("Continue balancing long-term accessibility capacity with legal, technical, and budget constraints.");
+  }
+
+  const reasoning = result.type === "failure"
+    ? "The session ended because one institutional constraint crossed a failure threshold before the system stabilized."
+    : "The session reached the end of the simulation with a sustainable, though not necessarily optimal, governance posture.";
+
+  return {
+    band: getScoreBand(score),
+    reasoning,
+    strengths,
+    concerns,
+    advice: advice.slice(0, 3),
+    maturity,
+  };
+}
+
 function finalizeSimulation(result) {
   const score = getCompositeScore();
   const maturity = classifyMaturity(score);
+  const evaluation = buildFinalEvaluation(score, maturity, result);
   state.finalReport = {
     result,
     compositeScore: score,
     maturity,
+    evaluation,
     version: LAB_VERSION,
     sessionUUID: state.sessionUUID,
     participantCode: state.settings.anonymizedMode ? undefined : state.participantCode,
@@ -400,11 +544,25 @@ function finalizeSimulation(result) {
   };
   ui.endSummary.innerHTML = `
     <p><strong>Outcome:</strong> ${result.reason}</p>
+    <p><strong>Overall score:</strong> ${score}/100 (${evaluation.band})</p>
     <p><strong>Governance posture classification:</strong> ${maturity}</p>
     <p><strong>Risk profile:</strong> Legal Risk ${state.indicators.legalRisk}, Trust ${state.indicators.trust}, Technical Debt ${state.indicators.technicalDebt}</p>
     <p><strong>Strategic maturity level:</strong> ${maturity}</p>
+    <p><strong>Assessment:</strong> ${evaluation.reasoning}</p>
+    <p><strong>Comments:</strong> ${evaluation.strengths[0] || evaluation.concerns[0] || "This run produced a mixed governance profile."}</p>
+    <p><strong>Rationale:</strong> ${(evaluation.concerns[0] || evaluation.strengths[1] || "Your decisions created a mixed set of trade-offs across the indicators.")}</p>
+    <div>
+      <strong>Advice for the next run:</strong>
+      <ul>
+        ${evaluation.advice.map((item) => `<li>${item}</li>`).join("")}
+      </ul>
+    </div>
   `;
-  ui.exportCSV.hidden = state.userRole !== "research";
+  const showResearchExports = state.userRole === "research";
+  ui.exportJSON.hidden = !showResearchExports;
+  ui.exportReport.hidden = !showResearchExports;
+  ui.exportCaseStudy.hidden = !showResearchExports;
+  ui.exportCSV.hidden = !showResearchExports;
   ui.focusBeforeModal = document.activeElement;
   ui.endScreen.hidden = false;
   ui.endTitle.focus();
@@ -415,6 +573,7 @@ function getDecisionTimeMs() {
 }
 
 function onDecision(choice, scenario) {
+  if (state.awaitingNext) return;
   const indicatorBefore = { ...state.indicators };
   const afterDirect = updateIndicators(state.indicators, choice.effects);
   const afterHidden = updateIndicators(afterDirect, choice.hiddenEffects || {});
@@ -427,7 +586,7 @@ function onDecision(choice, scenario) {
   state.lastIndicators = { ...state.indicators };
   state.indicators = afterDrift;
   state.hiddenEffects.push({ hiddenReveal: choice.hiddenReveal || "No hidden effect available." });
-  state.reflection = buildStrategicReflection(choice, combinedDelta, choice.hiddenReveal || "");
+  state.reflection = buildStrategicReflection(choice, combinedDelta, choice.hiddenReveal || "", scenario, indicatorBefore);
 
   const decisionTimestamp = new Date().toISOString();
   state.history.push({
@@ -459,15 +618,37 @@ function onDecision(choice, scenario) {
   renderReflection();
   persistSession();
 
-  state.currentScenarioIndex += 1;
+  state.awaitingNext = true;
+  Array.from(ui.choiceList.querySelectorAll("button")).forEach((button) => {
+    button.disabled = true;
+    if (button.querySelector("strong")?.textContent?.includes(choice.text)) {
+      button.classList.add("is-selected");
+    }
+  });
+
   const result = evaluateGameEnd(state.indicators, state.currentScenarioIndex + 1);
   if (result.ended) {
-    ui.criticalStatus.textContent = result.reason;
-    finalizeSimulation(result);
+    state.pendingEndResult = result;
+    ui.nextQuestion.textContent = "View Final Summary";
+    ui.nextQuestion.hidden = false;
     return;
   }
+  ui.nextQuestion.textContent = "Next Question";
+  ui.nextQuestion.hidden = false;
+}
+
+function advanceScenario() {
+  if (!state.awaitingNext) return;
+  if (state.pendingEndResult) {
+    ui.criticalStatus.textContent = state.pendingEndResult.reason;
+    finalizeSimulation(state.pendingEndResult);
+    return;
+  }
+  state.currentScenarioIndex += 1;
   state.scenarioStartedAt = Date.now();
+  state.reflection = null;
   renderScenario();
+  renderReflection();
 }
 
 function exportResults() {
@@ -611,20 +792,38 @@ async function sha256(input) {
   return Array.from(new Uint8Array(hashBuffer)).map((byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
-async function activateResearchAccess() {
-  const response = window.prompt("Enter research access code");
-  if (!response) return;
-  const digest = await sha256(response);
-  if (digest !== RESEARCH_HASH) return;
-  state.userRole = "research";
-  state.settings.researchMode = true;
-  formatToggle(ui.toggleResearchMode, "Research Mode", true);
+function syncResearchAccessUI() {
+  formatToggle(ui.toggleResearchMode, "Research Mode", state.settings.researchMode);
   ui.toggleResearchMode.hidden = false;
   ui.toggleAnonymizedMode.hidden = false;
-  ui.exportCSV.hidden = false;
-  ui.researchPanel.hidden = false;
+  ui.researchPanel.hidden = !state.settings.researchMode;
+  ui.activateResearchMode.textContent = state.settings.researchMode ? "Deactivate Research Mode" : "Activate Research Mode";
+  ui.activateResearchMode.setAttribute(
+    "aria-label",
+    state.settings.researchMode ? "Deactivate Research Mode" : "Activate Research Mode"
+  );
+}
+
+function setResearchMode(enabled) {
+  state.settings.researchMode = enabled;
+  state.userRole = enabled ? "research" : "public";
+  syncResearchAccessUI();
   renderDashboard();
   renderReflection();
+  persistSession();
+}
+
+async function promptForResearchCode() {
+  const response = window.prompt("Enter research access code");
+  if (!response) return false;
+  const digest = await sha256(response);
+  return digest === RESEARCH_HASH;
+}
+
+async function activateResearchAccess() {
+  const authorized = await promptForResearchCode();
+  if (!authorized) return;
+  setResearchMode(!state.settings.researchMode);
 }
 
 function activateTab(tabId) {
@@ -682,7 +881,7 @@ function bindToggles() {
   toggleMap.forEach(([button, key, label]) => {
     formatToggle(button, label, state.settings[key]);
     button.addEventListener("click", () => {
-      if (key === "researchMode" && state.userRole !== "research") return;
+      if (key === "researchMode") return;
       state.settings[key] = !state.settings[key];
       formatToggle(button, label, state.settings[key]);
       applyVisualSettings();
@@ -709,6 +908,7 @@ function beginSimulation() {
   ui.endScreen.hidden = true;
   ui.startScreen.hidden = true;
   ui.simulationShell.hidden = false;
+  setDashboardOpen(false);
   renderDashboard();
   renderScenario();
   renderReflection();
@@ -722,15 +922,39 @@ function restartSimulation() {
   }
   ui.startScreen.hidden = false;
   ui.simulationShell.hidden = true;
+  setDashboardOpen(false);
   ui.consentCheckbox.checked = false;
-  ui.beginSimulation.disabled = true;
+  updateConsentUI();
+}
+
+function closeEndScreen() {
+  ui.endScreen.hidden = true;
+  if (state.focusBeforeModal instanceof HTMLElement) {
+    state.focusBeforeModal.focus();
+    return;
+  }
+  ui.scenarioTitle.focus();
 }
 
 function bindEvents() {
   ui.consentCheckbox.addEventListener("change", () => {
-    ui.beginSimulation.disabled = !ui.consentCheckbox.checked;
+    updateConsentUI();
   });
   ui.beginSimulation.addEventListener("click", beginSimulation);
+  ui.nextQuestion.addEventListener("click", advanceScenario);
+  ui.dashboardToggle.addEventListener("click", () => {
+    setDashboardOpen(!state.dashboardOpen);
+    if (state.dashboardOpen) {
+      ui.dashboard.querySelector("h2")?.focus?.();
+    } else {
+      ui.dashboardToggle.focus();
+    }
+  });
+  ui.dashboardBackdrop.addEventListener("click", () => {
+    setDashboardOpen(false);
+    ui.dashboardToggle.focus();
+  });
+  ui.closeEndScreen.addEventListener("click", closeEndScreen);
   ui.restart.addEventListener("click", restartSimulation);
   ui.exportJSON.addEventListener("click", exportResults);
   ui.exportReport.addEventListener("click", exportAccessibleReport);
@@ -744,6 +968,7 @@ function bindEvents() {
     setSpeechState(false);
   });
   ui.activateResearchMode.addEventListener("click", activateResearchAccess);
+  ui.toggleResearchMode.addEventListener("click", activateResearchAccess);
   document.addEventListener("keydown", (event) => {
     if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === "r") {
       event.preventDefault();
@@ -768,6 +993,15 @@ function bindEvents() {
         first.focus();
       }
     }
+    if (event.key === "Escape" && !ui.endScreen.hidden) {
+      event.preventDefault();
+      closeEndScreen();
+    }
+    if (event.key === "Escape" && state.dashboardOpen) {
+      event.preventDefault();
+      setDashboardOpen(false);
+      ui.dashboardToggle.focus();
+    }
   });
 }
 
@@ -777,8 +1011,13 @@ async function init() {
   bindEvents();
   applyVisualSettings();
   ui.endScreen.hidden = true;
-  ui.researchPanel.hidden = true;
+  syncResearchAccessUI();
+  setDashboardOpen(false);
+  ui.exportJSON.hidden = true;
+  ui.exportReport.hidden = true;
+  ui.exportCaseStudy.hidden = true;
   ui.exportCSV.hidden = true;
+  updateConsentUI();
   try {
     state.scenarios = await loadScenarios();
   } catch (error) {

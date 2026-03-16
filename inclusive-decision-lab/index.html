@@ -21,11 +21,20 @@
 
   <nav class="tab-nav" aria-label="Primary sections">
     <div role="tablist" aria-label="Inclusive Decision Lab sections">
-      <button id="tab-simulation" role="tab" aria-selected="true" aria-controls="panel-simulation" aria-current="page" tabindex="0">Simulation</button>
-      <button id="tab-about" role="tab" aria-selected="false" aria-controls="panel-about" tabindex="-1">About the Lab</button>
+      <button id="tab-about" role="tab" aria-selected="true" aria-controls="panel-about" aria-current="page" tabindex="0">About the Lab</button>
       <button id="tab-how" role="tab" aria-selected="false" aria-controls="panel-how" tabindex="-1">How to Play</button>
-      <button id="tab-learning" role="tab" aria-selected="false" aria-controls="panel-learning" tabindex="-1">Learning Impact</button>
-      <button id="tab-research" role="tab" aria-selected="false" aria-controls="panel-research" tabindex="-1">Research &amp; Theoretical Foundations</button>
+      <button
+        id="tab-simulation"
+        class="simulation-tab"
+        role="tab"
+        aria-selected="false"
+        aria-controls="panel-simulation"
+        tabindex="-1"
+        aria-describedby="simulation-tab-hint"
+      >
+        <span>Simulation</span>
+        <span id="simulation-tab-hint" class="simulation-tab-hint">Start Here</span>
+      </button>
       <details class="preferences-menu">
         <summary aria-label="Interaction preferences">Interaction Preferences</summary>
         <div class="preferences-panel" aria-label="Simulation controls">
@@ -48,38 +57,56 @@
   <div id="critical-status" class="sr-only" aria-live="assertive"></div>
 
   <main id="main-content" aria-label="Inclusive Decision Lab main content">
-    <section id="panel-simulation" role="tabpanel" aria-labelledby="tab-simulation">
+    <section id="panel-simulation" role="tabpanel" aria-labelledby="tab-simulation" hidden>
       <section id="start-screen" class="panel intro-panel" aria-labelledby="start-title">
         <h2 id="start-title">Strategic Accessibility Governance Briefing</h2>
         <p>This simulation models the institutional consequences of accessibility governance decisions across legal, technical, financial, and stakeholder domains.</p>
+        <div class="participant-code-panel">
+          <label for="participant-code">Participant Code (optional)</label>
+          <input id="participant-code" type="text" aria-describedby="participant-code-help">
+          <p id="participant-code-help" class="form-help">Use a research or workshop code if your session requires one.</p>
+        </div>
         <div class="form-grid">
-          <div>
-            <label for="participant-code">Participant Code (optional)</label>
-            <input id="participant-code" type="text" aria-describedby="participant-code-help">
-            <p id="participant-code-help" class="form-help">Use a research or workshop code if your session requires one.</p>
-          </div>
-          <div class="consent-wrap">
-            <input type="checkbox" id="consent-checkbox">
-            <label for="consent-checkbox">I consent to anonymous research data collection.</label>
+          <div class="consent-panel" aria-labelledby="consent-title" aria-describedby="consent-help consent-status">
+            <h3 id="consent-title">Before you begin</h3>
+            <p id="consent-help" class="form-help">To start the simulation, first confirm the consent checkbox below. This enables the Begin Simulation button.</p>
+            <div class="consent-wrap">
+              <input type="checkbox" id="consent-checkbox">
+              <label for="consent-checkbox">I consent to anonymous research data collection.</label>
+            </div>
+            <p id="consent-status" class="consent-status" aria-live="polite">Consent is required before the simulation can begin.</p>
+            <button id="begin-simulation" class="primary-button" type="button" aria-describedby="consent-status" disabled>Begin Simulation</button>
           </div>
         </div>
-        <button id="begin-simulation" class="primary-button" type="button" disabled>Begin Simulation</button>
       </section>
 
       <section id="simulation-shell" hidden>
+        <button
+          id="dashboard-toggle"
+          class="dashboard-toggle"
+          type="button"
+          aria-controls="decision-dashboard"
+          aria-expanded="false"
+          aria-label="Open decision dashboard"
+        >
+          <span aria-hidden="true">›</span>
+          <span class="dashboard-toggle-label">Open Dashboard</span>
+        </button>
+        <div id="dashboard-backdrop" class="dashboard-backdrop" hidden></div>
         <div class="layout-grid">
-          <aside class="dashboard panel" aria-labelledby="dashboard-title">
-            <h2 id="dashboard-title">Decision Dashboard</h2>
+          <aside id="decision-dashboard" class="dashboard panel" aria-labelledby="dashboard-title">
+            <h2 id="dashboard-title" tabindex="-1">Decision Dashboard</h2>
             <p id="round-counter" class="round-counter">Round 1 of 20</p>
-            <section class="status-explainer" aria-labelledby="status-explainer-title">
-              <h3 id="status-explainer-title">Indicator Status Guide</h3>
+            <p class="dashboard-intro">This panel tracks the live system conditions affected by your decisions. Open it when you need to compare indicators before making a choice.</p>
+            <details class="status-explainer" aria-labelledby="status-explainer-title">
+              <summary id="status-explainer-title">Indicator Status Guide</summary>
               <p>Each indicator includes a status marker so you can quickly read system conditions without relying on color alone.</p>
               <ul class="status-guide-list">
                 <li><span class="status-guide-symbol status-good">✔ good</span> means the indicator is currently in a stable range.</li>
                 <li><span class="status-guide-symbol status-watch">⚠ watch</span> means the indicator needs monitoring because pressure is building.</li>
                 <li><span class="status-guide-symbol status-critical">✖ critical</span> means the indicator is in a high-risk range and may trigger failure if conditions worsen.</li>
               </ul>
-            </section>
+            </details>
             <div id="indicator-grid" class="indicator-grid"></div>
             <section id="research-panel" class="panel nested-panel" hidden aria-labelledby="research-panel-title">
               <h3 id="research-panel-title">Research Data</h3>
@@ -95,7 +122,11 @@
             <article class="panel scenario-panel" aria-labelledby="scenario-title" aria-describedby="scenario-help">
               <div class="scenario-head">
                 <div>
-                  <p id="scenario-category" class="category-pill">Policy</p>
+                  <p class="scenario-intro">This section presents the current governance issue. Review the category shown here, read the scenario, then choose one strategic response.</p>
+                  <div class="scenario-meta">
+                    <p id="scenario-category" class="category-pill">Policy</p>
+                    <p id="scenario-progress" class="scenario-progress" aria-live="polite">Question 1 of 20</p>
+                  </div>
                   <h2 id="scenario-title" tabindex="-1">Scenario loading</h2>
                 </div>
                 <details class="assistive-disclosure" aria-label="Adaptive interface controls">
@@ -111,27 +142,32 @@
               <p id="scenario-description"></p>
               <p id="scenario-help" class="assistive-note">Select one strategic response. Hidden downstream effects and indicator drift will update after your decision.</p>
               <div id="choice-list" class="choice-list"></div>
-            </article>
-
-            <article id="reflection-panel" class="panel" aria-labelledby="reflection-title">
-              <h2 id="reflection-title">Strategic Reflection</h2>
-              <div id="reflection-content">
-                <p>Make a decision to generate a strategic reflection.</p>
+              <div class="scenario-actions">
+                <button id="next-question" type="button" hidden>Next Question</button>
               </div>
             </article>
 
-            <article id="effects-panel" class="panel" aria-labelledby="effects-title">
-              <h2 id="effects-title">Latest Hidden Effects</h2>
-              <div id="effects-content">
-                <p>Make a decision to reveal hidden downstream impacts.</p>
-              </div>
-            </article>
+            <section class="insights-grid">
+              <article id="reflection-panel" class="panel" aria-labelledby="reflection-title">
+                <h2 id="reflection-title">Strategic Reflection</h2>
+                <div id="reflection-content">
+                  <p>Make a decision to generate a strategic reflection.</p>
+                </div>
+              </article>
+
+              <article id="effects-panel" class="panel" aria-labelledby="effects-title">
+                <h2 id="effects-title">Latest Hidden Effects</h2>
+                <div id="effects-content">
+                  <p>Make a decision to reveal hidden downstream impacts.</p>
+                </div>
+              </article>
+            </section>
           </section>
         </div>
       </section>
     </section>
 
-    <section id="panel-about" role="tabpanel" aria-labelledby="tab-about" hidden>
+    <section id="panel-about" role="tabpanel" aria-labelledby="tab-about">
       <article class="panel prose-panel">
         <h2>About the Lab</h2>
         <p>Inclusive Decision Lab is a strategic accessibility governance simulation framework designed for institutional learning, executive workshops, and applied academic use.</p>
@@ -146,6 +182,21 @@
         <p><strong>Technical Debt</strong>: higher values indicate accumulated implementation burden and fragility.</p>
         <p><strong>Budget</strong>: higher values indicate more financial flexibility for governance action.</p>
         <p>The platform includes structured session logging, timestamped decision tracking, anonymized dataset export, and CSV output functionality to support academic research and institutional analysis.</p>
+        <h3>Learning Impact</h3>
+        <p>Participants develop applied WCAG reasoning at governance level, trade-off analysis, systems thinking, legal compliance awareness, participatory design understanding, and long-term technical debt awareness.</p>
+        <p>This edition references WCAG principles, EN 301 549, Universal Design, the Social Model of Disability, and participatory governance models.</p>
+        <h3>Research &amp; Theoretical Foundations</h3>
+        <h4>Governance Simulation Model Type</h4>
+        <p>Indicator-based strategic simulation. Systems-dynamics-informed drift modeling. Threshold-triggered governance failure framework. Applied policy reasoning tool.</p>
+        <h4>Standards Alignment</h4>
+        <p>Alignment is modeled with WCAG principles, EN 301 549, Universal Design principles, the Social Model of Disability, and participatory governance approaches.</p>
+        <h4>Drift &amp; Interaction Logic</h4>
+        <div class="diagram" aria-label="Drift model diagram">
+          <div>Accessibility ↓</div>
+          <div>Legal Risk ↑</div>
+          <div>Trust ↓</div>
+          <div>Budget strain → Technical Debt ↑</div>
+        </div>
         <footer class="academic-footer">This simulation model was developed for research and educational use in strategic accessibility governance contexts.</footer>
       </article>
     </section>
@@ -155,35 +206,24 @@
         <h2>How to Play</h2>
         <p>You are acting as an accessibility advisor within a strategic governance environment.</p>
         <p>Each round presents one governance decision. Indicators update dynamically, hidden effects reveal delayed consequences, and drift rules model systemic interactions between policy choices and institutional conditions.</p>
+        <h3>Step-by-Step Flow</h3>
+        <ol>
+          <li>Read the category, title, and description in the main scenario panel.</li>
+          <li><strong>Open the Decision Dashboard</strong> when you want to compare the current indicator conditions before deciding.</li>
+          <li>Review the available strategic responses and select one option.</li>
+          <li>Read the updated reflection and hidden effects after your decision.</li>
+          <li>Continue to the next scenario and repeat the process.</li>
+        </ol>
         <h3>How to Read Indicator Status</h3>
         <p>Each indicator card includes a status marker. These markers help participants interpret risk quickly and support users who do not rely on color perception.</p>
         <p><strong>Good</strong> indicates a relatively stable condition. <strong>Watch</strong> indicates a developing pressure that should be monitored. <strong>Critical</strong> indicates a severe condition that may contribute to institutional failure.</p>
+        <h3>How to Use the Dashboard</h3>
+        <p>The Decision Dashboard helps you review the current condition of the system before making a choice. <strong>Open the dashboard</strong> from the left-side control whenever you want to compare the five indicators.</p>
+        <p>Use the dashboard to check which areas are stable, which areas need monitoring, and which areas may become critical if additional pressure is introduced. This helps you judge whether a decision is improving the system or shifting risk elsewhere.</p>
+        <h3>How to Move Through Each Round</h3>
+        <p>Start by reading the scenario category, title, and description in the main scenario area. Then review the available strategic responses. Select one option to continue the simulation.</p>
+        <p>After your selection, the system updates the indicators, reveals hidden downstream effects, and generates a strategic reflection. You can then review the updated situation and proceed to the next scenario.</p>
         <p>The simulation ends after 20 rounds or earlier if a failure threshold is reached.</p>
-      </article>
-    </section>
-
-    <section id="panel-learning" role="tabpanel" aria-labelledby="tab-learning" hidden>
-      <article class="panel prose-panel">
-        <h2>Learning Impact</h2>
-        <p>Participants develop applied WCAG reasoning at governance level, trade-off analysis, systems thinking, legal compliance awareness, participatory design understanding, and long-term technical debt awareness.</p>
-        <p>This edition references WCAG principles, EN 301 549, Universal Design, the Social Model of Disability, and participatory governance models.</p>
-      </article>
-    </section>
-
-    <section id="panel-research" role="tabpanel" aria-labelledby="tab-research" hidden>
-      <article class="panel prose-panel">
-        <h2>Research &amp; Theoretical Foundations</h2>
-        <h3>Governance Simulation Model Type</h3>
-        <p>Indicator-based strategic simulation. Systems-dynamics-informed drift modeling. Threshold-triggered governance failure framework. Applied policy reasoning tool.</p>
-        <h3>Standards Alignment</h3>
-        <p>Alignment is modeled with WCAG principles, EN 301 549, Universal Design principles, the Social Model of Disability, and participatory governance approaches.</p>
-        <h3>Drift &amp; Interaction Logic</h3>
-        <div class="diagram" aria-label="Drift model diagram">
-          <div>Accessibility ↓</div>
-          <div>Legal Risk ↑</div>
-          <div>Trust ↓</div>
-          <div>Budget strain → Technical Debt ↑</div>
-        </div>
       </article>
     </section>
 
@@ -198,6 +238,7 @@
       <h2 id="end-title" tabindex="-1">Simulation Complete</h2>
       <div id="end-summary"></div>
       <div class="button-row">
+        <button id="close-end-screen" type="button">Close Summary</button>
         <button id="export-json" type="button">Export Session JSON</button>
         <button id="export-report" type="button">Export Accessible Report (PDF)</button>
         <button id="export-case-study" type="button">Export Case Study Report</button>
