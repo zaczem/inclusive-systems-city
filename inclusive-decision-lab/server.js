@@ -67,6 +67,6 @@ const server = http.createServer((request, response) => {
   });
 });
 
-server.listen(PORT, '127.0.0.1', () => {
-  console.log(`Inclusive Decision Lab server running at http://127.0.0.1:${PORT}`);
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Inclusive Decision Lab server running at http://0.0.0.0:${PORT}`);
 });
