@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Barrier Breaker: Forensic Mode</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="topbar" role="banner">
+    <div>
+      <h1>Barrier Breaker: Forensic Mode</h1>
+      <p class="subtitle">Accessibility forensic analysis training platform</p>
+    </div>
+    <div id="session-info" class="session-info" aria-live="polite" hidden>
+      <p><strong>Session:</strong> <span id="session-id">Loading…</span></p>
+      <p><strong>Case:</strong> <span id="case-position">0 / 0</span></p>
+    </div>
+    <p id="research-mode-badge" class="research-badge" hidden>Research Mode</p>
+  </header>
+
+  <nav class="tabs-nav" aria-label="Platform sections">
+    <div class="tablist" role="tablist" aria-label="Barrier Breaker sections">
+      <button id="tab-overview" role="tab" aria-selected="true" aria-controls="panel-overview" tabindex="0" class="tab-btn">Overview</button>
+      <button id="tab-instructions" role="tab" aria-selected="false" aria-controls="panel-instructions" tabindex="-1" class="tab-btn">Instructions</button>
+      <button id="tab-keyboard" role="tab" aria-selected="false" aria-controls="panel-keyboard" tabindex="-1" class="tab-btn">Keyboard Guide</button>
+      <button id="tab-interaction" role="tab" aria-selected="false" aria-controls="panel-interaction" tabindex="-1" class="tab-btn">Interaction Preferences</button>
+      <button id="tab-simulation" role="tab" aria-selected="false" aria-controls="panel-simulation" aria-describedby="simulation-start-note" tabindex="-1" class="tab-btn start-tab">
+        <span class="tab-label">Simulation</span>
+        <span class="tab-kicker">Start Here</span>
+      </button>
+    </div>
+    <p id="simulation-start-note" class="tab-start-note">When you are ready to begin, open the Simulation tab to start the assessment.</p>
+  </nav>
+
+  <main id="main" tabindex="-1">
+    <section id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" class="tabpanel is-active">
+      <div class="tab-content panel">
+        <h2>Overview</h2>
+
+        <h3>Platform Description</h3>
+        <p>Barrier Breaker: Forensic Mode is an institutional accessibility assessment environment for structured analysis of interface barriers. The platform supports reproducible case review, evidence-linked classification, and exportable measurement outputs for training and research contexts. Participants evaluate predefined interface scenarios using controlled response fields, while the system records interpretable performance variables suitable for comparative analysis, longitudinal competency tracking, and standards-informed reporting workflows.</p>
+
+        <h3>Learning Outcomes</h3>
+        <ul class="plain-list">
+          <li>Identify barrier locations and interface elements with consistent analytical precision.</li>
+          <li>Classify accessibility findings against recognized barrier categories.</li>
+          <li>Document concise rationale with relevance to observed interface evidence.</li>
+          <li>Estimate confidence levels and compare them with measured accuracy.</li>
+          <li>Interpret exported variables for research, benchmarking, and quality review.</li>
+        </ul>
+
+        <h3>Standards Alignment</h3>
+        <ul class="plain-list">
+          <li>WCAG 2.1 AA</li>
+          <li>EN 301 549</li>
+          <li>Universal Design</li>
+          <li>Social Model</li>
+        </ul>
+
+        <section id="overview-research-note" hidden aria-labelledby="overview-research-heading">
+          <h3 id="overview-research-heading">Research Mode</h3>
+          <p>This run is configured for experimental data capture. Session-linked variables are stored for structured competency analysis and reproducible reporting.</p>
+        </section>
+      </div>
+    </section>
+
+    <section id="panel-simulation" role="tabpanel" aria-labelledby="tab-simulation" class="tabpanel" hidden>
+      <div class="layout">
+        <section id="research-data-panel" class="panel data-panel" aria-labelledby="data-heading" hidden>
+          <h2 id="data-heading">Research Data</h2>
+          <p>Total submissions logged: <strong id="log-count">0</strong></p>
+          <div class="button-row">
+            <button id="export-json" type="button" disabled>Export JSON</button>
+            <button id="export-csv" type="button" disabled>Export CSV</button>
+          </div>
+        </section>
+
+        <section class="panel case-panel" aria-labelledby="case-heading">
+          <div class="case-header">
+            <h2 id="case-heading">Forensic Case</h2>
+            <p id="level-tag" class="badge">Level</p>
+          </div>
+
+          <div class="case-meta" id="case-meta"></div>
+          <div class="case-jump-row">
+            <label for="case-jump" class="case-jump-label">Jump to case</label>
+            <select id="case-jump" aria-describedby="case-jump-help">
+              <option value="">Select case</option>
+            </select>
+          </div>
+          <p id="case-jump-help" class="field-helper">Use this menu to open a specific case directly. The current case and case order stay stable while this browser tab remains open.</p>
+          <p class="simulation-intro task-reminder" id="simulation-intro">
+            Review the neutral case description first, then inspect the screenshot and identify the interface element or area that appears to create an accessibility barrier.
+          </p>
+
+          <section class="case-description" aria-labelledby="description-heading">
+            <div class="section-head">
+              <h3 id="description-heading">Neutral Case Description</h3>
+              <div class="audio-controls" role="group" aria-label="Case description narration controls">
+                <label for="case-audio-speed" class="field-helper">Speed</label>
+                <select id="case-audio-speed" aria-label="Case narration speed">
+                  <option value="0.8">0.8x</option>
+                  <option value="0.9">0.9x</option>
+                  <option value="1" selected>1.0x</option>
+                  <option value="1.1">1.1x</option>
+                  <option value="1.2">1.2x</option>
+                </select>
+                <button id="case-audio-play" type="button" aria-label="Read case description narration">Read</button>
+                <button id="case-audio-pause" type="button" aria-label="Pause case description narration">Pause</button>
+              </div>
+            </div>
+            <div id="case-description"></div>
+          </section>
+
+          <div class="viewer-controls instruction-box instruction-box--subtle" id="viewer-help">
+            <p class="instruction-kicker">Screenshot Note</p>
+            <p class="preference-note">
+              The case description explains what kind of screen you are viewing and which main parts it contains. The screenshot is where you inspect those parts visually and mark the area that appears to be causing the barrier. Use your mouse, trackpad, pen, or touch to place the mark directly on the screenshot. If zoom is enabled, drag with the mouse or use the arrow keys to pan across the screenshot.
+            </p>
+          </div>
+
+          <div id="zoom-viewport" class="zoom-viewport" tabindex="0" role="group" aria-label="Case screenshot viewer" aria-describedby="viewer-help case-description">
+            <div id="zoom-layer" class="zoom-layer">
+              <img id="case-image" alt="UI case screenshot for accessibility analysis" aria-describedby="case-description">
+              <canvas id="analysis-canvas" aria-hidden="true"></canvas>
+            </div>
+          </div>
+
+          <p id="selection-readout">No point marked yet.</p>
+          <p id="form-guidance" class="task-reminder">
+            After you mark an area, complete the four fields below in order: choose the barrier type, choose the affected group, write a short rationale, and rate your confidence before submitting.
+          </p>
+
+          <section id="alternative-panel" class="alternative-panel" hidden aria-labelledby="alternative-heading">
+            <h3 id="alternative-heading">Structured Review Target Selection</h3>
+            <label for="violation-target">Interface element under review</label>
+            <select id="violation-target">
+              <option value="">Select interface element under review</option>
+            </select>
+            <ul id="target-list" class="target-list"></ul>
+          </section>
+
+          <form id="answer-form" novalidate>
+            <div id="error-summary" class="error-summary" role="alert" aria-live="assertive" hidden tabindex="-1"></div>
+            <div class="form-grid">
+              <label for="barrier-type">Main issue</label>
+              <select id="barrier-type" aria-describedby="barrier-type-help" required>
+                <option value="">Select barrier type</option>
+              </select>
+              <p id="barrier-type-help" class="field-helper">Choose the barrier category that best matches the issue you noticed in the marked area.</p>
+
+              <label for="affected-group">Who is most affected</label>
+              <select id="affected-group" aria-describedby="affected-group-help" required>
+                <option value="">Select affected group</option>
+              </select>
+              <p id="affected-group-help" class="field-helper">Choose the group most directly affected by this barrier in the current case.</p>
+
+              <label for="rationale">Rationale (max 150 characters)</label>
+              <textarea id="rationale" aria-describedby="rationale-help rationale-count" maxlength="150" rows="3" required></textarea>
+              <p id="rationale-help" class="field-helper">Briefly explain why this element creates a barrier.</p>
+              <p id="rationale-count" class="preference-note">0 / 150</p>
+
+              <label for="confidence-rating">How confident are you? (1-5)</label>
+              <select id="confidence-rating" aria-describedby="confidence-help" required>
+                <option value="">Select confidence</option>
+                <option value="1">1 - Low confidence</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5 - High confidence</option>
+              </select>
+              <p id="confidence-help" class="field-helper">Rate how certain you are that your selected area and classification are correct.</p>
+            </div>
+            <div class="button-row">
+              <button id="submit-answer" type="submit">Submit</button>
+              <button id="next-case" type="button" disabled>Next case</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel result-panel" aria-labelledby="result-heading">
+          <h2 id="result-heading">Feedback for this case</h2>
+          <div id="result-summary" class="result-summary" aria-live="polite">
+            <p class="instruction-kicker">Feedback Note</p>
+            <p>After you submit, this panel will explain the main issue, why it matters, and how your answer compares with the reference response.</p>
+          </div>
+          <section id="expert-explanation-block" class="result-summary top-gap" hidden aria-labelledby="expert-explanation-heading">
+            <div class="section-head">
+              <h3 id="expert-explanation-heading">Why this is the main issue</h3>
+              <div class="audio-controls" role="group" aria-label="Expert explanation narration controls">
+                <label for="expert-audio-speed" class="field-helper">Speed</label>
+                <select id="expert-audio-speed" aria-label="Expert narration speed">
+                  <option value="0.8">0.8x</option>
+                  <option value="0.9">0.9x</option>
+                  <option value="1" selected>1.0x</option>
+                  <option value="1.1">1.1x</option>
+                  <option value="1.2">1.2x</option>
+                </select>
+                <button id="expert-audio-play" type="button" aria-label="Read expert explanation narration">Read</button>
+                <button id="expert-audio-pause" type="button" aria-label="Pause expert explanation narration">Pause</button>
+              </div>
+            </div>
+            <div id="expert-explanation-text"></div>
+          </section>
+          <section id="reference-response-block" class="result-summary top-gap" hidden aria-labelledby="reference-response-heading">
+            <h3 id="reference-response-heading">Correct answer</h3>
+            <p class="preference-note">Use this as a clear reference answer after submission. It shows what to focus on, who is affected, and why the issue matters.</p>
+            <div id="reference-response-content" class="reference-response"></div>
+          </section>
+          <div id="score-breakdown" hidden></div>
+          <section id="run-summary-block" class="result-summary top-gap" hidden aria-labelledby="run-summary-heading">
+            <h3 id="run-summary-heading">Run Summary</h3>
+            <div id="run-summary-content"></div>
+          </section>
+          <div id="final-score" class="final-score" aria-live="polite"></div>
+        </section>
+      </div>
+    </section>
+
+    <section id="panel-instructions" role="tabpanel" aria-labelledby="tab-instructions" class="tabpanel" hidden>
+      <div class="tab-content panel">
+        <div class="section-head">
+          <h2>Instructions</h2>
+          <div class="audio-controls" role="group" aria-label="Instructions narration controls">
+            <label for="instructions-audio-speed" class="field-helper">Speed</label>
+            <select id="instructions-audio-speed" aria-label="Instructions narration speed">
+              <option value="0.8">0.8x</option>
+              <option value="0.9">0.9x</option>
+              <option value="1" selected>1.0x</option>
+              <option value="1.1">1.1x</option>
+              <option value="1.2">1.2x</option>
+            </select>
+            <button id="instructions-audio-play" type="button" aria-label="Read instructions narration">Read</button>
+            <button id="instructions-audio-pause" type="button" aria-label="Pause instructions narration">Pause</button>
+          </div>
+        </div>
+        <div id="instructions-content">
+          <h3>Purpose</h3>
+          <p>This platform helps you practice accessibility analysis by examining interface screenshots and identifying where a barrier may exist. You are not answering a quiz from memory. You are reviewing visible interface evidence and making a reasoned judgment.</p>
+
+          <h3>What You Are Seeing</h3>
+          <p>Each case includes two forms of evidence. The neutral case description tells you the general layout and major interface elements without revealing the answer. The screenshot lets you inspect the interface visually and decide which element or area is most likely responsible for the barrier.</p>
+
+          <h3>What You Do</h3>
+          <p>Open the Simulation tab and work through one case at a time. First read the neutral description. Then inspect the screenshot. Next, either click the problem area or use Structured Analysis Mode to choose the interface element under review. After that, complete the barrier type, affected group, rationale, and confidence fields, then submit your analysis.</p>
+
+          <h3>Why The Platform Is Structured This Way</h3>
+          <p>The description is neutral on purpose so that you focus on observation rather than hints. The screenshot, structured response fields, and confidence rating work together to measure how accurately and consistently you can identify accessibility barriers in realistic interfaces.</p>
+
+          <h3>Scoring Model</h3>
+          <p>Your submission is evaluated using four parts: whether you selected the correct area or interface element, whether you chose the correct barrier classification, whether your rationale meaningfully matches the case, and whether your confidence level is well calibrated to your accuracy.</p>
+
+          <h3>Research Note</h3>
+          <p>Submissions are recorded as session data for structured analysis, competency review, and research reporting. In public use, this supports training feedback. In research mode, the same structure supports controlled data collection and export.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="panel-interaction" role="tabpanel" aria-labelledby="tab-interaction" class="tabpanel" hidden>
+      <div class="tab-content panel">
+        <div class="section-head">
+          <h2>Interaction Preferences</h2>
+          <div class="audio-controls" role="group" aria-label="Interaction preferences narration controls">
+            <label for="interaction-audio-speed" class="field-helper">Speed</label>
+            <select id="interaction-audio-speed" aria-label="Interaction preferences narration speed">
+              <option value="0.8">0.8x</option>
+              <option value="0.9">0.9x</option>
+              <option value="1" selected>1.0x</option>
+              <option value="1.1">1.1x</option>
+              <option value="1.2">1.2x</option>
+            </select>
+            <button id="interaction-audio-play" type="button" aria-label="Read interaction preferences narration">Read</button>
+            <button id="interaction-audio-pause" type="button" aria-label="Pause interaction preferences narration">Pause</button>
+          </div>
+        </div>
+        <p class="preference-note">These global interaction preferences apply across all tabs and simulation states.</p>
+        <div class="preferences-grid">
+          <label class="toggle-row" for="contrast-toggle" aria-label="Interface preference enhanced contrast">
+            <span>Enhanced Contrast</span>
+            <input id="contrast-toggle" type="checkbox" aria-describedby="contrast-help">
+          </label>
+          <p id="contrast-help" class="preference-note">Adjust foreground/background contrast for improved readability.</p>
+
+          <label class="toggle-row" for="motion-toggle" aria-label="Interface preference limit motion effects">
+            <span>Limit Motion Effects</span>
+            <input id="motion-toggle" type="checkbox" aria-describedby="motion-help">
+          </label>
+          <p id="motion-help" class="preference-note">Limit motion effects in the interface.</p>
+
+          <label for="font-scale">Font scale</label>
+          <input id="font-scale" type="range" min="90" max="130" value="100" step="5" aria-valuemin="90" aria-valuemax="130" aria-label="Interface preference font scale">
+          <output id="font-scale-value" for="font-scale">100%</output>
+
+          <label class="toggle-row" for="alternative-mode-toggle" aria-label="Interface preference structured analysis mode">
+            <span>Structured Analysis Mode</span>
+            <input id="alternative-mode-toggle" type="checkbox" aria-describedby="alternative-help">
+          </label>
+          <p id="alternative-help" class="preference-note">Switch between spatial and structured analysis modes.</p>
+
+          <label class="toggle-row" for="zoom-toggle" aria-label="Interface preference magnification view">
+            <span>Magnification View (200%)</span>
+            <input id="zoom-toggle" type="checkbox" aria-describedby="zoom-help">
+          </label>
+          <p id="zoom-help" class="preference-note">Enable close inspection with drag or arrow-key panning.</p>
+
+          <label class="toggle-row" for="timer-toggle" aria-label="Interface preference timed evaluation mode">
+            <span>Timed Evaluation Mode</span>
+            <input id="timer-toggle" type="checkbox" aria-describedby="timer-help">
+          </label>
+          <p id="timer-help" class="preference-note">Include optional time-efficiency weighting in scoring.</p>
+
+          <label class="toggle-row" for="wcag-preview-toggle" aria-label="Interface preference standards reference preview">
+            <span>Standards Reference Preview</span>
+            <input id="wcag-preview-toggle" type="checkbox" aria-describedby="wcag-preview-help">
+          </label>
+          <p id="wcag-preview-help" class="preference-note">Show standards reference context after submission.</p>
+
+          <p id="audio-support-message" class="field-helper" hidden aria-live="polite"></p>
+        </div>
+
+        <div class="button-row top-gap">
+          <button id="reset-interface" type="button">Reset Interface</button>
+        </div>
+        <div class="access-row top-gap" aria-live="polite">
+          <p id="current-access-status" class="access-status">Current access: Public mode</p>
+          <button id="activate-research-mode" class="secondary-action" type="button" aria-label="Activate research mode">
+            Activate Research Mode
+          </button>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="panel-keyboard" role="tabpanel" aria-labelledby="tab-keyboard" class="tabpanel" hidden>
+      <div class="tab-content panel">
+        <div class="section-head">
+          <h2>Keyboard Guide</h2>
+          <div class="audio-controls" role="group" aria-label="Keyboard guide narration controls">
+            <label for="keyboard-audio-speed" class="field-helper">Speed</label>
+            <select id="keyboard-audio-speed" aria-label="Keyboard guide narration speed">
+              <option value="0.8">0.8x</option>
+              <option value="0.9">0.9x</option>
+              <option value="1" selected>1.0x</option>
+              <option value="1.1">1.1x</option>
+              <option value="1.2">1.2x</option>
+            </select>
+            <button id="keyboard-audio-play" type="button" aria-label="Read keyboard guide narration">Read</button>
+            <button id="keyboard-audio-pause" type="button" aria-label="Pause keyboard guide narration">Pause</button>
+          </div>
+        </div>
+        <ul class="plain-list">
+          <li><strong>Tab / Shift+Tab:</strong> Move through interactive controls.</li>
+          <li><strong>Arrow Left/Right:</strong> Move between top tabs when focus is on the tablist.</li>
+          <li><strong>Home / End:</strong> Jump to first or last top tab.</li>
+          <li><strong>Enter / Space:</strong> Activate focused tab or action button.</li>
+          <li><strong>Viewer Arrow Keys:</strong> Move marked point when zoom is off.</li>
+          <li><strong>Viewer Arrow Keys (zoom on):</strong> Pan the zoomed screenshot.</li>
+          <li><strong>Shift + Arrow Keys:</strong> Use larger movement steps for marking/panning.</li>
+          <li><strong>Enter / Space in viewer:</strong> Confirm current marker point.</li>
+          <li><strong>Form controls:</strong> Use standard select/textarea keyboard interaction and submit with Enter on button.</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <p>Designed by Zacharoula Zempili<br>PhD Researcher, KTH Royal Institute of Technology</p>
+  </footer>
+
+  <dialog id="start-modal" class="start-modal" aria-labelledby="start-modal-title">
+    <form method="dialog" id="start-form">
+      <button type="button" class="dialog-close-button" id="start-modal-close" aria-label="Close start dialog">×</button>
+      <p class="start-kicker">Strategic Simulation Environment</p>
+      <h2 id="start-modal-title">Barrier Breaker: Forensic Mode</h2>
+      <p class="start-description">This simulation places you in an accessibility forensic analysis role. In each case, you will read a short neutral description, inspect a screenshot, identify the part of the interface that seems problematic, and submit a structured accessibility judgment.</p>
+      <p class="start-description">The goal is not to guess. The goal is to examine the evidence on screen and explain why that interface may create a barrier.</p>
+      <label for="participant-code">Participant Code (optional)</label>
+      <input id="participant-code" type="text" maxlength="64" autocomplete="off">
+
+      <label class="start-consent">
+        <input id="consent-research" type="checkbox">
+        <span>I consent to anonymized research data collection for this session.</span>
+      </label>
+
+      <div class="button-row top-gap">
+        <button id="begin-simulation" type="submit" disabled>Begin Simulation</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="access-modal" aria-labelledby="access-modal-title">
+    <form method="dialog" id="access-form">
+      <button type="button" class="dialog-close-button" id="access-modal-close" aria-label="Close access dialog">×</button>
+      <h2 id="access-modal-title">Restricted Access</h2>
+      <p id="access-modal-description" class="field-helper">Enter the access code to continue.</p>
+      <label for="access-password">Access code</label>
+      <input id="access-password" type="password" autocomplete="current-password">
+      <div class="button-row top-gap">
+        <button id="access-cancel" type="button">Cancel</button>
+        <button id="access-submit" type="submit">Unlock</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="app.js?v=20260308d"></script>
+</body>
+</html>

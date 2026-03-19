@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: barrier-breaker-forensic-mode
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    healthCheckPath: /index.html
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.2
+      - key: ADMIN_KEY
+        sync: false
+      - key: LOG_DB_PATH
+        value: /tmp/research_logs.sqlite3

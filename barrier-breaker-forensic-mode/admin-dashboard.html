@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Barrier Breaker Admin Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: #f3f5f7;
+      color: #1f2a36;
+    }
+    main {
+      max-width: 1100px;
+      margin: 1rem auto;
+      padding: 0 1rem 1rem;
+    }
+    .panel {
+      background: #fff;
+      border: 1px solid #c4ccd3;
+      border-radius: 10px;
+      padding: 1rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.94rem;
+    }
+    th, td {
+      border: 1px solid #d5dde4;
+      text-align: left;
+      padding: 0.45rem 0.55rem;
+      vertical-align: top;
+    }
+    th {
+      background: #eef3f6;
+      font-weight: 600;
+    }
+    .muted {
+      color: #526270;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="panel" aria-labelledby="dashboard-title">
+      <h1 id="dashboard-title">Barrier Breaker: Admin Dashboard</h1>
+      <p class="muted">Protected research logs view.</p>
+      <p id="summary"><strong>Total records:</strong> 0</p>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Session UUID</th>
+              <th>Role</th>
+              <th>Case ID</th>
+              <th>Decision Timestamp</th>
+              <th>Classification</th>
+              <th>Justification</th>
+              <th>Confidence</th>
+              <th>Time Taken</th>
+              <th>Mode</th>
+              <th>Indicator Changes</th>
+              <th>Participant Code</th>
+              <th>Consent</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    async function loadLogs() {
+      const res = await fetch('/api/admin/logs', { credentials: 'same-origin' });
+      if (!res.ok) {
+        document.getElementById('summary').innerHTML = '<strong>Unable to load records.</strong>';
+        return;
+      }
+      const data = await res.json();
+      document.getElementById('summary').innerHTML = `<strong>Total records:</strong> ${data.total}`;
+      const tbody = document.getElementById('rows');
+      tbody.innerHTML = '';
+      for (const item of data.items || []) {
+        const tr = document.createElement('tr');
+        const cells = [
+          item.sessionUUID,
+          item.role,
+          item.caseID,
+          item.decisionTimestamp,
+          item.classification,
+          item.justification,
+          String(item.confidence),
+          String(item.timeTaken),
+          item.mode,
+          Array.isArray(item.indicatorChanges) ? item.indicatorChanges.join(', ') : '',
+          item.participantCode || '',
+          item.consentResearch ? 'Yes' : 'No'
+        ];
+        for (const value of cells) {
+          const td = document.createElement('td');
+          td.textContent = value || '';
+          tr.appendChild(td);
+        }
+        tbody.appendChild(tr);
+      }
+    }
+    loadLogs();
+  </script>
+</body>
+</html>

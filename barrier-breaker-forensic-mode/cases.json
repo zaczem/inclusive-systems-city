@@ -1,0 +1,1532 @@
+{
+  "issueTypes": [
+    "Color contrast failure",
+    "Keyboard/focus issue",
+    "Missing or unclear label",
+    "Semantic structure error",
+    "Non-text content issue",
+    "Time/auto-update issue",
+    "Inconsistent navigation"
+  ],
+  "levels": [
+    "Level 1 - Visual issues",
+    "Level 2 - Interaction issues",
+    "Level 3 - Structural issues",
+    "Level 4 - Systemic issues",
+    "Level 5 - Complex issues"
+  ],
+  "cases": [
+    {
+      "id": "L1-C01",
+      "level": "Level 1 - Visual issues",
+      "difficulty": "Easy",
+      "category": "Color contrast failure",
+      "wcag": "WCAG 1.4.3 Contrast (Minimum)",
+      "principleCategory": "Perceivable",
+      "barrierComplexityScore": 1,
+      "visualSalienceScore": 5,
+      "severityIndex": 2,
+      "expectedDetectionTimeMs": 25000,
+      "cognitiveLoadEstimate": 1,
+      "wcagLevel": "AA",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "contrast",
+        "readability",
+        "foreground",
+        "background",
+        "low"
+      ],
+      "problemZone": {
+        "x": 320,
+        "y": 228,
+        "width": 220,
+        "height": 58
+      },
+      "tolerance": 30,
+      "neutralDescription": {
+        "layout": "Single content card with heading, text lines, and one primary action button in the center area.",
+        "elements": [
+          "Top heading line inside white card",
+          "Multiple horizontal body text lines",
+          "Primary action button labeled Submit Request"
+        ]
+      },
+      "expertExplanation": "The call-to-action button uses low luminance contrast between text and background, reducing text legibility.",
+      "impact": "Primary action discoverability and readability are reduced, increasing task failure risk.",
+      "affectedGroups": [
+        "People with low vision",
+        "People with color vision differences",
+        "Users in low-light or glare conditions"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#f4f7fa'/><rect x='80' y='80' width='740' height='360' rx='12' fill='white' stroke='#d0d7de'/><rect x='120' y='120' width='320' height='18' rx='3' fill='#2f3b48'/><rect x='120' y='158' width='620' height='12' rx='3' fill='#d7dde3'/><rect x='120' y='180' width='560' height='12' rx='3' fill='#d7dde3'/><rect x='120' y='202' width='590' height='12' rx='3' fill='#d7dde3'/><rect x='320' y='228' width='220' height='58' rx='8' fill='#95a0ad'/><text x='430' y='264' text-anchor='middle' font-size='25' font-family='Arial' fill='#aab4bf'>Submit Request</text><rect x='120' y='320' width='620' height='10' rx='3' fill='#d7dde3'/><rect x='120' y='340' width='450' height='10' rx='3' fill='#d7dde3'/></svg>"
+      }
+    },
+    {
+      "id": "L2-C01",
+      "level": "Level 2 - Interaction issues",
+      "difficulty": "Medium",
+      "category": "Keyboard/focus issue",
+      "wcag": "WCAG 2.1.1 Keyboard",
+      "principleCategory": "Operable",
+      "barrierComplexityScore": 2,
+      "visualSalienceScore": 4,
+      "severityIndex": 3,
+      "expectedDetectionTimeMs": 35500,
+      "cognitiveLoadEstimate": 2,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "keyboard",
+        "focus",
+        "tab",
+        "interactive",
+        "operable"
+      ],
+      "problemZone": {
+        "x": 603,
+        "y": 201,
+        "width": 32,
+        "height": 32
+      },
+      "tolerance": 24,
+      "neutralDescription": {
+        "layout": "Payment form with two option rows and a small icon control near the upper-right of the options region.",
+        "elements": [
+          "Payment option rows",
+          "icon circular add control",
+          "Continue button in lower section"
+        ]
+      },
+      "expertExplanation": "The icon-only control lacks robust keyboard focus visibility and is difficult to operate reliably.",
+      "impact": "Keyboard and precision-limited users may not locate or activate the control, blocking progression.",
+      "affectedGroups": [
+        "Keyboard-only users",
+        "People with motor impairments",
+        "Screen magnifier users"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#edf2f7'/><rect x='70' y='70' width='760' height='380' rx='14' fill='white' stroke='#d0d7de'/><text x='110' y='130' font-size='24' font-family='Arial' fill='#243241'>Payment Method</text><rect x='110' y='160' width='430' height='54' rx='8' fill='#f8fafc' stroke='#cfd6de'/><text x='130' y='194' font-size='18' font-family='Arial' fill='#2c3e50'>Card ending in 4402</text><rect x='110' y='240' width='430' height='54' rx='8' fill='#f8fafc' stroke='#cfd6de'/><text x='130' y='274' font-size='18' font-family='Arial' fill='#2c3e50'>Add new card</text><rect x='603' y='201' width='32' height='32' rx='16' fill='#d8dee5'/><path d='M611 217h16M619 209v16' stroke='#718096' stroke-width='2'/><rect x='110' y='340' width='170' height='50' rx='8' fill='#0b4f6c'/><text x='195' y='372' text-anchor='middle' font-size='18' font-family='Arial' fill='white'>Continue</text></svg>"
+      }
+    },
+    {
+      "id": "L3-C01",
+      "level": "Level 3 - Structural issues",
+      "difficulty": "Hard",
+      "category": "Missing or unclear label",
+      "wcag": "WCAG 3.3.2 Labels or Instructions",
+      "principleCategory": "Understandable",
+      "barrierComplexityScore": 3,
+      "visualSalienceScore": 3,
+      "severityIndex": 4,
+      "expectedDetectionTimeMs": 46000,
+      "cognitiveLoadEstimate": 3,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "label",
+        "instruction",
+        "placeholder",
+        "form",
+        "input"
+      ],
+      "problemZone": {
+        "x": 170,
+        "y": 191,
+        "width": 410,
+        "height": 56
+      },
+      "tolerance": 26,
+      "neutralDescription": {
+        "layout": "Profile form with title, introductory line, and two input regions followed by a save action.",
+        "elements": [
+          "First input displays placeholder text",
+          "Second input has visible preceding label",
+          "Save button at lower area"
+        ]
+      },
+      "expertExplanation": "The first text field uses placeholder text as the primary cue instead of a persistent label.",
+      "impact": "Input purpose can become unclear during entry, increasing data quality and completion errors.",
+      "affectedGroups": [
+        "Screen reader users",
+        "People with cognitive disabilities",
+        "Users with memory or attention limitations"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#f1f4f8'/><rect x='120' y='70' width='660' height='380' rx='12' fill='white' stroke='#ced6de'/><text x='170' y='130' font-size='26' font-family='Arial' fill='#213040'>Profile Setup</text><text x='170' y='175' font-size='16' font-family='Arial' fill='#586574'>Complete your contact details</text><rect x='170' y='191' width='410' height='56' rx='8' fill='#ffffff' stroke='#c8d1da'/><text x='190' y='226' font-size='18' font-family='Arial' fill='#9aa6b2'>Enter your email</text><text x='170' y='285' font-size='15' font-family='Arial' fill='#5a6773'>Phone Number</text><rect x='170' y='296' width='410' height='56' rx='8' fill='#ffffff' stroke='#c8d1da'/><text x='190' y='331' font-size='18' font-family='Arial' fill='#2f3c49'>+46</text><rect x='170' y='372' width='170' height='48' rx='8' fill='#0f766e'/><text x='255' y='402' text-anchor='middle' font-size='18' font-family='Arial' fill='white'>Save</text></svg>"
+      }
+    },
+    {
+      "id": "L4-C01",
+      "level": "Level 4 - Systemic issues",
+      "difficulty": "Expert",
+      "category": "Inconsistent navigation",
+      "wcag": "WCAG 3.2.3 Consistent Navigation",
+      "principleCategory": "Understandable",
+      "barrierComplexityScore": 4,
+      "visualSalienceScore": 2,
+      "severityIndex": 5,
+      "expectedDetectionTimeMs": 56500,
+      "cognitiveLoadEstimate": 5,
+      "wcagLevel": "AA",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "consistent",
+        "navigation",
+        "predictable",
+        "menu",
+        "order"
+      ],
+      "problemZone": {
+        "x": 552,
+        "y": 108,
+        "width": 235,
+        "height": 32
+      },
+      "tolerance": 22,
+      "neutralDescription": {
+        "layout": "Dashboard page with global top navigation and three content cards in the main region.",
+        "elements": [
+          "Brand title in top-left",
+          "Top navigation items in right-aligned sequence",
+          "Three analytics cards in content area"
+        ]
+      },
+      "expertExplanation": "Navigation item order differs between equivalent screens, reducing consistency and predictability.",
+      "impact": "Repeated navigation patterns are disrupted, increasing orientation time and cognitive load.",
+      "affectedGroups": [
+        "People with cognitive disabilities",
+        "Screen reader users",
+        "Frequent keyboard navigators"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#edf1f4'/><rect x='60' y='80' width='780' height='360' rx='12' fill='white' stroke='#d0d7de'/><rect x='60' y='80' width='780' height='72' rx='12' fill='#1f2d3d'/><text x='98' y='125' font-size='24' font-family='Arial' fill='white'>Acme Operations</text><text x='552' y='128' font-size='20' font-family='Arial' fill='#ffc857'>Settings</text><text x='648' y='128' font-size='20' font-family='Arial' fill='#dce4ec'>Dashboard</text><text x='760' y='128' font-size='20' font-family='Arial' fill='#dce4ec'>Reports</text><rect x='100' y='185' width='220' height='220' rx='10' fill='#f8fafb' stroke='#cfd6de'/><rect x='340' y='185' width='220' height='220' rx='10' fill='#f8fafb' stroke='#cfd6de'/><rect x='580' y='185' width='220' height='220' rx='10' fill='#f8fafb' stroke='#cfd6de'/><text x='130' y='225' font-size='18' font-family='Arial' fill='#2c3e50'>Monthly Activity</text></svg>"
+      }
+    },
+    {
+      "id": "L1-C02",
+      "level": "Level 1 - Visual issues",
+      "difficulty": "Easy",
+      "category": "Color contrast failure",
+      "wcag": "WCAG 1.4.3 Contrast (Minimum)",
+      "principleCategory": "Perceivable",
+      "barrierComplexityScore": 1,
+      "visualSalienceScore": 5,
+      "severityIndex": 2,
+      "expectedDetectionTimeMs": 25000,
+      "cognitiveLoadEstimate": 1,
+      "wcagLevel": "AA",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "contrast",
+        "readability",
+        "text",
+        "foreground",
+        "background",
+        "low"
+      ],
+      "problemZone": {
+        "x": 224,
+        "y": 388,
+        "width": 224,
+        "height": 18
+      },
+      "tolerance": 24,
+      "neutralDescription": {
+        "layout": "Sign-in card with heading, two fields, helper text, and submit action.",
+        "elements": [
+          "Email field",
+          "Password field",
+          "subtle password requirements text"
+        ]
+      },
+      "expertExplanation": "Helper text contrast is insufficient against the background, reducing readability for many users.",
+      "impact": "Low-contrast helper text reduces legibility and increases reading errors.",
+      "affectedGroups": [
+        "Users with low vision",
+        "Users with cognitive impairments"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><rect x='182' y='124' width='536' height='306' rx='16' fill='#fbfcfd' stroke='#d6dee7'/><text x='224' y='172' font-size='24' font-family='Arial' fill='#25374a'>Sign In</text><rect x='224' y='194' width='208' height='12' rx='4' fill='#d5dde5'/><text x='224' y='236' font-size='16' font-family='Arial' fill='#536578'>Email</text><rect x='224' y='248' width='452' height='42' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='224' y='326' font-size='16' font-family='Arial' fill='#536578'>Password</text><rect x='224' y='338' width='452' height='42' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='224' y='398' font-size='13' font-family='Arial' fill='#b5c0cb'>Use at least 12 characters.</text><rect x='224' y='404' width='148' height='42' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><text x='272' y='431' font-size='18' font-family='Arial' fill='#42576b'>Continue</text></svg>"
+      }
+    },
+    {
+      "id": "L1-C03",
+      "level": "Level 1 - Visual issues",
+      "difficulty": "Easy",
+      "category": "Non-text content issue",
+      "wcag": "WCAG 1.1.1 Non-text Content",
+      "principleCategory": "Perceivable",
+      "barrierComplexityScore": 1,
+      "visualSalienceScore": 5,
+      "severityIndex": 2,
+      "expectedDetectionTimeMs": 25000,
+      "cognitiveLoadEstimate": 1,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "non-text",
+        "icon",
+        "alt",
+        "status",
+        "semantic",
+        "announcement"
+      ],
+      "problemZone": {
+        "x": 620,
+        "y": 204,
+        "width": 44,
+        "height": 44
+      },
+      "tolerance": 22,
+      "neutralDescription": {
+        "layout": "Settings panel with status icons and short labels.",
+        "elements": [
+          "System status row",
+          "status icon",
+          "Save button"
+        ]
+      },
+      "expertExplanation": "The warning icon communicates critical meaning visually but lacks a text alternative.",
+      "impact": "Meaningful icon state is missed when no text alternative is available.",
+      "affectedGroups": [
+        "Screen reader users",
+        "Users with cognitive impairments"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Settings Panel</text><rect x='110' y='145' width='240' height='12' rx='4' fill='#d5dde5'/><rect x='110' y='182' width='620' height='70' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><text x='138' y='216' font-size='18' font-family='Arial' fill='#4d6377'>System Status</text><rect x='138' y='228' width='134' height='10' rx='4' fill='#dbe3eb'/><rect x='620' y='195' width='44' height='44' rx='8' fill='#dfe8f1' stroke='#b8c6d5'/><path d='M642 205l10 18h-20z' fill='#8ea1b4'/><rect x='110' y='274' width='620' height='54' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><rect x='138' y='296' width='188' height='10' rx='4' fill='#dbe3eb'/><rect x='110' y='346' width='160' height='44' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><text x='158' y='374' font-size='18' font-family='Arial' fill='#4d6377'>Save</text></svg>"
+      }
+    },
+    {
+      "id": "L2-C02",
+      "level": "Level 2 - Interaction issues",
+      "difficulty": "Moderate",
+      "category": "Keyboard/focus issue",
+      "wcag": "WCAG 2.4.7 Focus Visible",
+      "principleCategory": "Operable",
+      "barrierComplexityScore": 2,
+      "visualSalienceScore": 4,
+      "severityIndex": 3,
+      "expectedDetectionTimeMs": 35500,
+      "cognitiveLoadEstimate": 2,
+      "wcagLevel": "AA",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "focus",
+        "keyboard",
+        "tab",
+        "visible",
+        "navigation",
+        "operable"
+      ],
+      "problemZone": {
+        "x": 304,
+        "y": 108,
+        "width": 118,
+        "height": 38
+      },
+      "tolerance": 22,
+      "neutralDescription": {
+        "layout": "Application header with horizontal navigation and workspace panel.",
+        "elements": [
+          "Top navigation links",
+          "Workspace summary card",
+          "Secondary tools menu"
+        ]
+      },
+      "expertExplanation": "No visible focus indicator appears on the active navigation control during keyboard traversal.",
+      "impact": "Keyboard users cannot track current focus location in top navigation.",
+      "affectedGroups": [
+        "Keyboard users",
+        "Users with low vision"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><rect x='70' y='70' width='760' height='72' rx='12' fill='#f8fafc' stroke='#cfd7df'/><text x='108' y='116' font-size='22' font-family='Arial' fill='#25374a'>Navigation Header</text><text x='304' y='132' font-size='17' font-family='Arial' fill='#42576b'>Overview</text><rect x='304' y='108' width='118' height='38' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><text x='330' y='132' font-size='17' font-family='Arial' fill='#42576b'>Projects</text><text x='470' y='132' font-size='17' font-family='Arial' fill='#5b6f82'>Reports</text><text x='596' y='132' font-size='17' font-family='Arial' fill='#5b6f82'>Settings</text><rect x='664' y='102' width='84' height='44' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='688' y='130' font-size='15' font-family='Arial' fill='#5b6f82'>Tools</text><rect x='108' y='178' width='220' height='156' rx='12' fill='#f8fafc' stroke='#d5dee7'/><text x='134' y='212' font-size='18' font-family='Arial' fill='#536578'>Workspace</text><rect x='134' y='236' width='146' height='12' rx='4' fill='#dce4ec'/><rect x='134' y='264' width='164' height='12' rx='4' fill='#dce4ec'/><rect x='360' y='178' width='360' height='156' rx='12' fill='#fbfcfd' stroke='#d5dee7'/><rect x='388' y='208' width='280' height='12' rx='4' fill='#dce4ec'/><rect x='388' y='236' width='244' height='12' rx='4' fill='#dce4ec'/><rect x='388' y='264' width='260' height='12' rx='4' fill='#dce4ec'/></svg>"
+      }
+    },
+    {
+      "id": "L2-C03",
+      "level": "Level 2 - Interaction issues",
+      "difficulty": "Moderate",
+      "category": "Keyboard/focus issue",
+      "wcag": "WCAG 2.1.2 No Keyboard Trap",
+      "principleCategory": "Operable",
+      "barrierComplexityScore": 2,
+      "visualSalienceScore": 4,
+      "severityIndex": 3,
+      "expectedDetectionTimeMs": 35500,
+      "cognitiveLoadEstimate": 2,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "keyboard",
+        "trap",
+        "modal",
+        "focus",
+        "escape",
+        "navigation"
+      ],
+      "problemZone": {
+        "x": 642,
+        "y": 174,
+        "width": 36,
+        "height": 36
+      },
+      "tolerance": 20,
+      "neutralDescription": {
+        "layout": "Modal confirmation over dimmed background content.",
+        "elements": [
+          "Dialog title",
+          "Close control",
+          "Primary and secondary buttons"
+        ]
+      },
+      "expertExplanation": "The dialog close control is not reachable by keyboard, creating a practical keyboard trap.",
+      "impact": "Dialog interaction becomes blocked when users cannot exit by keyboard.",
+      "affectedGroups": [
+        "Keyboard users",
+        "Screen reader users"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#e7edf3'/><rect x='108' y='128' width='684' height='248' rx='12' fill='#dbe4ec'/><rect x='146' y='158' width='606' height='184' rx='14' fill='#ffffff' stroke='#cfd7df'/><text x='178' y='204' font-size='22' font-family='Arial' fill='#25374a'>Confirm changes</text><rect x='178' y='222' width='282' height='12' rx='4' fill='#d5dde5'/><rect x='178' y='248' width='512' height='12' rx='4' fill='#dbe3eb'/><rect x='178' y='272' width='484' height='12' rx='4' fill='#dbe3eb'/><rect x='642' y='174' width='36' height='36' rx='8' fill='#dfe8f1' stroke='#b8c6d5'/><path d='M652 184l16 16M668 184l-16 16' stroke='#6d8092' stroke-width='2.2' stroke-linecap='round'/><rect x='178' y='298' width='110' height='38' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='206' y='322' font-size='15' font-family='Arial' fill='#5d7285'>Cancel</text><rect x='302' y='298' width='132' height='38' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><text x='330' y='322' font-size='15' font-family='Arial' fill='#42576b'>Confirm</text></svg>"
+      }
+    },
+    {
+      "id": "L2-C04",
+      "level": "Level 2 - Interaction issues",
+      "difficulty": "Advanced",
+      "category": "Keyboard/focus issue",
+      "wcag": "WCAG 2.4.3 Focus Order",
+      "principleCategory": "Operable",
+      "barrierComplexityScore": 2,
+      "visualSalienceScore": 4,
+      "severityIndex": 4,
+      "expectedDetectionTimeMs": 38000,
+      "cognitiveLoadEstimate": 4,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "focus order",
+        "keyboard",
+        "form",
+        "sequence",
+        "navigation",
+        "consistency"
+      ],
+      "problemZone": {
+        "x": 540,
+        "y": 412,
+        "width": 180,
+        "height": 40
+      },
+      "tolerance": 24,
+      "neutralDescription": {
+        "layout": "Two-column form with personal and account details.",
+        "elements": [
+          "Left-column identity fields",
+          "Right-column account fields",
+          "Create account action"
+        ]
+      },
+      "expertExplanation": "Focus sequence skips logical field order and jumps to actions before required fields are reached.",
+      "impact": "Unexpected focus jumps disrupt completion flow and increase task time.",
+      "affectedGroups": [
+        "Keyboard users",
+        "Screen reader users",
+        "Users with cognitive impairments"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Registration Form</text><rect x='110' y='145' width='420' height='12' rx='3' fill='#d5dde5'/><text x='160' y='196' font-size='15' font-family='Arial' fill='#5b6f82'>Personal details</text><rect x='160' y='208' width='220' height='46' rx='10' fill='#ffffff' stroke='#cad5df'/><rect x='160' y='274' width='220' height='46' rx='10' fill='#ffffff' stroke='#cad5df'/><rect x='160' y='340' width='220' height='46' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='500' y='196' font-size='15' font-family='Arial' fill='#5b6f82'>Account details</text><rect x='500' y='208' width='220' height='46' rx='10' fill='#ffffff' stroke='#cad5df'/><rect x='500' y='274' width='220' height='46' rx='10' fill='#ffffff' stroke='#cad5df'/><rect x='500' y='340' width='220' height='46' rx='10' fill='#ffffff' stroke='#cad5df'/><rect x='532' y='404' width='196' height='56' rx='14' fill='none' stroke='#b8c6d5' stroke-width='3'/><rect x='540' y='412' width='180' height='40' rx='10' fill='#dfe8f1' stroke='#9fb4c7' stroke-width='2'/><text x='630' y='438' text-anchor='middle' font-size='16' font-family='Arial' fill='#42576b'>Create Account</text></svg>"
+      }
+    },
+    {
+      "id": "L2-C05",
+      "level": "Level 2 - Interaction issues",
+      "difficulty": "Advanced",
+      "category": "Time/auto-update issue",
+      "wcag": "WCAG 2.2.1 Timing Adjustable",
+      "principleCategory": "Operable",
+      "barrierComplexityScore": 2,
+      "visualSalienceScore": 4,
+      "severityIndex": 4,
+      "expectedDetectionTimeMs": 38000,
+      "cognitiveLoadEstimate": 4,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "timing",
+        "timeout",
+        "adjustable",
+        "countdown",
+        "error",
+        "control"
+      ],
+      "problemZone": {
+        "x": 120,
+        "y": 166,
+        "width": 660,
+        "height": 58
+      },
+      "tolerance": 24,
+      "neutralDescription": {
+        "layout": "Long-form assessment page with active countdown banner.",
+        "elements": [
+          "Countdown message",
+          "Long response field",
+          "Submit action"
+        ]
+      },
+      "expertExplanation": "A strict time limit is enforced without a clear method to extend, pause, or disable timing.",
+      "impact": "Session expiration without extension mechanism causes preventable data loss.",
+      "affectedGroups": [
+        "Users with cognitive impairments",
+        "Screen reader users",
+        "Keyboard users"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Timed Assessment</text><rect x='110' y='145' width='250' height='12' rx='4' fill='#d5dde5'/><rect x='120' y='166' width='660' height='58' rx='12' fill='#dfe8f1' stroke='#b8c6d5'/><text x='148' y='190' font-size='16' font-family='Arial' fill='#4d6377'>Time remaining: 01:58</text><rect x='148' y='198' width='156' height='8' rx='4' fill='#eef3f8'/><rect x='320' y='180' width='116' height='28' rx='8' fill='#eef3f8'/><text x='344' y='199' font-size='14' font-family='Arial' fill='#5d7285'>Continue</text><rect x='120' y='248' width='660' height='132' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><text x='148' y='282' font-size='18' font-family='Arial' fill='#4d6377'>Response</text><rect x='148' y='300' width='604' height='18' rx='5' fill='#dbe3eb'/><rect x='148' y='328' width='580' height='18' rx='5' fill='#dbe3eb'/><rect x='148' y='356' width='552' height='18' rx='5' fill='#dbe3eb'/><rect x='120' y='398' width='184' height='44' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><text x='170' y='426' font-size='18' font-family='Arial' fill='#4d6377'>Submit</text></svg>"
+      }
+    },
+    {
+      "id": "L2-C06",
+      "level": "Level 2 - Interaction issues",
+      "difficulty": "Advanced",
+      "category": "Missing or unclear label",
+      "wcag": "WCAG 2.5.3 Label in Name",
+      "principleCategory": "Operable",
+      "barrierComplexityScore": 2,
+      "visualSalienceScore": 4,
+      "severityIndex": 4,
+      "expectedDetectionTimeMs": 38000,
+      "cognitiveLoadEstimate": 4,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "label",
+        "name",
+        "voice",
+        "button",
+        "consistency",
+        "semantic"
+      ],
+      "problemZone": {
+        "x": 536,
+        "y": 184,
+        "width": 142,
+        "height": 40
+      },
+      "tolerance": 20,
+      "neutralDescription": {
+        "layout": "Toolbar with command buttons and search.",
+        "elements": [
+          "Search field",
+          "Export command",
+          "Share command"
+        ]
+      },
+      "expertExplanation": "Visible command text and accessible control name are inconsistent, harming speech/assistive interaction.",
+      "impact": "Voice command users cannot reliably trigger controls when labels mismatch.",
+      "affectedGroups": [
+        "Screen reader users",
+        "Users with cognitive impairments"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Command Toolbar</text><rect x='110' y='145' width='260' height='12' rx='4' fill='#d5dde5'/><rect x='130' y='176' width='640' height='56' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><rect x='154' y='184' width='248' height='40' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='184' y='209' font-size='15' font-family='Arial' fill='#7b8d9f'>Search documents</text><circle cx='376' cy='203' r='7' fill='none' stroke='#8ea1b4' stroke-width='2'/><path d='M381 208l7 7' stroke='#8ea1b4' stroke-width='2' stroke-linecap='round'/><rect x='426' y='184' width='96' height='40' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='448' y='209' font-size='15' font-family='Arial' fill='#5d7285'>Filter</text><rect x='536' y='184' width='142' height='40' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><text x='560' y='209' font-size='15' font-family='Arial' fill='#42576b'>Export data</text><rect x='692' y='184' width='78' height='40' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='714' y='209' font-size='15' font-family='Arial' fill='#5d7285'>Share</text><rect x='130' y='260' width='640' height='124' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><rect x='154' y='286' width='576' height='12' rx='4' fill='#dbe3eb'/><rect x='154' y='314' width='548' height='12' rx='4' fill='#dbe3eb'/><rect x='154' y='342' width='510' height='12' rx='4' fill='#dbe3eb'/></svg>"
+      }
+    },
+    {
+      "id": "L2-C07",
+      "level": "Level 2 - Interaction issues",
+      "difficulty": "Expert",
+      "category": "Inconsistent navigation",
+      "wcag": "WCAG 3.2.3 Consistent Navigation",
+      "principleCategory": "Understandable",
+      "barrierComplexityScore": 2,
+      "visualSalienceScore": 4,
+      "severityIndex": 5,
+      "expectedDetectionTimeMs": 40500,
+      "cognitiveLoadEstimate": 5,
+      "wcagLevel": "AA",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "consistency",
+        "navigation",
+        "settings",
+        "predictable",
+        "order",
+        "workflow"
+      ],
+      "problemZone": {
+        "x": 126,
+        "y": 194,
+        "width": 184,
+        "height": 42
+      },
+      "tolerance": 22,
+      "neutralDescription": {
+        "layout": "Account settings page with side navigation and a profile details form.",
+        "elements": [
+          "Settings navigation list",
+          "Profile form fields",
+          "Primary save action"
+        ]
+      },
+      "expertExplanation": "The step navigation order differs from equivalent screens, reducing predictability across the flow.",
+      "impact": "Changing step order across checkout pages increases orientation errors.",
+      "affectedGroups": [
+        "Users with cognitive impairments",
+        "Keyboard users",
+        "Screen reader users"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='72' y='72' width='756' height='376' rx='12' fill='white' stroke='#cfd7df'/><text x='112' y='118' font-size='24' font-family='Arial' fill='#25374a'>Account Settings</text><rect x='112' y='148' width='220' height='252' rx='12' fill='#f8fafc' stroke='#d5dee7'/><text x='138' y='182' font-size='18' font-family='Arial' fill='#536578'>Navigation</text><rect x='126' y='194' width='184' height='42' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><text x='148' y='221' font-size='16' font-family='Arial' fill='#42576b'>Billing</text><rect x='126' y='246' width='184' height='42' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='148' y='273' font-size='16' font-family='Arial' fill='#5b6f82'>Profile</text><rect x='126' y='298' width='184' height='42' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='148' y='325' font-size='16' font-family='Arial' fill='#5b6f82'>Security</text><rect x='126' y='350' width='184' height='42' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='148' y='377' font-size='16' font-family='Arial' fill='#5b6f82'>Notifications</text><rect x='360' y='148' width='404' height='252' rx='12' fill='#fbfcfd' stroke='#d5dee7'/><text x='392' y='182' font-size='18' font-family='Arial' fill='#536578'>Profile Details</text><rect x='392' y='214' width='300' height='12' rx='4' fill='#dce4ec'/><rect x='392' y='244' width='328' height='40' rx='10' fill='#ffffff' stroke='#cad5df'/><rect x='392' y='302' width='328' height='40' rx='10' fill='#ffffff' stroke='#cad5df'/><rect x='392' y='358' width='118' height='42' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/></svg>"
+      }
+    },
+    {
+      "id": "L3-C02",
+      "level": "Level 3 - Structural issues",
+      "difficulty": "Moderate",
+      "category": "Missing or unclear label",
+      "wcag": "WCAG 3.3.2 Labels or Instructions",
+      "principleCategory": "Understandable",
+      "barrierComplexityScore": 3,
+      "visualSalienceScore": 3,
+      "severityIndex": 3,
+      "expectedDetectionTimeMs": 43500,
+      "cognitiveLoadEstimate": 3,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "label",
+        "instruction",
+        "date",
+        "format",
+        "error",
+        "form"
+      ],
+      "problemZone": {
+        "x": 168,
+        "y": 206,
+        "width": 244,
+        "height": 44
+      },
+      "tolerance": 22,
+      "neutralDescription": {
+        "layout": "Booking form with date, time, and confirmation controls.",
+        "elements": [
+          "Date field",
+          "Time dropdown",
+          "Confirm booking action"
+        ]
+      },
+      "expertExplanation": "The date input lacks persistent label and clear formatting instruction.",
+      "impact": "Users are uncertain about required input format and make avoidable errors.",
+      "affectedGroups": [
+        "Users with cognitive impairments",
+        "Screen reader users",
+        "Users with low vision"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Booking Form</text><rect x='110' y='145' width='420' height='12' rx='3' fill='#d5dde5'/><text x='168' y='196' font-size='15' font-family='Arial' fill='#5b6f82'>Select date</text><rect x='168' y='206' width='244' height='44' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><text x='188' y='234' font-size='16' font-family='Arial' fill='#8c9baa'>DD / MM / YYYY</text><text x='454' y='196' font-size='15' font-family='Arial' fill='#5b6f82'>Time</text><rect x='454' y='206' width='180' height='44' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='474' y='234' font-size='16' font-family='Arial' fill='#536578'>09:00</text><circle cx='610' cy='228' r='5' fill='#7a8d9f'/><rect x='168' y='286' width='466' height='12' rx='4' fill='#dce4ec'/><rect x='168' y='314' width='430' height='12' rx='4' fill='#dce4ec'/><rect x='168' y='360' width='190' height='44' rx='10' fill='#dbe6f1' stroke='#b3c5d6'/><text x='263' y='388' text-anchor='middle' font-size='16' font-family='Arial' fill='#42576b'>Confirm Booking</text></svg>"
+      }
+    },
+    {
+      "id": "L3-C03",
+      "level": "Level 3 - Structural issues",
+      "difficulty": "Advanced",
+      "category": "Semantic structure error",
+      "wcag": "WCAG 1.3.1 Info and Relationships",
+      "principleCategory": "Perceivable",
+      "barrierComplexityScore": 3,
+      "visualSalienceScore": 3,
+      "severityIndex": 4,
+      "expectedDetectionTimeMs": 46000,
+      "cognitiveLoadEstimate": 4,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "semantic",
+        "heading",
+        "structure",
+        "relationships",
+        "navigation",
+        "content"
+      ],
+      "problemZone": {
+        "x": 146,
+        "y": 214,
+        "width": 430,
+        "height": 96
+      },
+      "tolerance": 24,
+      "neutralDescription": {
+        "layout": "Article layout with title, subsections, and summary panel.",
+        "elements": [
+          "Main heading area",
+          "Section heading rows",
+          "Summary column"
+        ]
+      },
+      "expertExplanation": "Visual section headers are not represented with corresponding semantic heading structure.",
+      "impact": "Content hierarchy is unclear, reducing efficient comprehension.",
+      "affectedGroups": [
+        "Screen reader users",
+        "Users with cognitive impairments"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Knowledge Article</text><rect x='110' y='145' width='250' height='12' rx='4' fill='#d5dde5'/><rect x='146' y='214' width='430' height='36' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><text x='172' y='237' font-size='16' font-family='Arial' fill='#42576b'>Overview and key requirements</text><rect x='146' y='258' width='430' height='52' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><rect x='172' y='276' width='364' height='10' rx='4' fill='#eef3f8'/><rect x='172' y='294' width='332' height='10' rx='4' fill='#eef3f8'/><rect x='146' y='326' width='430' height='94' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><text x='172' y='358' font-size='16' font-family='Arial' fill='#4d6377'>Implementation notes</text><rect x='172' y='374' width='356' height='10' rx='4' fill='#dbe3eb'/><rect x='172' y='392' width='328' height='10' rx='4' fill='#dbe3eb'/><rect x='602' y='214' width='146' height='206' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><text x='624' y='244' font-size='17' font-family='Arial' fill='#4d6377'>Summary</text><rect x='624' y='266' width='86' height='10' rx='4' fill='#dbe3eb'/><rect x='624' y='292' width='94' height='10' rx='4' fill='#dbe3eb'/><rect x='624' y='318' width='78' height='10' rx='4' fill='#dbe3eb'/></svg>"
+      }
+    },
+    {
+      "id": "L3-C04",
+      "level": "Level 3 - Structural issues",
+      "difficulty": "Advanced",
+      "category": "Missing or unclear label",
+      "wcag": "WCAG 3.3.1 Error Identification",
+      "principleCategory": "Understandable",
+      "barrierComplexityScore": 3,
+      "visualSalienceScore": 3,
+      "severityIndex": 4,
+      "expectedDetectionTimeMs": 46000,
+      "cognitiveLoadEstimate": 4,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "error",
+        "identification",
+        "form",
+        "instruction",
+        "label",
+        "clarity"
+      ],
+      "problemZone": {
+        "x": 170,
+        "y": 186,
+        "width": 560,
+        "height": 46
+      },
+      "tolerance": 24,
+      "neutralDescription": {
+        "layout": "Profile form with top error banner and multiple fields.",
+        "elements": [
+          "General error message",
+          "Three stacked fields",
+          "Save action"
+        ]
+      },
+      "expertExplanation": "The error notice does not identify which field contains the problem or what needs correction.",
+      "impact": "Generic alerts slow correction because error location is unclear.",
+      "affectedGroups": [
+        "Screen reader users",
+        "Users with cognitive impairments",
+        "Users with low vision"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Profile Validation</text><rect x='110' y='145' width='300' height='12' rx='4' fill='#d5dde5'/><rect x='170' y='186' width='560' height='46' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><circle cx='194' cy='209' r='9' fill='#8ea1b4'/><rect x='214' y='199' width='236' height='10' rx='4' fill='#eef3f8'/><rect x='214' y='214' width='198' height='8' rx='4' fill='#eef3f8'/><rect x='170' y='252' width='560' height='44' rx='10' fill='#ffffff' stroke='#cad5df'/><rect x='170' y='312' width='560' height='44' rx='10' fill='#ffffff' stroke='#cad5df'/><rect x='170' y='372' width='560' height='44' rx='10' fill='#ffffff' stroke='#cad5df'/><rect x='170' y='430' width='140' height='34' rx='8' fill='#dbe6f1' stroke='#b3c5d6'/></svg>"
+      }
+    },
+    {
+      "id": "L3-C05",
+      "level": "Level 3 - Structural issues",
+      "difficulty": "Advanced",
+      "category": "Time/auto-update issue",
+      "wcag": "WCAG 3.2.2 On Input",
+      "principleCategory": "Understandable",
+      "barrierComplexityScore": 3,
+      "visualSalienceScore": 3,
+      "severityIndex": 4,
+      "expectedDetectionTimeMs": 46000,
+      "cognitiveLoadEstimate": 4,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "on input",
+        "auto-update",
+        "timing",
+        "consistency",
+        "navigation",
+        "context"
+      ],
+      "problemZone": {
+        "x": 582,
+        "y": 152,
+        "width": 150,
+        "height": 42
+      },
+      "tolerance": 22,
+      "neutralDescription": {
+        "layout": "Results page with heading, sorting toolbar, and a product grid.",
+        "elements": [
+          "Sort dropdown",
+          "Result cards",
+          "Page heading"
+        ]
+      },
+      "expertExplanation": "Input changes trigger immediate context updates without explicit user request or warning.",
+      "impact": "Automatic context changes on input interrupt user flow and increase cognitive load.",
+      "affectedGroups": [
+        "Users with cognitive impairments",
+        "Screen reader users",
+        "Keyboard users"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='24' font-family='Arial' fill='#25374a'>Browse Results</text><rect x='110' y='146' width='280' height='12' rx='4' fill='#d5dde5'/><rect x='110' y='182' width='120' height='12' rx='4' fill='#dce4ec'/><rect x='582' y='152' width='150' height='42' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><text x='604' y='178' font-size='16' font-family='Arial' fill='#42576b'>Sort: Newest</text><circle cx='710' cy='173' r='5' fill='#2f8f83'/><rect x='110' y='224' width='186' height='108' rx='12' fill='#f8fafc' stroke='#d5dee7'/><rect x='322' y='224' width='186' height='108' rx='12' fill='#f8fafc' stroke='#d5dee7'/><rect x='534' y='224' width='186' height='108' rx='12' fill='#f8fafc' stroke='#d5dee7'/><rect x='110' y='352' width='186' height='108' rx='12' fill='#f8fafc' stroke='#d5dee7'/><rect x='322' y='352' width='186' height='108' rx='12' fill='#f8fafc' stroke='#d5dee7'/><rect x='534' y='352' width='186' height='108' rx='12' fill='#f8fafc' stroke='#d5dee7'/><rect x='132' y='246' width='112' height='12' rx='4' fill='#dce4ec'/><rect x='344' y='246' width='112' height='12' rx='4' fill='#dce4ec'/><rect x='556' y='246' width='112' height='12' rx='4' fill='#dce4ec'/><rect x='132' y='374' width='112' height='12' rx='4' fill='#dce4ec'/><rect x='344' y='374' width='112' height='12' rx='4' fill='#dce4ec'/><rect x='556' y='374' width='112' height='12' rx='4' fill='#dce4ec'/></svg>"
+      }
+    },
+    {
+      "id": "L3-C06",
+      "level": "Level 3 - Structural issues",
+      "difficulty": "Expert",
+      "category": "Semantic structure error",
+      "wcag": "WCAG 1.3.2 Meaningful Sequence",
+      "principleCategory": "Perceivable",
+      "barrierComplexityScore": 3,
+      "visualSalienceScore": 3,
+      "severityIndex": 5,
+      "expectedDetectionTimeMs": 48500,
+      "cognitiveLoadEstimate": 5,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "sequence",
+        "semantic",
+        "order",
+        "structure",
+        "navigation",
+        "consistency"
+      ],
+      "problemZone": {
+        "x": 178,
+        "y": 196,
+        "width": 470,
+        "height": 72
+      },
+      "tolerance": 24,
+      "neutralDescription": {
+        "layout": "Process page with a sequence row, supporting text, and a completion summary.",
+        "elements": [
+          "Three numbered step blocks",
+          "Supporting content lines",
+          "Summary panel"
+        ]
+      },
+      "expertExplanation": "Visual process blocks present a non-meaningful order that conflicts with expected task sequence.",
+      "impact": "Out-of-order process steps cause misunderstanding and completion mistakes.",
+      "affectedGroups": [
+        "Screen reader users",
+        "Users with cognitive impairments"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Process Sequence</text><rect x='110' y='145' width='340' height='12' rx='3' fill='#d5dde5'/><rect x='178' y='196' width='138' height='72' rx='12' fill='#dfe8f1' stroke='#b8c6d5'/><text x='247' y='222' text-anchor='middle' font-size='18' font-family='Arial' fill='#42576b'>1</text><rect x='330' y='196' width='138' height='72' rx='12' fill='#dfe8f1' stroke='#b8c6d5'/><text x='399' y='222' text-anchor='middle' font-size='18' font-family='Arial' fill='#42576b'>3</text><rect x='482' y='196' width='142' height='72' rx='12' fill='#dfe8f1' stroke='#b8c6d5'/><text x='553' y='222' text-anchor='middle' font-size='18' font-family='Arial' fill='#42576b'>2</text><rect x='178' y='308' width='410' height='12' rx='4' fill='#dce4ec'/><rect x='178' y='336' width='382' height='12' rx='4' fill='#dce4ec'/><rect x='612' y='184' width='118' height='174' rx='12' fill='#f4f7fa' stroke='#d3dbe3'/><text x='634' y='214' font-size='15' font-family='Arial' fill='#5a6b7c'>Summary</text><rect x='634' y='236' width='72' height='10' rx='3' fill='#d9e2ea'/><rect x='634' y='258' width='58' height='10' rx='3' fill='#d9e2ea'/><rect x='634' y='300' width='74' height='10' rx='3' fill='#d9e2ea'/></svg>"
+      }
+    },
+    {
+      "id": "L3-C07",
+      "level": "Level 3 - Structural issues",
+      "difficulty": "Expert",
+      "category": "Inconsistent navigation",
+      "wcag": "WCAG 3.2.4 Consistent Identification",
+      "principleCategory": "Understandable",
+      "barrierComplexityScore": 3,
+      "visualSalienceScore": 3,
+      "severityIndex": 5,
+      "expectedDetectionTimeMs": 48500,
+      "cognitiveLoadEstimate": 5,
+      "wcagLevel": "AA",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "consistency",
+        "identification",
+        "label",
+        "navigation",
+        "semantic",
+        "cognitive"
+      ],
+      "problemZone": {
+        "x": 384,
+        "y": 336,
+        "width": 128,
+        "height": 38
+      },
+      "tolerance": 20,
+      "neutralDescription": {
+        "layout": "Dashboard cards with repeated primary action chips.",
+        "elements": [
+          "Three similar cards",
+          "Action chip per card",
+          "Shared metrics header"
+        ]
+      },
+      "expertExplanation": "Equivalent actions are labeled differently across similar card components, violating consistent identification.",
+      "impact": "Repeated controls with varying labels reduce confidence and increase selection errors.",
+      "affectedGroups": [
+        "Users with cognitive impairments",
+        "Screen reader users"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Card Actions</text><rect x='110' y='145' width='260' height='12' rx='4' fill='#d5dde5'/><rect x='118' y='186' width='214' height='206' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><rect x='344' y='186' width='214' height='206' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><rect x='570' y='186' width='214' height='206' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><text x='144' y='220' font-size='18' font-family='Arial' fill='#4d6377'>Quarterly report</text><text x='370' y='220' font-size='18' font-family='Arial' fill='#4d6377'>Quarterly report</text><text x='596' y='220' font-size='18' font-family='Arial' fill='#4d6377'>Quarterly report</text><rect x='144' y='240' width='146' height='10' rx='4' fill='#dbe3eb'/><rect x='370' y='240' width='146' height='10' rx='4' fill='#dbe3eb'/><rect x='596' y='240' width='146' height='10' rx='4' fill='#dbe3eb'/><rect x='144' y='270' width='160' height='10' rx='4' fill='#dbe3eb'/><rect x='370' y='270' width='160' height='10' rx='4' fill='#dbe3eb'/><rect x='596' y='270' width='160' height='10' rx='4' fill='#dbe3eb'/><rect x='144' y='322' width='128' height='38' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='168' y='346' font-size='14' font-family='Arial' fill='#5d7285'>Open report</text><rect x='384' y='336' width='128' height='38' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><text x='424' y='360' font-size='14' font-family='Arial' fill='#42576b'>Launch</text><rect x='610' y='322' width='128' height='38' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='634' y='346' font-size='14' font-family='Arial' fill='#5d7285'>Open report</text></svg>"
+      }
+    },
+    {
+      "id": "L4-C02",
+      "level": "Level 4 - Systemic issues",
+      "difficulty": "Advanced",
+      "category": "Semantic structure error",
+      "wcag": "WCAG 4.1.2 Name, Role, Value",
+      "principleCategory": "Robust",
+      "barrierComplexityScore": 4,
+      "visualSalienceScore": 2,
+      "severityIndex": 4,
+      "expectedDetectionTimeMs": 54000,
+      "cognitiveLoadEstimate": 4,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "aria",
+        "role",
+        "state",
+        "semantic",
+        "toggle",
+        "robustness"
+      ],
+      "problemZone": {
+        "x": 596,
+        "y": 196,
+        "width": 122,
+        "height": 112
+      },
+      "tolerance": 24,
+      "neutralDescription": {
+        "layout": "Preferences panel with custom visual switches.",
+        "elements": [
+          "Notification switch",
+          "Visibility switch",
+          "Save controls"
+        ]
+      },
+      "expertExplanation": "Custom switches do not expose proper role/state semantics, reducing robust assistive interpretation.",
+      "impact": "Custom switch controls are announced ambiguously and difficult to operate consistently.",
+      "affectedGroups": [
+        "Screen reader users",
+        "Keyboard users"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Custom Switches</text><rect x='110' y='145' width='240' height='12' rx='4' fill='#d5dde5'/><rect x='130' y='186' width='640' height='78' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><text x='160' y='220' font-size='18' font-family='Arial' fill='#4d6377'>Notification alerts</text><rect x='160' y='232' width='156' height='10' rx='4' fill='#dbe3eb'/><rect x='596' y='196' width='122' height='36' rx='18' fill='#dfe8f1' stroke='#b8c6d5'/><circle cx='698' cy='214' r='14' fill='#ffffff' stroke='#b8c6d5'/><rect x='130' y='280' width='640' height='78' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><text x='160' y='314' font-size='18' font-family='Arial' fill='#4d6377'>Profile visibility</text><rect x='160' y='326' width='148' height='10' rx='4' fill='#dbe3eb'/><rect x='596' y='308' width='122' height='36' rx='18' fill='#dfe8f1' stroke='#b8c6d5'/><circle cx='616' cy='326' r='14' fill='#ffffff' stroke='#b8c6d5'/><rect x='130' y='378' width='168' height='42' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><text x='188' y='406' font-size='18' font-family='Arial' fill='#4d6377'>Save</text></svg>"
+      }
+    },
+    {
+      "id": "L4-C03",
+      "level": "Level 4 - Systemic issues",
+      "difficulty": "Advanced",
+      "category": "Semantic structure error",
+      "wcag": "WCAG 1.3.1 Info and Relationships",
+      "principleCategory": "Perceivable",
+      "barrierComplexityScore": 4,
+      "visualSalienceScore": 2,
+      "severityIndex": 4,
+      "expectedDetectionTimeMs": 54000,
+      "cognitiveLoadEstimate": 4,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "table",
+        "header",
+        "relationships",
+        "semantic",
+        "structure",
+        "navigation"
+      ],
+      "problemZone": {
+        "x": 150,
+        "y": 180,
+        "width": 604,
+        "height": 46
+      },
+      "tolerance": 22,
+      "neutralDescription": {
+        "layout": "Metrics table with headers and trend column.",
+        "elements": [
+          "Header row",
+          "Data rows",
+          "Trend indicators"
+        ]
+      },
+      "expertExplanation": "Table header relationships are presented visually but not with robust semantic associations.",
+      "impact": "Data relationships in table view are not conveyed programmatically.",
+      "affectedGroups": [
+        "Screen reader users",
+        "Users with cognitive impairments"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Metrics Table</text><rect x='110' y='145' width='340' height='12' rx='3' fill='#d5dde5'/><rect x='150' y='180' width='604' height='46' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><text x='176' y='208' font-size='15' font-family='Arial' fill='#42576b'>Region</text><text x='332' y='208' font-size='15' font-family='Arial' fill='#42576b'>Users</text><text x='470' y='208' font-size='15' font-family='Arial' fill='#42576b'>Change</text><text x='610' y='208' font-size='15' font-family='Arial' fill='#42576b'>Trend</text><rect x='150' y='236' width='604' height='42' rx='8' fill='#ffffff' stroke='#cad5df'/><rect x='150' y='286' width='604' height='42' rx='8' fill='#ffffff' stroke='#cad5df'/><rect x='150' y='336' width='604' height='42' rx='8' fill='#ffffff' stroke='#cad5df'/><text x='176' y='262' font-size='15' font-family='Arial' fill='#5b6f82'>North</text><text x='176' y='312' font-size='15' font-family='Arial' fill='#5b6f82'>South</text><text x='176' y='362' font-size='15' font-family='Arial' fill='#5b6f82'>West</text><rect x='598' y='250' width='110' height='12' rx='4' fill='#dce4ec'/><rect x='598' y='300' width='110' height='12' rx='4' fill='#dce4ec'/><rect x='598' y='350' width='110' height='12' rx='4' fill='#dce4ec'/></svg>"
+      }
+    },
+    {
+      "id": "L4-C04",
+      "level": "Level 4 - Systemic issues",
+      "difficulty": "Expert",
+      "category": "Time/auto-update issue",
+      "wcag": "WCAG 4.1.3 Status Messages",
+      "principleCategory": "Robust",
+      "barrierComplexityScore": 4,
+      "visualSalienceScore": 2,
+      "severityIndex": 5,
+      "expectedDetectionTimeMs": 56500,
+      "cognitiveLoadEstimate": 5,
+      "wcagLevel": "AA",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "status",
+        "announcement",
+        "dynamic",
+        "aria-live",
+        "update",
+        "timing"
+      ],
+      "problemZone": {
+        "x": 610,
+        "y": 268,
+        "width": 126,
+        "height": 34
+      },
+      "tolerance": 20,
+      "neutralDescription": {
+        "layout": "Live operations dashboard with status chips and updating.",
+        "elements": [
+          "Queue rows",
+          "Status chip",
+          "Update timestamp"
+        ]
+      },
+      "expertExplanation": "Dynamic status changes are visual only and not announced via status message mechanisms.",
+      "impact": "Live updates are missed when state changes are not announced to assistive tech.",
+      "affectedGroups": [
+        "Screen reader users",
+        "Users with cognitive impairments"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Live Queue</text><rect x='110' y='145' width='240' height='12' rx='4' fill='#d5dde5'/><text x='654' y='120' font-size='15' font-family='Arial' fill='#6a7c8e'>Updated 09:42</text><rect x='130' y='190' width='640' height='60' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><text x='160' y='224' font-size='17' font-family='Arial' fill='#4d6377'>Order queue</text><rect x='160' y='232' width='180' height='10' rx='4' fill='#dbe3eb'/><rect x='610' y='204' width='106' height='30' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='638' y='224' font-size='14' font-family='Arial' fill='#5d7285'>Waiting</text><rect x='130' y='258' width='640' height='60' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><text x='160' y='292' font-size='17' font-family='Arial' fill='#4d6377'>Returns queue</text><rect x='160' y='300' width='172' height='10' rx='4' fill='#dbe3eb'/><rect x='610' y='268' width='126' height='34' rx='11' fill='#dfe8f1' stroke='#b8c6d5'/><text x='638' y='290' font-size='14' font-family='Arial' fill='#42576b'>Reopened</text><rect x='130' y='326' width='640' height='60' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><text x='160' y='360' font-size='17' font-family='Arial' fill='#4d6377'>Fulfillment queue</text><rect x='160' y='368' width='194' height='10' rx='4' fill='#dbe3eb'/><rect x='610' y='336' width='102' height='30' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='636' y='356' font-size='14' font-family='Arial' fill='#5d7285'>Queued</text></svg>"
+      }
+    },
+    {
+      "id": "L4-C05",
+      "level": "Level 4 - Systemic issues",
+      "difficulty": "Expert",
+      "category": "Semantic structure error",
+      "wcag": "WCAG 4.1.1 Parsing",
+      "principleCategory": "Robust",
+      "barrierComplexityScore": 4,
+      "visualSalienceScore": 2,
+      "severityIndex": 5,
+      "expectedDetectionTimeMs": 56500,
+      "cognitiveLoadEstimate": 5,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "parsing",
+        "id",
+        "aria-controls",
+        "semantic",
+        "accordion",
+        "robustness"
+      ],
+      "problemZone": {
+        "x": 156,
+        "y": 186,
+        "width": 588,
+        "height": 144
+      },
+      "tolerance": 24,
+      "neutralDescription": {
+        "layout": "Accordion FAQ with expandable sections.",
+        "elements": [
+          "Three accordion headers",
+          "Expanded panel",
+          "Chevron controls"
+        ]
+      },
+      "expertExplanation": "Accordion controls use conflicting IDs/relationships, causing parsing and control-state ambiguity.",
+      "impact": "Invalid markup relationships produce inconsistent behavior across assistive tech.",
+      "affectedGroups": [
+        "Screen reader users",
+        "Keyboard users"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Accordion FAQ</text><rect x='110' y='145' width='420' height='12' rx='3' fill='#d5dde5'/><rect x='156' y='186' width='588' height='42' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><text x='182' y='212' font-size='16' font-family='Arial' fill='#42576b'>How do billing updates work?</text><path d='M712 204l8 8 8-8' fill='none' stroke='#607487' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/><rect x='156' y='228' width='588' height='102' rx='0 0 10 10' fill='#eef3f8' stroke='#b8c6d5'/><rect x='182' y='252' width='516' height='10' rx='4' fill='#d1dbe5'/><rect x='182' y='276' width='474' height='10' rx='4' fill='#d1dbe5'/><rect x='182' y='300' width='438' height='10' rx='4' fill='#d1dbe5'/><rect x='156' y='346' width='588' height='42' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='182' y='372' font-size='16' font-family='Arial' fill='#5b6f82'>Can I change notification settings?</text><path d='M712 366l8-8 8 8' fill='none' stroke='#7b8d9f' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/><rect x='156' y='404' width='588' height='42' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='182' y='430' font-size='16' font-family='Arial' fill='#5b6f82'>Where can I download invoices?</text><path d='M712 424l8-8 8 8' fill='none' stroke='#7b8d9f' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/></svg>"
+      }
+    },
+    {
+      "id": "L4-C06",
+      "level": "Level 4 - Systemic issues",
+      "difficulty": "Expert",
+      "category": "Semantic structure error",
+      "wcag": "WCAG 4.1.2 Name, Role, Value",
+      "principleCategory": "Robust",
+      "barrierComplexityScore": 4,
+      "visualSalienceScore": 2,
+      "severityIndex": 5,
+      "expectedDetectionTimeMs": 56500,
+      "cognitiveLoadEstimate": 5,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "aria",
+        "combobox",
+        "listbox",
+        "state",
+        "role",
+        "semantic"
+      ],
+      "problemZone": {
+        "x": 174,
+        "y": 214,
+        "width": 452,
+        "height": 150
+      },
+      "tolerance": 24,
+      "neutralDescription": {
+        "layout": "Search panel with autocomplete suggestion popup.",
+        "elements": [
+          "Search field",
+          "Suggestion list",
+          "Result count text"
+        ]
+      },
+      "expertExplanation": "Combobox/listbox roles and active option state are not exposed correctly to assistive technologies.",
+      "impact": "Autocomplete control state is unclear, reducing robust keyboard and AT interaction.",
+      "affectedGroups": [
+        "Screen reader users",
+        "Keyboard users",
+        "Users with cognitive impairments"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Autocomplete Search</text><rect x='110' y='145' width='320' height='12' rx='3' fill='#d5dde5'/><rect x='174' y='178' width='452' height='44' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='198' y='206' font-size='16' font-family='Arial' fill='#7b8d9f'>Search products</text><circle cx='598' cy='200' r='8' fill='none' stroke='#7b8d9f' stroke-width='2'/><path d='M604 206l8 8' stroke='#7b8d9f' stroke-width='2' stroke-linecap='round'/><rect x='174' y='214' width='452' height='150' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><rect x='196' y='236' width='404' height='12' rx='4' fill='#eef3f8'/><rect x='196' y='266' width='372' height='12' rx='4' fill='#eef3f8'/><rect x='196' y='296' width='390' height='12' rx='4' fill='#eef3f8'/><rect x='196' y='326' width='344' height='12' rx='4' fill='#eef3f8'/><text x='174' y='396' font-size='15' font-family='Arial' fill='#5b6f82'>24 results</text></svg>"
+      }
+    },
+    {
+      "id": "L4-C07",
+      "level": "Level 4 - Systemic issues",
+      "difficulty": "Expert",
+      "category": "Inconsistent navigation",
+      "wcag": "WCAG 3.2.3 Consistent Navigation",
+      "principleCategory": "Understandable",
+      "barrierComplexityScore": 4,
+      "visualSalienceScore": 2,
+      "severityIndex": 5,
+      "expectedDetectionTimeMs": 56500,
+      "cognitiveLoadEstimate": 5,
+      "wcagLevel": "AA",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "navigation",
+        "consistency",
+        "landmark",
+        "order",
+        "predictable",
+        "workflow"
+      ],
+      "problemZone": {
+        "x": 112,
+        "y": 148,
+        "width": 156,
+        "height": 248
+      },
+      "tolerance": 22,
+      "neutralDescription": {
+        "layout": "Enterprise app shell with left menu and top utilities.",
+        "elements": [
+          "Sidebar navigation",
+          "Top utility header",
+          "Main workspace"
+        ]
+      },
+      "expertExplanation": "Primary navigation placement/order differs across related screens, reducing predictable navigation.",
+      "impact": "Global orientation declines when landmark order changes between modules.",
+      "affectedGroups": [
+        "Screen reader users",
+        "Users with cognitive impairments",
+        "Keyboard users"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>App Shell Navigation</text><rect x='112' y='148' width='156' height='248' rx='12' fill='#dfe8f1' stroke='#b8c6d5'/><text x='136' y='178' font-size='16' font-family='Arial' fill='#4d6377'>Navigation</text><rect x='136' y='196' width='110' height='28' rx='8' fill='#eef3f8'/><text x='154' y='215' font-size='14' font-family='Arial' fill='#5d7285'>Overview</text><rect x='136' y='234' width='110' height='28' rx='8' fill='#eef3f8'/><text x='154' y='253' font-size='14' font-family='Arial' fill='#5d7285'>Reports</text><rect x='136' y='272' width='110' height='28' rx='8' fill='#eef3f8'/><text x='154' y='291' font-size='14' font-family='Arial' fill='#5d7285'>Projects</text><rect x='136' y='310' width='110' height='28' rx='8' fill='#eef3f8'/><text x='154' y='329' font-size='14' font-family='Arial' fill='#5d7285'>Admin</text><rect x='136' y='348' width='110' height='28' rx='8' fill='#eef3f8'/><text x='146' y='367' font-size='14' font-family='Arial' fill='#5d7285'>Help Center</text><rect x='292' y='148' width='502' height='42' rx='10' fill='#f7f9fb' stroke='#d6dee7'/><rect x='320' y='160' width='170' height='12' rx='4' fill='#d5dde5'/><circle cx='728' cy='169' r='10' fill='#dfe8f1' stroke='#b8c6d5'/><circle cx='760' cy='169' r='10' fill='#dfe8f1' stroke='#b8c6d5'/><circle cx='792' cy='169' r='10' fill='#dfe8f1' stroke='#b8c6d5'/><rect x='292' y='212' width='338' height='126' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><text x='320' y='244' font-size='18' font-family='Arial' fill='#4d6377'>Workspace Summary</text><rect x='320' y='262' width='250' height='12' rx='4' fill='#dbe3eb'/><rect x='320' y='286' width='276' height='12' rx='4' fill='#dbe3eb'/><rect x='320' y='310' width='220' height='12' rx='4' fill='#dbe3eb'/><rect x='648' y='212' width='146' height='126' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><text x='674' y='244' font-size='18' font-family='Arial' fill='#4d6377'>Tools</text><rect x='674' y='264' width='88' height='12' rx='4' fill='#dbe3eb'/><rect x='674' y='288' width='74' height='12' rx='4' fill='#dbe3eb'/><rect x='292' y='356' width='502' height='56' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><rect x='320' y='378' width='428' height='12' rx='4' fill='#dbe3eb'/></svg>"
+      }
+    },
+    {
+      "id": "L5-C01",
+      "level": "Level 5 - Complex issues",
+      "difficulty": "Advanced",
+      "category": "Time/auto-update issue",
+      "wcag": "WCAG 4.1.3 Status Messages",
+      "principleCategory": "Robust",
+      "barrierComplexityScore": 5,
+      "visualSalienceScore": 1,
+      "severityIndex": 4,
+      "expectedDetectionTimeMs": 62000,
+      "cognitiveLoadEstimate": 5,
+      "wcagLevel": "AA",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "announcement",
+        "status",
+        "dynamic",
+        "aria-live",
+        "timing",
+        "update"
+      ],
+      "problemZone": {
+        "x": 646,
+        "y": 180,
+        "width": 132,
+        "height": 56
+      },
+      "tolerance": 20,
+      "neutralDescription": {
+        "layout": "Trading dashboard with live feed and alert rail.",
+        "elements": [
+          "Price table",
+          "Alert toast",
+          "Quick action controls"
+        ]
+      },
+      "expertExplanation": "Live alerts update visually but are not announced as status messages to non-visual users.",
+      "impact": "Real-time alert changes are missed without assistive announcements.",
+      "affectedGroups": [
+        "Screen reader users",
+        "Users with cognitive impairments"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Live Trading Panel</text><rect x='110' y='145' width='230' height='12' rx='4' fill='#d5dde5'/><rect x='110' y='176' width='492' height='198' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><text x='136' y='208' font-size='18' font-family='Arial' fill='#4d6377'>Market Prices</text><rect x='136' y='224' width='434' height='10' rx='4' fill='#dbe3eb'/><rect x='136' y='252' width='410' height='10' rx='4' fill='#dbe3eb'/><rect x='136' y='278' width='398' height='10' rx='4' fill='#dbe3eb'/><rect x='136' y='304' width='418' height='10' rx='4' fill='#dbe3eb'/><rect x='136' y='330' width='382' height='10' rx='4' fill='#dbe3eb'/><rect x='620' y='176' width='160' height='198' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><text x='646' y='208' font-size='18' font-family='Arial' fill='#4d6377'>Alert Rail</text><rect x='646' y='180' width='132' height='56' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><circle cx='662' cy='198' r='6' fill='#8ea1b4'/><text x='676' y='202' font-size='13' font-family='Arial' fill='#5d7285'>Price jump</text><rect x='676' y='212' width='58' height='8' rx='4' fill='#eef3f8'/><rect x='646' y='254' width='108' height='10' rx='4' fill='#dbe3eb'/><rect x='646' y='278' width='96' height='10' rx='4' fill='#dbe3eb'/><rect x='646' y='302' width='82' height='10' rx='4' fill='#dbe3eb'/><rect x='110' y='392' width='670' height='40' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><rect x='128' y='398' width='110' height='28' rx='10' fill='#eef2f6' stroke='#ccd6e0'/><rect x='262' y='398' width='110' height='28' rx='10' fill='#eef2f6' stroke='#ccd6e0'/><rect x='396' y='398' width='110' height='28' rx='10' fill='#eef2f6' stroke='#ccd6e0'/><text x='183' y='417' text-anchor='middle' font-size='14' font-family='Arial' fill='#5d7285'>Buy</text><text x='317' y='417' text-anchor='middle' font-size='14' font-family='Arial' fill='#5d7285'>Sell</text><text x='451' y='417' text-anchor='middle' font-size='14' font-family='Arial' fill='#5d7285'>Watch</text></svg>"
+      }
+    },
+    {
+      "id": "L5-C02",
+      "level": "Level 5 - Complex issues",
+      "difficulty": "Advanced",
+      "category": "Inconsistent navigation",
+      "wcag": "WCAG 3.2.3 Consistent Navigation",
+      "principleCategory": "Understandable",
+      "barrierComplexityScore": 5,
+      "visualSalienceScore": 1,
+      "severityIndex": 4,
+      "expectedDetectionTimeMs": 62000,
+      "cognitiveLoadEstimate": 5,
+      "wcagLevel": "AA",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "consistency",
+        "navigation",
+        "wizard",
+        "sequence",
+        "predictable",
+        "workflow"
+      ],
+      "problemZone": {
+        "x": 126,
+        "y": 170,
+        "width": 164,
+        "height": 40
+      },
+      "tolerance": 22,
+      "neutralDescription": {
+        "layout": "Multi-step enrollment page with step navigation, content area, and summary sidebar.",
+        "elements": [
+          "Step navigation tabs",
+          "Main form content",
+          "Summary sidebar"
+        ]
+      },
+      "expertExplanation": "The wizard step order differs from equivalent onboarding paths, reducing predictability.",
+      "impact": "Step progression errors increase because sequence differs across linked flows.",
+      "affectedGroups": [
+        "Users with cognitive impairments",
+        "Keyboard users",
+        "Screen reader users"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Enrollment Steps</text><rect x='110' y='145' width='340' height='12' rx='3' fill='#d5dde5'/><rect x='126' y='170' width='164' height='40' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><text x='148' y='196' font-size='15' font-family='Arial' fill='#42576b'>Verification</text><rect x='304' y='170' width='148' height='40' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='326' y='196' font-size='15' font-family='Arial' fill='#5b6f82'>Profile</text><rect x='466' y='170' width='148' height='40' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='488' y='196' font-size='15' font-family='Arial' fill='#5b6f82'>Account</text><rect x='628' y='170' width='124' height='40' rx='10' fill='#ffffff' stroke='#cad5df'/><text x='650' y='196' font-size='15' font-family='Arial' fill='#5b6f82'>Review</text><rect x='110' y='236' width='474' height='170' rx='12' fill='#fbfcfd' stroke='#d6dfe8'/><rect x='136' y='264' width='220' height='12' rx='4' fill='#dce4ec'/><rect x='136' y='292' width='404' height='40' rx='10' fill='#ffffff' stroke='#cad5df'/><rect x='136' y='348' width='404' height='40' rx='10' fill='#ffffff' stroke='#cad5df'/><rect x='610' y='236' width='142' height='170' rx='12' fill='#f4f7fa' stroke='#d3dbe3'/><text x='632' y='268' font-size='15' font-family='Arial' fill='#5a6b7c'>Summary</text><rect x='632' y='288' width='96' height='10' rx='3' fill='#d9e2ea'/><rect x='632' y='308' width='84' height='10' rx='3' fill='#d9e2ea'/><rect x='632' y='340' width='96' height='10' rx='3' fill='#d9e2ea'/><rect x='632' y='360' width='84' height='10' rx='3' fill='#d9e2ea'/><rect x='130' y='420' width='120' height='34' rx='8' fill='#eef2f6' stroke='#ccd6e0'/><rect x='470' y='420' width='120' height='34' rx='8' fill='#dbe6f1' stroke='#b3c5d6'/></svg>"
+      }
+    },
+    {
+      "id": "L5-C03",
+      "level": "Level 5 - Complex issues",
+      "difficulty": "Expert",
+      "category": "Semantic structure error",
+      "wcag": "WCAG 4.1.2 Name, Role, Value",
+      "principleCategory": "Robust",
+      "barrierComplexityScore": 5,
+      "visualSalienceScore": 1,
+      "severityIndex": 5,
+      "expectedDetectionTimeMs": 64500,
+      "cognitiveLoadEstimate": 5,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "aria",
+        "drag",
+        "drop",
+        "keyboard",
+        "role",
+        "semantic"
+      ],
+      "problemZone": {
+        "x": 160,
+        "y": 234,
+        "width": 570,
+        "height": 162
+      },
+      "tolerance": 26,
+      "neutralDescription": {
+        "layout": "Kanban board with draggable cards across columns.",
+        "elements": [
+          "Three workflow columns",
+          "Task cards",
+          "Column action controls"
+        ]
+      },
+      "expertExplanation": "Drag-and-drop cards lack robust roles/states and keyboard alternatives in a complex widget.",
+      "impact": "Composite board interactions fail for keyboard and screen reader users.",
+      "affectedGroups": [
+        "Screen reader users",
+        "Keyboard users"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Kanban Board</text><rect x='110' y='145' width='320' height='12' rx='3' fill='#d5dde5'/><rect x='130' y='190' width='214' height='220' rx='12' fill='#f8fafc' stroke='#d5dee7'/><rect x='362' y='190' width='214' height='220' rx='12' fill='#f8fafc' stroke='#d5dee7'/><rect x='594' y='190' width='176' height='220' rx='12' fill='#f8fafc' stroke='#d5dee7'/><text x='156' y='220' font-size='16' font-family='Arial' fill='#536578'>To Do</text><text x='388' y='220' font-size='16' font-family='Arial' fill='#536578'>In Progress</text><text x='620' y='220' font-size='16' font-family='Arial' fill='#536578'>Done</text><rect x='160' y='234' width='170' height='52' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><rect x='160' y='298' width='170' height='52' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><rect x='392' y='234' width='170' height='52' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><rect x='392' y='298' width='170' height='52' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><rect x='624' y='234' width='120' height='52' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><rect x='624' y='298' width='120' height='52' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/><circle cx='316' cy='216' r='8' fill='none' stroke='#7b8d9f' stroke-width='2'/><circle cx='548' cy='216' r='8' fill='none' stroke='#7b8d9f' stroke-width='2'/><circle cx='730' cy='216' r='8' fill='none' stroke='#7b8d9f' stroke-width='2'/></svg>"
+      }
+    },
+    {
+      "id": "L5-C04",
+      "level": "Level 5 - Complex issues",
+      "difficulty": "Expert",
+      "category": "Time/auto-update issue",
+      "wcag": "WCAG 2.2.2 Pause, Stop, Hide",
+      "principleCategory": "Operable",
+      "barrierComplexityScore": 5,
+      "visualSalienceScore": 1,
+      "severityIndex": 5,
+      "expectedDetectionTimeMs": 64500,
+      "cognitiveLoadEstimate": 5,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "timing",
+        "carousel",
+        "pause",
+        "stop",
+        "motion",
+        "control"
+      ],
+      "problemZone": {
+        "x": 110,
+        "y": 176,
+        "width": 660,
+        "height": 156
+      },
+      "tolerance": 26,
+      "neutralDescription": {
+        "layout": "Homepage hero carousel with rotating promotional slides.",
+        "elements": [
+          "Auto-advancing banner",
+          "Indicator dots",
+          "Secondary promo cards"
+        ]
+      },
+      "expertExplanation": "The carousel rotates automatically and lacks a persistent mechanism to pause or stop movement.",
+      "impact": "Continuous motion without pause control disrupts reading and task focus.",
+      "affectedGroups": [
+        "Users with cognitive impairments",
+        "Users with low vision",
+        "Screen reader users"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Hero Carousel</text><rect x='110' y='145' width='220' height='12' rx='4' fill='#d5dde5'/><rect x='110' y='176' width='660' height='156' rx='14' fill='#dfe8f1' stroke='#b8c6d5'/><rect x='138' y='204' width='214' height='14' rx='5' fill='#eef3f8'/><rect x='138' y='230' width='248' height='14' rx='5' fill='#eef3f8'/><rect x='138' y='256' width='196' height='14' rx='5' fill='#eef3f8'/><rect x='138' y='288' width='110' height='26' rx='8' fill='#eef3f8'/><circle cx='130' cy='254' r='16' fill='#eef3f8' stroke='#aebccc'/><path d='M136 246l-8 8 8 8' fill='none' stroke='#8ea1b4' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/><circle cx='750' cy='254' r='16' fill='#eef3f8' stroke='#aebccc'/><path d='M744 246l8 8-8 8' fill='none' stroke='#8ea1b4' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/><rect x='676' y='188' width='88' height='20' rx='10' fill='#eef3f8' stroke='#b8c6d5'/><circle cx='704' cy='198' r='5' fill='#8ea1b4'/><circle cx='722' cy='198' r='5' fill='#dfe8f1' stroke='#9fb0c2'/><circle cx='740' cy='198' r='5' fill='#dfe8f1' stroke='#9fb0c2'/><rect x='110' y='348' width='202' height='86' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><rect x='136' y='370' width='120' height='12' rx='4' fill='#dbe3eb'/><rect x='136' y='394' width='148' height='12' rx='4' fill='#dbe3eb'/><rect x='348' y='348' width='202' height='86' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><rect x='374' y='370' width='120' height='12' rx='4' fill='#dbe3eb'/><rect x='374' y='394' width='148' height='12' rx='4' fill='#dbe3eb'/><rect x='586' y='348' width='184' height='86' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><rect x='612' y='370' width='104' height='12' rx='4' fill='#dbe3eb'/><rect x='612' y='394' width='128' height='12' rx='4' fill='#dbe3eb'/></svg>"
+      }
+    },
+    {
+      "id": "L5-C05",
+      "level": "Level 5 - Complex issues",
+      "difficulty": "Expert",
+      "category": "Semantic structure error",
+      "wcag": "WCAG 1.3.1 Info and Relationships",
+      "principleCategory": "Perceivable",
+      "barrierComplexityScore": 5,
+      "visualSalienceScore": 1,
+      "severityIndex": 5,
+      "expectedDetectionTimeMs": 64500,
+      "cognitiveLoadEstimate": 5,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "relationships",
+        "semantic",
+        "table",
+        "chart",
+        "structure",
+        "navigation"
+      ],
+      "problemZone": {
+        "x": 156,
+        "y": 392,
+        "width": 598,
+        "height": 28
+      },
+      "tolerance": 26,
+      "neutralDescription": {
+        "layout": "Analytics page with KPI cards, chart area, and detailed table.",
+        "elements": [
+          "KPI summary cards",
+          "Trend chart",
+          "Data table"
+        ]
+      },
+      "expertExplanation": "Card, chart, and table regions are not programmatically associated, weakening multi-view comprehension.",
+      "impact": "Cross-view analytics relationships are unclear, reducing interpretation accuracy.",
+      "affectedGroups": [
+        "Screen reader users",
+        "Users with cognitive impairments",
+        "Users with low vision"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Analytics Dashboard</text><rect x='110' y='145' width='340' height='12' rx='3' fill='#d5dde5'/><rect x='128' y='176' width='154' height='70' rx='12' fill='#f8fafc' stroke='#d5dee7'/><rect x='308' y='176' width='154' height='70' rx='12' fill='#f8fafc' stroke='#d5dee7'/><rect x='488' y='176' width='154' height='70' rx='12' fill='#f8fafc' stroke='#d5dee7'/><rect x='668' y='176' width='114' height='70' rx='12' fill='#f8fafc' stroke='#d5dee7'/><rect x='150' y='202' width='88' height='12' rx='4' fill='#dce4ec'/><rect x='330' y='202' width='88' height='12' rx='4' fill='#dce4ec'/><rect x='510' y='202' width='88' height='12' rx='4' fill='#dce4ec'/><rect x='686' y='202' width='56' height='12' rx='4' fill='#dce4ec'/><rect x='128' y='270' width='654' height='82' rx='12' fill='#fbfcfd' stroke='#d6dfe8'/><path d='M160 330 L226 310 L292 322 L358 294 L424 308 L490 282 L556 300 L622 272 L688 286 L738 244' fill='none' stroke='#7d90a3' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/><rect x='128' y='372' width='654' height='102' rx='12' fill='#f8fafc' stroke='#d6dfe8'/><rect x='156' y='392' width='598' height='28' rx='8' fill='#dfe8f1' stroke='#b8c6d5'/><text x='182' y='411' font-size='14' font-family='Arial' fill='#42576b'>Region</text><text x='350' y='411' font-size='14' font-family='Arial' fill='#42576b'>Sessions</text><text x='518' y='411' font-size='14' font-family='Arial' fill='#42576b'>Conversion</text><text x='664' y='411' font-size='14' font-family='Arial' fill='#42576b'>Trend</text><rect x='156' y='434' width='572' height='12' rx='4' fill='#dce4ec'/><rect x='156' y='458' width='596' height='10' rx='4' fill='#dce4ec'/></svg>"
+      }
+    },
+    {
+      "id": "L5-C06",
+      "level": "Level 5 - Complex issues",
+      "difficulty": "Expert",
+      "category": "Keyboard/focus issue",
+      "wcag": "WCAG 2.1.1 Keyboard",
+      "principleCategory": "Operable",
+      "barrierComplexityScore": 5,
+      "visualSalienceScore": 1,
+      "severityIndex": 5,
+      "expectedDetectionTimeMs": 64500,
+      "cognitiveLoadEstimate": 5,
+      "wcagLevel": "A",
+      "datasetVersion": "v2.0-research",
+      "validationStatus": "expert-reviewed",
+      "keywords": [
+        "keyboard",
+        "operable",
+        "focus",
+        "accordion",
+        "navigation",
+        "consistency"
+      ],
+      "problemZone": {
+        "x": 126,
+        "y": 192,
+        "width": 430,
+        "height": 52
+      },
+      "tolerance": 24,
+      "neutralDescription": {
+        "layout": "Order review page with expandable sections and checkout summary.",
+        "elements": [
+          "Shipping section",
+          "Payment section",
+          "Discount section"
+        ]
+      },
+      "expertExplanation": "Expandable checkout sections are not fully keyboard operable, blocking transaction completion.",
+      "impact": "Critical order steps cannot be completed without pointer input.",
+      "affectedGroups": [
+        "Keyboard users",
+        "Screen reader users",
+        "Users with low vision"
+      ],
+      "screenshot": {
+        "width": 900,
+        "height": 520,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><rect width='900' height='520' fill='#eef3f8'/><rect x='70' y='70' width='760' height='380' rx='12' fill='white' stroke='#cfd7df'/><text x='110' y='120' font-size='22' font-family='Arial' fill='#25374a'>Order Review</text><rect x='110' y='145' width='250' height='12' rx='4' fill='#d5dde5'/><rect x='126' y='192' width='430' height='52' rx='12' fill='#dfe8f1' stroke='#b8c6d5'/><text x='156' y='224' font-size='18' font-family='Arial' fill='#42576b'>Shipping details</text><path d='M524 214l8 8-8 8' fill='none' stroke='#607487' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/><rect x='126' y='254' width='430' height='52' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><text x='156' y='286' font-size='18' font-family='Arial' fill='#4d6377'>Payment method</text><path d='M524 276l8 8-8 8' fill='none' stroke='#607487' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/><rect x='126' y='316' width='430' height='52' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><text x='156' y='348' font-size='18' font-family='Arial' fill='#4d6377'>Discount code</text><path d='M524 338l8 8-8 8' fill='none' stroke='#607487' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/><rect x='580' y='192' width='194' height='176' rx='12' fill='#f8fbfd' stroke='#d6dee7'/><text x='612' y='226' font-size='18' font-family='Arial' fill='#4d6377'>Checkout Summary</text><rect x='612' y='246' width='126' height='10' rx='4' fill='#dbe3eb'/><rect x='612' y='272' width='140' height='10' rx='4' fill='#dbe3eb'/><rect x='612' y='298' width='132' height='10' rx='4' fill='#dbe3eb'/><rect x='612' y='330' width='118' height='36' rx='10' fill='#dfe8f1' stroke='#b8c6d5'/></svg>"
+      }
+    }
+  ]
+}
