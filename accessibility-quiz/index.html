@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accessibility Quiz</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to quiz</a>
+
+  <main class="container" id="main-content">
+    <div class="card start-screen" id="start-screen">
+      <h1>Accessibility Quiz</h1>
+      <p>Test your knowledge with 10 random questions about web accessibility best practices.</p>
+      <div class="difficulty-selector" id="difficulty-selector" role="group" aria-label="Select difficulty">
+        <button class="diff-btn" data-difficulty="1" type="button">
+          <span class="diff-label">Beginner</span>
+          <span class="diff-desc">Fundamentals</span>
+          <span class="diff-count" id="count-1"></span>
+        </button>
+        <button class="diff-btn" data-difficulty="2" type="button">
+          <span class="diff-label">Intermediate</span>
+          <span class="diff-desc">Applied knowledge</span>
+          <span class="diff-count" id="count-2"></span>
+        </button>
+        <button class="diff-btn" data-difficulty="3" type="button">
+          <span class="diff-label">Advanced</span>
+          <span class="diff-desc">Expert scenarios</span>
+          <span class="diff-count" id="count-3"></span>
+        </button>
+      </div>
+      <button class="start-btn" id="start-btn" type="button" disabled>Select a difficulty to start</button>
+    </div>
+
+    <div class="card hidden" id="quiz-screen">
+      <div class="score-bar" id="score-bar"></div>
+      <div class="progress" id="progress" aria-hidden="true"></div>
+      <div class="meta-tags" id="meta-tags"></div>
+      <div class="question" id="question" tabindex="-1"></div>
+      <div class="choices" id="choices"></div>
+      <div class="explanation-box hidden" id="explanation" aria-live="polite"></div>
+      <button class="next-btn hidden" id="next-btn" type="button">Next Question</button>
+    </div>
+
+    <div class="card hidden" id="results-screen">
+      <div class="results" id="results" aria-live="polite"></div>
+    </div>
+
+    <div class="status-region" id="status-region" aria-live="polite" aria-atomic="true"></div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
