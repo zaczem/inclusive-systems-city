@@ -6,14 +6,15 @@
     "theme": "Color Contrast",
     "principle": "Perceivable",
     "wcag": "1.4.3 Contrast (Minimum)",
-    "question": "A website uses light grey text on a white background. What is the issue?",
+    "question": "A product page uses very light grey text on a white background. What is the main issue?",
     "choices": [
-      "Modern design style",
-      "Low contrast problem"
+      "The text contrast is too low to read easily",
+      "The font weight is too thin for body text",
+      "The text size is too small for this layout"
     ],
-    "correct": 1,
-    "explanation": "WCAG 1.4.3 requires a minimum contrast ratio of 4.5:1 for normal text.",
-    "learning_objective": "Identify insufficient text contrast."
+    "correct": 0,
+    "explanation": "This affects many users, especially people with low vision, because the text becomes hard to read. The safer fix is to increase the contrast so the content remains readable. Think: who is blocked when text fades into the background?",
+    "learning_objective": "Prioritize the main readability issue when contrast, size, and weight all seem relevant."
   },
   {
     "id": 2,
@@ -22,14 +23,15 @@
     "theme": "Alt Text",
     "principle": "Perceivable",
     "wcag": "1.1.1 Non-text Content",
-    "question": "An image has alt=\"image.png\". What is wrong?",
+    "question": "A checkout page shows an important image with alt=\"image.png\". What is the main issue?",
     "choices": [
-      "The alt text does not describe the content",
-      "File names are acceptable alt text"
+      "The alt text does not explain the meaning of the image",
+      "The image should also include a visible caption",
+      "The file name should match the product title"
     ],
     "correct": 0,
-    "explanation": "Alt text must describe the meaning of the image, not its filename.",
-    "learning_objective": "Understand meaningful alternative text."
+    "explanation": "This affects screen reader users because the image meaning is lost or unclear. The better choice is to replace the file name with alt text that explains the image purpose. Ask yourself: what happens if the image cannot be seen?",
+    "learning_objective": "Distinguish between naming an image and explaining its meaning."
   },
   {
     "id": 3,
@@ -38,14 +40,15 @@
     "theme": "Form Labels",
     "principle": "Robust",
     "wcag": "1.3.1 Info and Relationships",
-    "question": "A form input has visible text but no associated <label>. What is missing?",
+    "question": "A sign-up form has visible field names, but the inputs are not linked to labels in the code. What is the main issue?",
     "choices": [
-      "Better CSS styling",
-      "Programmatic label association"
+      "The fields need clearer visual grouping",
+      "The fields do not have clear labels for assistive tools",
+      "The form asks for too much information at once"
     ],
     "correct": 1,
-    "explanation": "Screen readers require programmatic association via <label> or aria-label.",
-    "learning_objective": "Recognize semantic relationships."
+    "explanation": "This affects screen reader and speech input users because the field purpose may not be announced correctly. The right fix is to connect each visible label to its input in the code. Think: how would someone know what to enter here?",
+    "learning_objective": "Decide between a visual form issue and a code-level labeling issue."
   },
   {
     "id": 4,
@@ -54,63 +57,66 @@
     "theme": "Headings",
     "principle": "Perceivable",
     "wcag": "1.3.1 Info and Relationships",
-    "question": "A page uses styled <div> elements instead of <h1>–<h6> tags. What is the issue?",
+    "question": "A page uses large bold text for section titles, but not real heading elements. What is the main issue?",
     "choices": [
-      "The font may look inconsistent",
-      "Screen readers cannot identify heading structure"
+      "The page structure is unclear to assistive tools",
+      "The sections look too visually dominant",
+      "The headings need more spacing above them"
     ],
-    "correct": 1,
-    "explanation": "Heading tags provide structural navigation for assistive technology.",
-    "learning_objective": "Understand document structure accessibility."
+    "correct": 0,
+    "explanation": "This affects users who navigate by structure because styled text is not the same as a real heading. The better solution is to use heading elements so the page outline is clear in the code. What user would struggle if structure is only visual?",
+    "learning_objective": "Distinguish between visual hierarchy and structural hierarchy."
   },
   {
     "id": 5,
     "level": 1,
     "difficulty": 1,
-    "theme": "Media",
+    "theme": "Captions",
     "principle": "Perceivable",
     "wcag": "1.2.2 Captions (Prerecorded)",
-    "question": "A video has no captions. Who is most affected?",
+    "question": "A short explainer video includes speech but no captions. What is the main issue?",
     "choices": [
-      "Only non-native speakers",
-      "Deaf and hard-of-hearing users"
+      "The video needs a transcript on a separate page",
+      "Users cannot get the spoken information in text form",
+      "The narration should be slowed down for clarity"
     ],
     "correct": 1,
-    "explanation": "Captions are required for prerecorded video with audio.",
-    "learning_objective": "Recognize caption requirements."
+    "explanation": "This affects deaf and hard-of-hearing users because spoken information is missing in the video itself. The better approach is to provide captions so the audio meaning is available at the same moment. Think: who loses the message when sound is the only channel?",
+    "learning_objective": "Prioritize the best way to make spoken video content available."
   },
-
   {
     "id": 6,
     "level": 2,
     "difficulty": 2,
-    "theme": "Keyboard Navigation",
+    "theme": "Keyboard Use",
     "principle": "Operable",
     "wcag": "2.1.1 Keyboard",
-    "question": "A dropdown opens only with a mouse click. What is the issue?",
+    "question": "A menu opens only when a user clicks it with a mouse. What is the main issue?",
     "choices": [
-      "It loads slowly",
-      "Keyboard users cannot access it"
+      "The menu is not usable without a mouse",
+      "The menu state is not visible enough after it opens",
+      "The click target is too small for quick use"
     ],
-    "correct": 1,
-    "explanation": "All functionality must be operable via keyboard.",
-    "learning_objective": "Apply keyboard operability principle."
+    "correct": 0,
+    "explanation": "This affects keyboard-only users because they may not be able to open the menu at all. The main fix is to make the same menu action work from the keyboard. Ask yourself: can the task start without a mouse?",
+    "learning_objective": "Distinguish between discoverability issues and access-to-function issues."
   },
   {
     "id": 7,
     "level": 2,
     "difficulty": 2,
-    "theme": "Color Use",
+    "theme": "Use of Color",
     "principle": "Perceivable",
     "wcag": "1.4.1 Use of Color",
-    "question": "Error messages appear in red text only. What is the issue?",
+    "question": "A form shows errors only by turning fields red. What is the main issue?",
     "choices": [
-      "Colour-only communication",
-      "Clear visual feedback"
+      "The error state depends only on color to communicate meaning",
+      "The contrast of the red may be too weak against the background",
+      "The form should place all error messages at the top of the page"
     ],
     "correct": 0,
-    "explanation": "Color cannot be the only means of conveying information.",
-    "learning_objective": "Apply WCAG use of color criterion."
+    "explanation": "This affects users who do not perceive color differences clearly because the error meaning may disappear. The better choice is to add text or another clear cue, not only color. Think: would the error still make sense in grayscale?",
+    "learning_objective": "Decide when color is the problem and when contrast is the problem."
   },
   {
     "id": 8,
@@ -119,14 +125,15 @@
     "theme": "Focus Management",
     "principle": "Operable",
     "wcag": "2.4.3 Focus Order",
-    "question": "A modal opens but focus remains behind it. What should happen?",
+    "question": "A modal opens, but keyboard focus stays on the page behind it. What is the main issue?",
     "choices": [
-      "Nothing needs to change",
-      "Focus should move into the modal"
+      "The background content should be dimmed more strongly",
+      "The keyboard focus is left in the wrong place",
+      "The modal needs a clearer title so users notice it faster"
     ],
     "correct": 1,
-    "explanation": "Focus must move into new context changes.",
-    "learning_objective": "Understand focus behavior."
+    "explanation": "This affects keyboard and screen reader users because they may keep interacting with the wrong part of the page. The right fix is to move focus into the modal when it opens. Ask yourself: where does the next keyboard action go?",
+    "learning_objective": "Prioritize focus behavior over purely visual modal design issues."
   },
   {
     "id": 9,
@@ -135,47 +142,50 @@
     "theme": "Time Limits",
     "principle": "Operable",
     "wcag": "2.2.1 Timing Adjustable",
-    "question": "A site logs users out after 30 seconds. What is the issue?",
+    "question": "A service logs users out after 30 seconds with no warning. What is the main issue?",
     "choices": [
-      "Insufficient time control",
-      "Strong security design"
+      "The timeout reason is not explained clearly enough",
+      "Users are not given enough time or control",
+      "The logout should happen after a confirmation step"
     ],
-    "correct": 0,
-    "explanation": "Users must be able to extend time limits.",
-    "learning_objective": "Evaluate time-based constraints."
+    "correct": 1,
+    "explanation": "This affects users who need more time to read, think, or type because the task may end too early. The better design is to warn users and let them extend the session. Think: who is pressured when the system controls the pace?",
+    "learning_objective": "Distinguish between explaining a timeout and giving users control over it."
   },
   {
     "id": 10,
     "level": 2,
     "difficulty": 2,
-    "theme": "ARIA",
+    "theme": "Custom Controls",
     "principle": "Robust",
     "wcag": "4.1.2 Name, Role, Value",
-    "question": "A <div> has role=\"button\" but no keyboard support. What is missing?",
+    "question": "A custom button is announced as a button, but pressing Enter or Space does nothing. What is the main issue?",
     "choices": [
-      "Visual decoration",
-      "Keyboard interaction handlers"
+      "The control should look more like a standard button",
+      "The control has a role but not the expected behavior",
+      "The control needs more helper text to explain what it does"
     ],
     "correct": 1,
-    "explanation": "ARIA roles do not add behavior. Keyboard support is required.",
-    "learning_objective": "Understand ARIA limitations."
+    "explanation": "This affects keyboard and assistive technology users because the control promises button behavior but does not deliver it. The correct fix is to make the custom control behave like a real button. Ask yourself: does the control act the way it is announced?",
+    "learning_objective": "Distinguish between a visual consistency issue and a behavior mismatch."
   },
-
   {
     "id": 11,
     "level": 3,
     "difficulty": 3,
-    "theme": "AI Systems",
+    "theme": "AI Decisions",
     "principle": "Robust",
-    "wcag": "Systemic Accessibility",
-    "question": "An AI recruitment system filters CVs without transparency. What is the accessibility concern?",
+    "wcag": "Inclusive Design",
+    "question": "An automated hiring tool rejects applicants, gives no reason, and offers no human review path. What is the main accessibility issue?",
     "choices": [
-      "Algorithmic bias and lack of alternative pathways",
-      "Efficient automation"
+      "The decision flow is not transparent and gives users no fair way to challenge an outcome",
+      "The tool should explain the scoring model in more technical detail",
+      "The system should ask fewer questions before making a decision",
+      "The main problem is that the dashboard is too hard to scan visually"
     ],
     "correct": 0,
-    "explanation": "Accessibility includes fairness, transparency, and appeal mechanisms.",
-    "learning_objective": "Analyze systemic accessibility risks."
+    "explanation": "This affects people blocked by an important automated decision because they cannot understand or challenge the result. The better design is to provide a clear reason and a human review path. Think: who is excluded when there is no way to appeal?",
+    "learning_objective": "Prioritize fairness and recourse over interface polish in automated systems."
   },
   {
     "id": 12,
@@ -184,14 +194,16 @@
     "theme": "Orientation",
     "principle": "Perceivable",
     "wcag": "1.3.4 Orientation",
-    "question": "A website only works in portrait mode. What issue arises?",
+    "question": "A booking form works only in portrait mode on a phone. What is the main issue?",
     "choices": [
-      "Minimalist design",
-      "Device orientation restriction"
+      "The layout blocks people who need another screen orientation",
+      "The mobile form should show fewer fields at once",
+      "The page should adapt more smoothly at different screen widths",
+      "The landscape version should simplify the visual layout"
     ],
-    "correct": 1,
-    "explanation": "Content should not restrict orientation unless essential.",
-    "learning_objective": "Evaluate device constraints."
+    "correct": 0,
+    "explanation": "This affects users who rely on a different device position because they may not be able to use the form at all. The better fix is to support both orientations unless one is truly essential. Ask yourself: what happens if the device cannot be held that way?",
+    "learning_objective": "Distinguish between orientation restriction and general responsive design improvement."
   },
   {
     "id": 13,
@@ -200,14 +212,16 @@
     "theme": "Touch Targets",
     "principle": "Operable",
     "wcag": "2.5.8 Target Size",
-    "question": "A mobile button is 20x20 pixels. What is the issue?",
+    "question": "A mobile app uses very small action buttons placed close together. What is the main issue?",
     "choices": [
-      "Touch target too small",
-      "Compact design"
+      "The icon style makes each action harder to recognize quickly",
+      "The targets are too small and too close to tap reliably",
+      "The action labels should be shortened before the buttons are resized",
+      "The spacing problem matters only on the smallest screen sizes"
     ],
-    "correct": 0,
-    "explanation": "Small targets create barriers for users with motor impairments.",
-    "learning_objective": "Assess motor accessibility."
+    "correct": 1,
+    "explanation": "This affects users with limited precision because they may hit the wrong action or miss it entirely. The better design is to enlarge the targets and separate them more clearly. Think: who would struggle to tap this accurately?",
+    "learning_objective": "Prioritize reliable input over general visual cleanup."
   },
   {
     "id": 14,
@@ -216,14 +230,16 @@
     "theme": "Plain Language",
     "principle": "Understandable",
     "wcag": "3.1.5 Reading Level",
-    "question": "Instructions use complex legal terminology without explanation. What is the issue?",
+    "question": "A help page uses dense legal wording with no simple explanation. What is the main issue?",
     "choices": [
-      "Professional tone",
-      "Lack of plain language"
+      "The writing is hard to understand for many users",
+      "The page should shorten the paragraphs before changing the wording",
+      "The title should summarize the policy more clearly",
+      "The tone is too formal for the rest of the product"
     ],
-    "correct": 1,
-    "explanation": "Content must be understandable and readable.",
-    "learning_objective": "Recognize cognitive accessibility barriers."
+    "correct": 0,
+    "explanation": "This affects users with different reading and language needs because the content may be hard to understand or act on. The better choice is to rewrite key instructions in plain language. Ask yourself: who understands this text on the first read?",
+    "learning_objective": "Distinguish between tone, layout, and real comprehension barriers."
   },
   {
     "id": 15,
@@ -232,30 +248,34 @@
     "theme": "Error Prevention",
     "principle": "Understandable",
     "wcag": "3.3.4 Error Prevention",
-    "question": "A destructive action has no confirmation step. What is missing?",
+    "question": "A user can permanently delete data with one tap and no confirmation or undo. What is the main issue?",
     "choices": [
-      "Error prevention mechanism",
-      "Extra styling"
+      "The delete action is too prominent compared with nearby actions",
+      "The action is too easy to trigger by mistake with no recovery path",
+      "The destructive action should appear only in account settings",
+      "The warning color is not strong enough for a risky action"
     ],
-    "correct": 0,
-    "explanation": "Critical actions require confirmation or recovery mechanisms.",
-    "learning_objective": "Evaluate risk mitigation."
+    "correct": 1,
+    "explanation": "This affects all users, especially people who act quickly or by mistake, because the loss cannot be recovered. The better design is to add confirmation, undo, or another recovery option. Think: what happens after one accidental tap?",
+    "learning_objective": "Prioritize recoverability over visual treatment of risky actions."
   },
   {
     "id": 16,
     "level": 3,
     "difficulty": 3,
-    "theme": "Media Autoplay",
+    "theme": "Audio Control",
     "principle": "Perceivable",
     "wcag": "1.4.2 Audio Control",
-    "question": "A video autoplays with sound. What is the issue?",
+    "question": "A video starts with sound as soon as the page loads. What is the main issue?",
     "choices": [
-      "It saves time",
-      "It can interfere with assistive technology"
+      "The page feels too busy because several things compete for attention",
+      "Users lose control over audio and may struggle to focus on the page",
+      "The player should show captions immediately when autoplay begins",
+      "The audio should start lower in volume rather than at the default level"
     ],
     "correct": 1,
-    "explanation": "Users must be able to pause or stop autoplay audio.",
-    "learning_objective": "Identify audio control issues."
+    "explanation": "This affects users who need quiet control of the interface because unexpected sound can interrupt reading and assistive technology use. The better solution is to let users choose when audio starts. Ask yourself: who loses focus when sound begins without warning?",
+    "learning_objective": "Decide between attention problems and loss of user control over sound."
   },
   {
     "id": 17,
@@ -264,30 +284,34 @@
     "theme": "Accessible Names",
     "principle": "Robust",
     "wcag": "4.1.2 Name, Role, Value",
-    "question": "An icon-only button has no accessible name. What is missing?",
+    "question": "A search button shows only a magnifying glass icon and has no accessible name in the code. What is the main issue?",
     "choices": [
-      "Accessible name",
-      "Shadow effect"
+      "The icon may be understood visually, but the control still lacks a clear name for assistive tools",
+      "The icon is too abstract and should always be replaced by visible text",
+      "The control should include helper text below it instead of next to it",
+      "The search button should be visually larger before its label is changed"
     ],
     "correct": 0,
-    "explanation": "All interactive elements must have a programmatically determinable name.",
-    "learning_objective": "Apply accessible name requirement."
+    "explanation": "This affects screen reader and speech users because the control may not be identified clearly. The better fix is to keep or improve the icon if needed, but also add a proper accessible name. Think: how would this control be announced out loud?",
+    "learning_objective": "Distinguish between visible clarity and programmatic naming."
   },
   {
     "id": 18,
     "level": 3,
     "difficulty": 3,
-    "theme": "Responsive Design",
+    "theme": "Zoom and Reflow",
     "principle": "Perceivable",
     "wcag": "1.4.10 Reflow",
-    "question": "Content breaks when zoomed to 200%. What is the issue?",
+    "question": "A dashboard breaks and hides content when the page is zoomed in. What is the main issue?",
     "choices": [
-      "High resolution display",
-      "Layout fails reflow requirements"
+      "The dashboard should show fewer cards once the screen gets crowded",
+      "The layout does not adapt when users zoom and enlarge content",
+      "The page should switch breakpoints sooner for medium-width screens",
+      "The browser zoom setting should be limited to avoid layout problems"
     ],
     "correct": 1,
-    "explanation": "Content must reflow without loss of functionality.",
-    "learning_objective": "Assess zoom behavior."
+    "explanation": "This affects users who zoom to read because important content or actions may disappear. The better approach is to let the layout reflow instead of breaking under zoom. Ask yourself: what becomes unreachable when content grows larger?",
+    "learning_objective": "Prioritize preserved access under zoom over general layout optimization."
   },
   {
     "id": 19,
@@ -296,29 +320,33 @@
     "theme": "Link Purpose",
     "principle": "Understandable",
     "wcag": "2.4.4 Link Purpose",
-    "question": "A link says 'Click here'. What is the issue?",
+    "question": "A page has several links that all say \"Click here\". What is the main issue?",
     "choices": [
-      "Lack of descriptive link text",
-      "Casual tone"
+      "The wording is too informal for a professional service",
+      "The links do not explain their destination or action clearly enough",
+      "The links should include icons so users can compare them more quickly",
+      "The repeated wording is acceptable if the links are visually separated"
     ],
-    "correct": 0,
-    "explanation": "Links must describe their destination.",
-    "learning_objective": "Recognize descriptive link requirements."
+    "correct": 1,
+    "explanation": "This affects users who scan links out of context because they cannot tell where each one goes. The better design is to make each link text explain its destination or action. Think: what would a user know before activating the link?",
+    "learning_objective": "Distinguish between visual grouping and meaningful link text."
   },
   {
     "id": 20,
     "level": 3,
     "difficulty": 3,
-    "theme": "Systemic Barriers",
-    "principle": "Universal Design",
-    "wcag": "Holistic Accessibility",
-    "question": "A service is only accessible through a mobile app with biometric login. What is the issue?",
+    "theme": "Alternative Access",
+    "principle": "Inclusive Design",
+    "wcag": "Multiple Ways",
+    "question": "A public service can only be accessed through a mobile app with biometric login. What is the main issue?",
     "choices": [
-      "Modern innovation",
-      "Single access channel exclusion"
+      "The service gives users only one access path and no practical alternative",
+      "The biometric process should be explained more clearly before login starts",
+      "The app should offer another identity check inside the same flow",
+      "The service should prefer web access because apps are harder to maintain"
     ],
-    "correct": 1,
-    "explanation": "Accessibility requires multiple access pathways.",
-    "learning_objective": "Evaluate inclusive system design."
+    "correct": 0,
+    "explanation": "This affects people who cannot or do not want to use that one method because the service becomes unreachable. The better design is to offer another practical way to access the service. Ask yourself: who is excluded by this single path?",
+    "learning_objective": "Prioritize alternative access paths over improvements to one restricted path."
   }
 ]

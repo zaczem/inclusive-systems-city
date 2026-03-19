@@ -138,6 +138,10 @@ class TestSimulationRules(unittest.TestCase):
         self.assertTrue(is_immediate_loss({"accessibility": 50, "legalRisk": 30, "trust": 5, "technicalDebt": 50, "budget": 50}))
         self.assertTrue(is_immediate_loss({"accessibility": 50, "legalRisk": 30, "trust": 50, "technicalDebt": 50, "budget": 0}))
 
+    def test_completion_triggers_on_round_20(self):
+        app_js = APP_JS_PATH.read_text(encoding="utf-8")
+        self.assertIn("if (roundNumber >= TOTAL_ROUNDS)", app_js)
+
     def test_random_playthroughs_stay_in_bounds(self):
         rng = random.Random(42)
         for _ in range(500):

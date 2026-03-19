@@ -3,16 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Accessibility Quiz</title>
+  <title>Accessibility Decision Simulator</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to quiz</a>
+  <a class="skip-link" href="#main-content">Skip to simulator</a>
 
   <main class="container" id="main-content">
+    <div class="top-controls">
+      <details class="preferences-menu">
+        <summary aria-label="Interaction preferences">Interaction Preferences</summary>
+        <div class="preferences-panel" aria-label="Quiz interaction preferences">
+          <button id="toggle-high-contrast" type="button" aria-pressed="false">High Contrast Theme: Off</button>
+          <label class="preferences-slider" for="font-scale">
+            <span>Font scale</span>
+            <div class="slider-row">
+              <input id="font-scale" type="range" min="100" max="130" step="5" value="100" aria-describedby="font-scale-value">
+              <output id="font-scale-value" for="font-scale">100%</output>
+            </div>
+          </label>
+          <button id="toggle-enhanced-readability" type="button" aria-pressed="false">Enhanced Readability Mode: Off</button>
+        </div>
+      </details>
+    </div>
+
     <div class="card start-screen" id="start-screen">
-      <h1>Accessibility Quiz</h1>
-      <p>Test your knowledge with 10 random questions about web accessibility best practices.</p>
+      <h1>Accessibility Decision Simulator</h1>
+      <p class="start-intro">You are part of a design review team before a product is released.</p>
+      <div class="story-panel">
+        <p>Your task is to identify accessibility issues that may block real users.</p>
+        <p>Each scenario reflects real-world problems based on WCAG and inclusive design principles.</p>
+        <p>Your goal is not just to find issues, but to understand their impact.</p>
+      </div>
       <div class="difficulty-selector" id="difficulty-selector" role="group" aria-label="Select difficulty">
         <button class="diff-btn" data-difficulty="1" type="button">
           <span class="diff-label">Beginner</span>
@@ -34,13 +56,23 @@
     </div>
 
     <div class="card hidden" id="quiz-screen">
-      <div class="score-bar" id="score-bar"></div>
+      <div class="quiz-nav">
+        <div class="quiz-nav-main">
+          <div class="question-counter" id="question-counter"></div>
+          <div class="score-bar" id="score-bar"></div>
+        </div>
+        <button class="quit-btn" id="quit-btn" type="button">Quit</button>
+      </div>
       <div class="progress" id="progress" aria-hidden="true"></div>
       <div class="meta-tags" id="meta-tags"></div>
+      <div class="audio-controls" role="group" aria-label="Speech controls">
+        <button class="secondary-btn compact-btn" id="read-screen-btn" type="button">Read</button>
+        <button class="secondary-btn compact-btn" id="stop-reading-btn" type="button">Stop</button>
+      </div>
       <div class="question" id="question" tabindex="-1"></div>
       <div class="choices" id="choices"></div>
       <div class="explanation-box hidden" id="explanation" aria-live="polite"></div>
-      <button class="next-btn hidden" id="next-btn" type="button">Next Question</button>
+      <button class="next-btn hidden" id="next-btn" type="button">Next</button>
     </div>
 
     <div class="card hidden" id="results-screen">

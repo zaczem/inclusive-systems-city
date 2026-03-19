@@ -60,7 +60,7 @@ const state = {
     anonymizedMode: false,
     researchMode: true,
     auditMode: false,
-    fontScale: 100,
+    fontScale: 110,
   },
   sessionUUID: "",
   participantCode: "",
@@ -232,7 +232,7 @@ function evaluateGameEnd(indicators, roundNumber) {
   if (indicators.accessibility <= 5) {
     return { ended: true, type: "failure", reason: "Accessibility performance failed institutionally." };
   }
-  if (roundNumber > TOTAL_ROUNDS) {
+  if (roundNumber >= TOTAL_ROUNDS) {
     return { ended: true, type: "complete", reason: "Twenty rounds were completed." };
   }
   return { ended: false };

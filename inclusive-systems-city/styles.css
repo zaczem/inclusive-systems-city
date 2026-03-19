@@ -1410,6 +1410,8 @@ body.high-contrast .aggregate-row,
 body.high-contrast .indicator,
 body.high-contrast .delta-card,
 body.high-contrast .metric-grid div,
+body.high-contrast .guide-step-card,
+body.high-contrast .guide-note,
 body.high-contrast .role-card,
 body.high-contrast .participant-list li,
 body.high-contrast .message-list li,
@@ -1441,11 +1443,20 @@ body.high-contrast .muted {
 
 body.high-contrast .role-card h3,
 body.high-contrast .role-card p,
+body.high-contrast .guide-step-card h3,
+body.high-contrast .guide-step-card p,
+body.high-contrast .guide-step-card strong,
+body.high-contrast .guide-note,
 body.high-contrast .info-card h2,
 body.high-contrast .info-card h3,
 body.high-contrast .info-card li,
 body.high-contrast .info-card p {
   color: #ffffff;
+}
+
+body.high-contrast .guide-note {
+  background: #111111 !important;
+  border-color: #ffffff !important;
 }
 
 body.high-contrast .phase-tracker li.is-active {
