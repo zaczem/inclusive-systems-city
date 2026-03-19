@@ -195,21 +195,13 @@ class TestStaticRequirements(unittest.TestCase):
             self.assertIn(marker, self.app_js)
 
     def test_accessibility_controls_present(self):
-        self.assertIn('id="toggle-motion"', self.index_html)
-        self.assertIn('id="toggle-text"', self.index_html)
-        self.assertIn('id="toggle-plain-language"', self.index_html)
-        self.assertIn('id="toggle-low-complexity"', self.index_html)
         self.assertIn('id="toggle-high-contrast"', self.index_html)
-        self.assertIn('id="toggle-large-spacing"', self.index_html)
+        self.assertIn('id="font-scale"', self.index_html)
         self.assertIn('id="toggle-enhanced-readability"', self.index_html)
-        self.assertIn('id="toggle-anonymized-mode"', self.index_html)
-        self.assertIn('id="toggle-research-mode"', self.index_html)
-        self.assertIn('id="toggle-audit"', self.index_html)
-        self.assertIn("Research &amp; Theoretical Foundations", self.index_html)
         self.assertIn("Learning Impact", self.index_html)
         self.assertIn("Strategic Accessibility Governance Simulation Framework", self.index_html)
         self.assertIn("Deliverable Context", self.index_html)
-        self.assertIn("Version 2.0 – Research-Enabled Edition", self.index_html)
+        self.assertIn("Version 1.0 – Research-Enabled Edition", self.index_html)
         self.assertIn('class="skip-link"', self.index_html)
         self.assertIn('aria-live="polite"', self.index_html)
         self.assertIn('aria-live="assertive"', self.index_html)
@@ -238,7 +230,7 @@ class TestStaticRequirements(unittest.TestCase):
         self.assertIn("function exportAccessibleReport", self.app_js)
         self.assertIn("function exportCaseStudyReport", self.app_js)
         self.assertIn("function renderAuditPanel", self.app_js)
-        self.assertIn('const LAB_VERSION = "2.0.0-Research-Enabled"', self.app_js)
+        self.assertIn('const LAB_VERSION = "1.0.0-Research-Enabled"', self.app_js)
 
 
 if __name__ == "__main__":

@@ -117,6 +117,7 @@ const ui = {
   optionList: document.getElementById("option-list"),
   prevotePanel: document.getElementById("prevote-panel"),
   prevoteForm: document.getElementById("prevote-form"),
+  prevoteSubmitButton: document.querySelector('#prevote-form button[type="submit"]'),
   prevoteOptions: document.getElementById("prevote-options"),
   prevoteConfidence: document.getElementById("prevote-confidence"),
   prevoteStatus: document.getElementById("prevote-status"),
@@ -130,6 +131,7 @@ const ui = {
   messageList: document.getElementById("message-list"),
   finalPanel: document.getElementById("final-panel"),
   finalForm: document.getElementById("final-form"),
+  finalSubmitButton: document.querySelector('#final-form button[type="submit"]'),
   finalOptions: document.getElementById("final-options"),
   finalConfidence: document.getElementById("final-confidence"),
   finalStatus: document.getElementById("final-status"),
@@ -396,16 +398,12 @@ function renderIndicators(room) {
   for (const [key, label] of Object.entries(INDICATOR_LABELS)) {
     const value = room.indicators[key];
     const help = INDICATOR_HELP[key];
-    const prefersHigher = help.direction.startsWith("Higher");
-    const indicatorClass = prefersHigher ? "indicator-trend-up" : "indicator-trend-down";
-    const indicatorLabel = prefersHigher ? "UP" : "DOWN";
     const card = document.createElement("article");
     card.className = "indicator";
     card.innerHTML = `
       <div class="indicator-row">
         <strong>${label}</strong>
         <span class="indicator-score-wrap">
-          <span class="indicator-trend ${indicatorClass}" aria-label="${help.direction}">${indicatorLabel}</span>
           <span class="indicator-score">${formatIndicatorValue(key, value)}/100</span>
         </span>
       </div>
@@ -794,6 +792,7 @@ function renderRoom(room) {
       : (appState.draftSelections.preVoteConfidence || (room.self.preVoteConfidence ? String(room.self.preVoteConfidence) : ""));
     renderOptions(ui.prevoteOptions, room.currentCrisis, "prevoteOption", selectedPreVoteOptionID);
     ui.prevoteConfidence.value = selectedPreVoteConfidence;
+    ui.prevoteSubmitButton.disabled = Boolean(room.self.preVoteSubmitted);
     ui.prevoteStatus.textContent = room.self.preVoteSubmitted ? "Your pre-vote has been recorded confidentially." : "Your pre-vote remains private until the aggregated reveal.";
   } else if (room.phase === "aggregated_reveal") {
     appState.draftSelections.preVoteOptionID = room.self.preVoteOptionID || "";
@@ -820,14 +819,12 @@ function renderRoom(room) {
       : (appState.draftSelections.finalVoteConfidence || (room.self.finalVoteConfidence ? String(room.self.finalVoteConfidence) : ""));
     renderOptions(ui.finalOptions, room.currentCrisis, "finalOption", selectedFinalVoteOptionID);
     ui.finalConfidence.value = selectedFinalVoteConfidence;
+    ui.finalSubmitButton.disabled = Boolean(room.self.finalVoteSubmitted);
     ui.finalStatus.textContent = room.self.finalVoteSubmitted
       ? room.self.voteShift
         ? "Final vote received. Your final vote differs from your pre-vote."
         : "Final vote received."
       : "Submit a final vote before the countdown ends.";
-    if (room.self.finalVoteSubmitted) {
-      renderExpertExplanation(room.currentCrisis, room.self.finalVoteOptionID, room.self.finalVoteConfidence);
-    }
   } else if (room.phase === "indicator_update") {
     appState.draftSelections.finalVoteOptionID = room.self.finalVoteOptionID || "";
     appState.draftSelections.finalVoteConfidence = room.self.finalVoteConfidence ? String(room.self.finalVoteConfidence) : "";
@@ -947,10 +944,12 @@ async function submitVote(kind) {
   const isPre = kind === "pre";
   const optionID = getSelectedRadio(isPre ? "prevoteOption" : "finalOption");
   const confidence = Number(isPre ? ui.prevoteConfidence.value : ui.finalConfidence.value);
+  const submitButton = isPre ? ui.prevoteSubmitButton : ui.finalSubmitButton;
   if (!optionID || !confidence) {
     setStatus("Select an option and confidence rating before submitting.", true);
     return;
   }
+  submitButton.disabled = true;
   await requestJSON(`/api/rooms/${isPre ? "pre-vote" : "final-vote"}`, {
     method: "POST",
     body: JSON.stringify({

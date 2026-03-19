@@ -313,6 +313,10 @@ main {
   color: var(--accent);
 }
 
+.hero .city-label {
+  color: #9fd8e3;
+}
+
 .site-header strong,
 .phase-panel strong {
   color: var(--deep);
@@ -375,17 +379,6 @@ main {
   color: #f5fbff;
   border-color: var(--console-line);
   overflow: hidden;
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: auto -4rem -4rem auto;
-  width: 18rem;
-  height: 18rem;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(241, 185, 79, 0.16), transparent 70%);
-  pointer-events: none;
 }
 
 .phase-strip {

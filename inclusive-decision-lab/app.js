@@ -1,5 +1,5 @@
-const LAB_VERSION = "2.0.0-Research-Enabled";
-const VERSION_LABEL = "Version 2.0 – Research-Enabled Edition";
+const LAB_VERSION = "1.0.0-Research-Enabled";
+const VERSION_LABEL = "Version 1.0 – Research-Enabled Edition";
 const INITIAL_INDICATORS = {
   accessibility: 55,
   legalRisk: 40,
@@ -60,6 +60,7 @@ const state = {
     anonymizedMode: false,
     researchMode: true,
     auditMode: false,
+    fontScale: 100,
   },
   sessionUUID: "",
   participantCode: "",
@@ -89,6 +90,7 @@ const ui = {
   scenarioProgress: document.getElementById("scenario-progress"),
   scenarioTitle: document.getElementById("scenario-title"),
   scenarioDescription: document.getElementById("scenario-description"),
+  roundOutcomeMessage: document.getElementById("round-outcome-message"),
   choiceList: document.getElementById("choice-list"),
   nextQuestion: document.getElementById("next-question"),
   reflectionPanel: document.getElementById("reflection-panel"),
@@ -114,16 +116,10 @@ const ui = {
   sessionUUIDDisplay: document.getElementById("session-uuid-display"),
   roleDisplay: document.getElementById("role-display"),
   decisionTimeDisplay: document.getElementById("decision-time-display"),
-  toggleMotion: document.getElementById("toggle-motion"),
-  toggleText: document.getElementById("toggle-text"),
-  togglePlainLanguage: document.getElementById("toggle-plain-language"),
-  toggleLowComplexity: document.getElementById("toggle-low-complexity"),
   toggleHighContrast: document.getElementById("toggle-high-contrast"),
-  toggleLargeSpacing: document.getElementById("toggle-large-spacing"),
+  fontScale: document.getElementById("font-scale"),
+  fontScaleValue: document.getElementById("font-scale-value"),
   toggleEnhancedReadability: document.getElementById("toggle-enhanced-readability"),
-  toggleAnonymizedMode: document.getElementById("toggle-anonymized-mode"),
-  toggleResearchMode: document.getElementById("toggle-research-mode"),
-  toggleAudit: document.getElementById("toggle-audit"),
   auditPanel: document.getElementById("audit-panel"),
   auditContent: document.getElementById("audit-content"),
   activateResearchMode: document.getElementById("activate-research-mode"),
@@ -133,6 +129,15 @@ const ui = {
 
 function clamp(value) {
   return Math.max(0, Math.min(100, value));
+}
+
+function shuffleArray(items) {
+  const copy = [...items];
+  for (let i = copy.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
 }
 
 function uuidv4() {
@@ -364,13 +369,11 @@ function getRecommendedChoice(scenario, baseIndicators) {
 
 function buildStrategicReflection(choice, delta, hiddenText, scenario, indicatorBefore) {
   const summary = buildPlainSummary(delta);
-  const advanced = `This decision prioritizes ${choice.text.toLowerCase()} within a constrained governance environment. The immediate trade-offs emerged because institutional capacity, legal exposure, stakeholder confidence, and technical maintenance pressures do not move independently. A longer-term effect may emerge if these tensions continue to reinforce one another through drift conditions.`;
-  const plain = `This choice changes several parts of the system at once. Some areas improve now, but other areas may weaken later. Watch ${summary.watch} next.`;
   const recommended = getRecommendedChoice(scenario, indicatorBefore);
   const alignment = recommended?.choice?.text === choice.text
     ? "Your choice matched the recommended policy response for this scenario."
     : `A stronger policy response would have been: ${recommended?.choice?.text || "Not available"}.`;
-  return { advanced, plain, summary, hiddenText, recommended, alignment };
+  return { summary, hiddenText, recommended, alignment };
 }
 
 function renderReflection() {
@@ -381,9 +384,7 @@ function renderReflection() {
     ui.effectsContent.innerHTML = "<p>Make a decision to reveal hidden downstream impacts.</p>";
     return;
   }
-  const text = state.settings.plainLanguage || state.settings.lowComplexity ? state.reflection.plain : state.reflection.advanced;
   ui.reflectionContent.innerHTML = `
-    <p>${text}</p>
     <div class="recommendation-block">
       <p><strong>Recommended answer:</strong> ${state.reflection.recommended?.choice?.text || "Not available"}</p>
       <p><strong>Why:</strong> ${state.reflection.recommended?.rationale || "No recommendation rationale available."}</p>
@@ -413,16 +414,21 @@ function renderScenario() {
   ui.scenarioTitle.textContent = scenario.title;
   ui.scenarioDescription.textContent = scenario.description;
   ui.choiceList.innerHTML = "";
-  scenario.choices.forEach((choice, index) => {
+  ui.roundOutcomeMessage.hidden = true;
+  ui.roundOutcomeMessage.textContent = "";
+  const renderedChoices = shuffleArray(scenario.choices);
+  renderedChoices.forEach((choice, index) => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "choice-button";
+    button.dataset.choiceText = choice.text;
     button.setAttribute("aria-describedby", "scenario-help");
     button.innerHTML = `<strong>${index + 1}. ${choice.text}</strong><small>Select this governance response.</small>`;
     button.addEventListener("click", () => onDecision(choice, scenario));
     ui.choiceList.appendChild(button);
   });
-  ui.nextQuestion.hidden = true;
+  ui.nextQuestion.hidden = false;
+  ui.nextQuestion.disabled = true;
   ui.nextQuestion.textContent = "Next Question";
   ui.scenarioTitle.focus();
   ui.statusRegion.textContent = `Round ${state.currentScenarioIndex + 1}. New scenario loaded.`;
@@ -550,7 +556,6 @@ function finalizeSimulation(result) {
     <p><strong>Strategic maturity level:</strong> ${maturity}</p>
     <p><strong>Assessment:</strong> ${evaluation.reasoning}</p>
     <p><strong>Comments:</strong> ${evaluation.strengths[0] || evaluation.concerns[0] || "This run produced a mixed governance profile."}</p>
-    <p><strong>Rationale:</strong> ${(evaluation.concerns[0] || evaluation.strengths[1] || "Your decisions created a mixed set of trade-offs across the indicators.")}</p>
     <div>
       <strong>Advice for the next run:</strong>
       <ul>
@@ -558,11 +563,6 @@ function finalizeSimulation(result) {
       </ul>
     </div>
   `;
-  const showResearchExports = state.userRole === "research";
-  ui.exportJSON.hidden = !showResearchExports;
-  ui.exportReport.hidden = !showResearchExports;
-  ui.exportCaseStudy.hidden = !showResearchExports;
-  ui.exportCSV.hidden = !showResearchExports;
   ui.focusBeforeModal = document.activeElement;
   ui.endScreen.hidden = false;
   ui.endTitle.focus();
@@ -619,22 +619,34 @@ function onDecision(choice, scenario) {
   persistSession();
 
   state.awaitingNext = true;
+  const recommendedText = state.reflection.recommended?.choice?.text;
   Array.from(ui.choiceList.querySelectorAll("button")).forEach((button) => {
     button.disabled = true;
-    if (button.querySelector("strong")?.textContent?.includes(choice.text)) {
+    const buttonChoiceText = button.dataset.choiceText;
+    if (buttonChoiceText === recommendedText) {
+      button.classList.add("is-correct");
+    }
+    if (buttonChoiceText === choice.text) {
       button.classList.add("is-selected");
+      if (buttonChoiceText !== recommendedText) {
+        button.classList.add("is-incorrect");
+      }
     }
   });
 
   const result = evaluateGameEnd(state.indicators, state.currentScenarioIndex + 1);
   if (result.ended) {
     state.pendingEndResult = result;
-    ui.nextQuestion.textContent = "View Final Summary";
-    ui.nextQuestion.hidden = false;
+    ui.roundOutcomeMessage.hidden = false;
+    ui.roundOutcomeMessage.textContent = result.type === "failure"
+      ? `The simulation ends here because a critical threshold was reached. ${result.reason}`
+      : result.reason;
+    ui.nextQuestion.textContent = result.type === "failure" ? "View Failure Summary" : "View Final Summary";
+    ui.nextQuestion.disabled = false;
     return;
   }
   ui.nextQuestion.textContent = "Next Question";
-  ui.nextQuestion.hidden = false;
+  ui.nextQuestion.disabled = false;
 }
 
 function advanceScenario() {
@@ -775,7 +787,7 @@ function getScenarioSpeechText() {
 function getReflectionSpeechText() {
   if (!state.reflection) return "No reflection is available yet.";
   const latestEffect = state.hiddenEffects[state.hiddenEffects.length - 1];
-  return `Reflection. ${state.settings.plainLanguage ? state.reflection.plain : state.reflection.advanced}. Summary. What improved. ${state.reflection.summary.improved.join(", ") || "No major improvement"}. What worsened. ${state.reflection.summary.worsened.join(", ") || "No major decline"}. What to watch next. ${state.reflection.summary.watch}. ${latestEffect ? `Latest hidden effect. ${latestEffect.hiddenReveal}.` : ""}`;
+  return `Reflection. Recommended answer. ${state.reflection.recommended?.choice?.text || "Not available"}. Why. ${state.reflection.recommended?.rationale || "No recommendation rationale available."}. Comparison. ${state.reflection.alignment}. Summary. What improved. ${state.reflection.summary.improved.join(", ") || "No major improvement"}. What worsened. ${state.reflection.summary.worsened.join(", ") || "No major decline"}. What to watch next. ${state.reflection.summary.watch}. ${latestEffect ? `Latest hidden effect. ${latestEffect.hiddenReveal}.` : ""}`;
 }
 
 function getIndicatorSpeechText() {
@@ -793,9 +805,13 @@ async function sha256(input) {
 }
 
 function syncResearchAccessUI() {
-  formatToggle(ui.toggleResearchMode, "Research Mode", state.settings.researchMode);
-  ui.toggleResearchMode.hidden = false;
-  ui.toggleAnonymizedMode.hidden = false;
+  if (ui.toggleResearchMode) {
+    formatToggle(ui.toggleResearchMode, "Research Mode", state.settings.researchMode);
+    ui.toggleResearchMode.hidden = false;
+  }
+  if (ui.toggleAnonymizedMode) {
+    ui.toggleAnonymizedMode.hidden = false;
+  }
   ui.researchPanel.hidden = !state.settings.researchMode;
   ui.activateResearchMode.textContent = state.settings.researchMode ? "Deactivate Research Mode" : "Activate Research Mode";
   ui.activateResearchMode.setAttribute(
@@ -862,26 +878,25 @@ function applyVisualSettings() {
   document.body.classList.toggle("high-contrast", state.settings.highContrast);
   document.body.classList.toggle("large-spacing", state.settings.largeSpacing);
   document.body.classList.toggle("enhanced-readability", state.settings.enhancedReadability);
+  document.documentElement.style.setProperty("--font-scale", String(state.settings.fontScale / 100));
+  if (ui.fontScale) {
+    ui.fontScale.value = String(state.settings.fontScale);
+  }
+  if (ui.fontScaleValue) {
+    ui.fontScaleValue.textContent = `${state.settings.fontScale}%`;
+  }
   renderAuditPanel();
 }
 
 function bindToggles() {
   const toggleMap = [
-    [ui.toggleMotion, "reducedMotion", "Reduced motion"],
-    [ui.toggleText, "largeText", "Large text"],
-    [ui.togglePlainLanguage, "plainLanguage", "Plain Language Mode"],
-    [ui.toggleLowComplexity, "lowComplexity", "Low Complexity Mode"],
     [ui.toggleHighContrast, "highContrast", "High Contrast Theme"],
-    [ui.toggleLargeSpacing, "largeSpacing", "Larger Spacing"],
     [ui.toggleEnhancedReadability, "enhancedReadability", "Enhanced Readability Mode"],
-    [ui.toggleAnonymizedMode, "anonymizedMode", "Anonymized Dataset Mode"],
-    [ui.toggleResearchMode, "researchMode", "Research Mode"],
-    [ui.toggleAudit, "auditMode", "Accessibility Audit Mode"],
   ];
   toggleMap.forEach(([button, key, label]) => {
+    if (!button) return;
     formatToggle(button, label, state.settings[key]);
     button.addEventListener("click", () => {
-      if (key === "researchMode") return;
       state.settings[key] = !state.settings[key];
       formatToggle(button, label, state.settings[key]);
       applyVisualSettings();
@@ -889,6 +904,12 @@ function bindToggles() {
       renderReflection();
     });
   });
+  if (ui.fontScale) {
+    ui.fontScale.addEventListener("input", () => {
+      state.settings.fontScale = Number(ui.fontScale.value);
+      applyVisualSettings();
+    });
+  }
 }
 
 function beginSimulation() {
@@ -956,10 +977,10 @@ function bindEvents() {
   });
   ui.closeEndScreen.addEventListener("click", closeEndScreen);
   ui.restart.addEventListener("click", restartSimulation);
-  ui.exportJSON.addEventListener("click", exportResults);
-  ui.exportReport.addEventListener("click", exportAccessibleReport);
-  ui.exportCaseStudy.addEventListener("click", exportCaseStudyReport);
-  ui.exportCSV.addEventListener("click", exportResearchCSV);
+  if (ui.exportJSON) ui.exportJSON.addEventListener("click", exportResults);
+  if (ui.exportReport) ui.exportReport.addEventListener("click", exportAccessibleReport);
+  if (ui.exportCaseStudy) ui.exportCaseStudy.addEventListener("click", exportCaseStudyReport);
+  if (ui.exportCSV) ui.exportCSV.addEventListener("click", exportResearchCSV);
   ui.readScenario.addEventListener("click", () => speakText(getScenarioSpeechText()));
   ui.readReflection.addEventListener("click", () => speakText(getReflectionSpeechText()));
   ui.summarizeIndicators.addEventListener("click", () => speakText(getIndicatorSpeechText()));
@@ -968,7 +989,6 @@ function bindEvents() {
     setSpeechState(false);
   });
   ui.activateResearchMode.addEventListener("click", activateResearchAccess);
-  ui.toggleResearchMode.addEventListener("click", activateResearchAccess);
   document.addEventListener("keydown", (event) => {
     if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === "r") {
       event.preventDefault();
@@ -977,7 +997,6 @@ function bindEvents() {
     if (state.settings.auditMode && event.altKey && event.shiftKey && event.key.toLowerCase() === "a") {
       event.preventDefault();
       state.settings.auditMode = !state.settings.auditMode;
-      formatToggle(ui.toggleAudit, "Accessibility Audit Mode", state.settings.auditMode);
       renderAuditPanel();
     }
     if (event.key === "Tab" && !ui.endScreen.hidden) {
@@ -1013,10 +1032,10 @@ async function init() {
   ui.endScreen.hidden = true;
   syncResearchAccessUI();
   setDashboardOpen(false);
-  ui.exportJSON.hidden = true;
-  ui.exportReport.hidden = true;
-  ui.exportCaseStudy.hidden = true;
-  ui.exportCSV.hidden = true;
+  if (ui.exportJSON) ui.exportJSON.hidden = true;
+  if (ui.exportReport) ui.exportReport.hidden = true;
+  if (ui.exportCaseStudy) ui.exportCaseStudy.hidden = true;
+  if (ui.exportCSV) ui.exportCSV.hidden = true;
   updateConsentUI();
   try {
     state.scenarios = await loadScenarios();

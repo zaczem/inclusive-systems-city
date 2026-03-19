@@ -107,8 +107,8 @@
           <article class="guide-step-card">
             <p class="city-label">Step 1</p>
             <h3>Enter a Room</h3>
-            <p><strong>What you will see:</strong> the options to start a new game or join a running game, plus role selection.</p>
-            <p><strong>What you do:</strong> choose a display name, pick a unique role, and either create a room or join with a Room ID.</p>
+            <p><strong>What you will see:</strong> the options to start a new game or join a running game, plus role selection and room size setup for the host.</p>
+            <p><strong>What you do:</strong> choose a display name, pick a unique role, and either create a room or join with a Room ID. If you create the room, you also decide how many players the room will support.</p>
             <p><strong>Why this step exists:</strong> every player enters the simulation from a different institutional perspective, so the room needs a clear role structure before discussion begins.</p>
             <p class="guide-note"><strong>Note:</strong> each role can be assigned to only one player in the room. If you choose a role that is already taken, the system will ask you to pick a different one before you can continue.</p>
           </article>
@@ -117,7 +117,7 @@
             <p class="city-label">Step 2</p>
             <h3>Wait in the Lobby</h3>
             <p><strong>What you will see:</strong> the Lobby panel, the current team, room readiness, and the City Systems baseline scores.</p>
-            <p><strong>What you do:</strong> confirm who is in the room, check your role, and wait for the host to begin the session.</p>
+            <p><strong>What you do:</strong> if you are the host, confirm the room is full enough to begin, review the assigned roles, and launch the mission when the group is ready. If you are joining as a participant, confirm who is in the room, check your role, and wait for the host to launch the mission.</p>
             <p><strong>Why this step exists:</strong> the lobby is the staging area that makes sure the team is complete and everyone starts from the same baseline conditions.</p>
             <p class="guide-note"><strong>Note:</strong> this is the right moment to check that your role is correct. If you joined with the wrong role or wrong room, it is better to leave and re-enter before the session starts.</p>
           </article>
@@ -245,7 +245,7 @@
         <article class="panel">
           <h2>Start a New Game</h2>
           <form id="create-room-form" class="stack-form">
-            <label for="create-name">Display name</label>
+            <label for="create-name">Enter your name</label>
             <input id="create-name" name="displayName" maxlength="40" required>
 
             <label for="create-role">Choose your role</label>
@@ -254,7 +254,7 @@
               <p id="create-role-note" class="field-note" hidden aria-live="polite"></p>
             </div>
 
-            <label for="create-max-players">Squad size</label>
+            <label for="create-max-players">Room size</label>
             <select id="create-max-players" name="maxPlayers" required>
               <option value="2">2 players</option>
               <option value="3">3 players</option>
