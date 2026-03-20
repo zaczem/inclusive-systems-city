@@ -15,7 +15,7 @@
       <h1>Inclusive Decision Lab</h1>
       <p class="subtitle">Strategic Accessibility Governance Simulation Framework</p>
       <p class="institutional-line">Designed by Zacharoula Zempili<br>PhD Researcher, KTH Royal Institute of Technology</p>
-      <p class="version-line">Version 1.0 – Research-Enabled Edition</p>
+      <p class="version-line">Version 1.0</p>
     </div>
   </header>
 
@@ -42,8 +42,8 @@
           <label class="preferences-slider" for="font-scale">
             <span>Font scale</span>
             <div class="slider-row">
-              <input id="font-scale" type="range" min="100" max="130" step="5" value="110" aria-describedby="font-scale-value">
-              <output id="font-scale-value" for="font-scale">110%</output>
+              <input id="font-scale" type="range" min="90" max="120" step="5" value="100" aria-describedby="font-scale-value">
+              <output id="font-scale-value" for="font-scale">100%</output>
             </div>
           </label>
           <button id="toggle-enhanced-readability" type="button" aria-pressed="false">Enhanced Readability Mode: Off</button>
@@ -80,48 +80,11 @@
       </section>
 
       <section id="simulation-shell" hidden>
-        <button
-          id="dashboard-toggle"
-          class="dashboard-toggle"
-          type="button"
-          aria-controls="decision-dashboard"
-          aria-expanded="false"
-          aria-label="Open decision dashboard"
-        >
-          <span aria-hidden="true">›</span>
-          <span class="dashboard-toggle-label">Open Dashboard</span>
-        </button>
-        <div id="dashboard-backdrop" class="dashboard-backdrop" hidden></div>
-        <div class="layout-grid">
-          <aside id="decision-dashboard" class="dashboard panel" aria-labelledby="dashboard-title">
-            <h2 id="dashboard-title" tabindex="-1">Decision Dashboard</h2>
-            <p id="round-counter" class="round-counter">Round 1 of 20</p>
-            <p class="dashboard-intro">This panel tracks the live system conditions affected by your decisions. Open it when you need to compare indicators before making a choice.</p>
-            <details class="status-explainer" aria-labelledby="status-explainer-title">
-              <summary id="status-explainer-title">Indicator Status Guide</summary>
-              <p>Each indicator includes a status marker so you can quickly read system conditions without relying on color alone.</p>
-              <ul class="status-guide-list">
-                <li><span class="status-guide-symbol status-good">✔ good</span> means the indicator is currently in a stable range.</li>
-                <li><span class="status-guide-symbol status-watch">⚠ watch</span> means the indicator needs monitoring because pressure is building.</li>
-                <li><span class="status-guide-symbol status-critical">✖ critical</span> means the indicator is in a high-risk range and may trigger failure if conditions worsen.</li>
-              </ul>
-            </details>
-            <div id="indicator-grid" class="indicator-grid"></div>
-            <section id="research-panel" class="panel nested-panel" hidden aria-labelledby="research-panel-title">
-              <h3 id="research-panel-title">Research Data</h3>
-              <dl class="meta-list">
-                <div><dt>Session UUID</dt><dd id="session-uuid-display">Restricted</dd></div>
-                <div><dt>Role</dt><dd id="role-display">Public</dd></div>
-                <div><dt>Last Decision Time</dt><dd id="decision-time-display">Not available</dd></div>
-              </dl>
-            </section>
-          </aside>
-
-          <section class="main-column">
+        <div class="simulation-app">
+          <section class="main-column simulation-main">
             <article class="panel scenario-panel" aria-labelledby="scenario-title" aria-describedby="scenario-help">
               <div class="scenario-head">
                 <div>
-                  <p class="scenario-intro">This section presents the current governance issue. Review the category shown here, read the scenario, then choose one strategic response.</p>
                   <div class="scenario-meta">
                     <p id="scenario-category" class="category-pill">Policy</p>
                     <p id="scenario-progress" class="scenario-progress" aria-live="polite">Question 1 of 20</p>
@@ -143,7 +106,16 @@
               <div id="round-outcome-message" class="round-outcome-message" hidden aria-live="assertive"></div>
               <div id="choice-list" class="choice-list"></div>
               <div class="scenario-actions">
-                <button id="next-question" type="button" hidden>Next Question</button>
+                <section id="choice-preview" class="choice-preview" aria-labelledby="choice-preview-title">
+                  <h3 id="choice-preview-title">Decision Preview</h3>
+                  <div id="choice-preview-content">
+                    <p>Select an option to review its immediate indicator effects before you confirm your decision.</p>
+                  </div>
+                </section>
+                <div class="scenario-action-buttons">
+                  <button id="confirm-decision" type="button" disabled>Confirm Decision</button>
+                  <button id="next-question" type="button" hidden>Next Question</button>
+                </div>
               </div>
             </article>
 
@@ -163,6 +135,22 @@
               </article>
             </section>
           </section>
+
+          <aside id="indicators-panel" class="simulation-right-panel panel" aria-labelledby="dashboard-title">
+            <h2 id="dashboard-title" tabindex="-1">Indicators</h2>
+            <p id="round-counter" class="round-counter">Round 1 of 20</p>
+            <p class="dashboard-intro">Use these indicators to compare the current state of the system before you confirm a decision.</p>
+            <details class="status-explainer" aria-labelledby="status-explainer-title">
+              <summary id="status-explainer-title">Indicator Status Guide</summary>
+              <p>Each indicator shows whether conditions are stable, under pressure, or critical.</p>
+              <ul class="status-guide-list">
+                <li><span class="status-guide-symbol status-good">✔ good</span> means the indicator is currently in a stable range.</li>
+                <li><span class="status-guide-symbol status-watch">⚠ watch</span> means the indicator needs monitoring because pressure is building.</li>
+                <li><span class="status-guide-symbol status-critical">✖ critical</span> means the indicator is in a high-risk range and may trigger failure if conditions worsen.</li>
+              </ul>
+            </details>
+            <div id="indicator-grid" class="indicator-grid"></div>
+          </aside>
         </div>
       </section>
     </section>
@@ -171,7 +159,7 @@
       <article class="panel prose-panel">
         <h2>About the Lab</h2>
         <p>Inclusive Decision Lab is a strategic accessibility governance simulation framework designed for institutional learning, executive workshops, and applied academic use.</p>
-        <p>Version 1.0 – Research-Enabled Edition</p>
+        <p>Version 1.0</p>
         <h3>Deliverable Context</h3>
         <p>This simulation serves as an educational demonstrator within Deliverable 3.5, supporting applied training in strategic accessibility governance, inclusive digital transformation, and compliance-oriented decision-making.</p>
         <p>It is designed to illustrate multi-dimensional impact interactions across policy, implementation, procurement, legal exposure, and stakeholder trust domains.</p>
@@ -252,7 +240,6 @@
   <footer class="site-footer">
     <div class="footer-inner">
       <p>Inclusive Decision Lab</p>
-      <button id="activate-research-mode" type="button">Activate Research Mode</button>
     </div>
   </footer>
 

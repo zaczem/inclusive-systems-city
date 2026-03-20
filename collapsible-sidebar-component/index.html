@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Collapsible Sidebar Component</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app" data-sidebar-state="expanded">
+    <aside class="sidebar" aria-label="Primary navigation">
+      <div class="sidebar__inner">
+        <div class="sidebar__topbar">
+          <button
+            class="sidebar__toggle"
+            id="sidebar-toggle"
+            type="button"
+            aria-expanded="true"
+            aria-controls="primary-navigation"
+            aria-label="Collapse navigation"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="sidebar__brand">
+            <span class="sidebar__brand-mark">ID</span>
+            <div class="sidebar__brand-copy">
+              <strong>Institutional Lab</strong>
+              <span>Navigation</span>
+            </div>
+          </div>
+        </div>
+
+        <nav id="primary-navigation" class="sidebar__nav" aria-label="Sidebar navigation">
+          <a class="nav-item is-active" href="#dashboard" data-tooltip="Dashboard" aria-current="page">
+            <span class="nav-item__indicator" aria-hidden="true"></span>
+            <span class="nav-item__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path d="M4 11l8-7 8 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M6 10v10h12V10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="nav-item__label">Dashboard</span>
+          </a>
+
+          <a class="nav-item" href="#simulation" data-tooltip="Simulation">
+            <span class="nav-item__indicator" aria-hidden="true"></span>
+            <span class="nav-item__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path d="M8 6l10 6-10 6V6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="nav-item__label">Simulation</span>
+          </a>
+
+          <a class="nav-item" href="#indicators" data-tooltip="Indicators">
+            <span class="nav-item__indicator" aria-hidden="true"></span>
+            <span class="nav-item__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path d="M5 19V9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 19V5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M19 19v-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="nav-item__label">Indicators</span>
+          </a>
+
+          <a class="nav-item" href="#settings" data-tooltip="Settings">
+            <span class="nav-item__indicator" aria-hidden="true"></span>
+            <span class="nav-item__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path d="M12 8.5A3.5 3.5 0 1 0 12 15.5A3.5 3.5 0 1 0 12 8.5z" fill="none" stroke="currentColor" stroke-width="2"/>
+                <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.2a1.7 1.7 0 0 0 1 1.5h0a1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.2a1.7 1.7 0 0 0-1.5 1z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="nav-item__label">Settings</span>
+          </a>
+        </nav>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="main__shell">
+        <header class="main__header">
+          <p class="main__eyebrow">Existing app layout</p>
+          <h1>Dashboard content area</h1>
+          <p>This component is structured to sit inside an existing application shell. The sidebar remains in layout flow and the main area automatically adapts as the navigation collapses or expands.</p>
+        </header>
+
+        <section class="content-grid" aria-label="Main dashboard sections">
+          <article class="content-card" id="dashboard">
+            <h2>Dashboard</h2>
+            <p>Overview metrics, summaries, or landing content can sit here.</p>
+          </article>
+          <article class="content-card" id="simulation">
+            <h2>Simulation</h2>
+            <p>This area can host scenario flows, decision panels, or live policy interactions.</p>
+          </article>
+          <article class="content-card" id="indicators">
+            <h2>Indicators</h2>
+            <p>Use this section for charts, indicator cards, or system condition summaries.</p>
+          </article>
+          <article class="content-card" id="settings">
+            <h2>Settings</h2>
+            <p>Controls, preferences, and administrative options can be placed here.</p>
+          </article>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

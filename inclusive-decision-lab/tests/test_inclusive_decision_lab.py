@@ -205,7 +205,7 @@ class TestStaticRequirements(unittest.TestCase):
         self.assertIn("Learning Impact", self.index_html)
         self.assertIn("Strategic Accessibility Governance Simulation Framework", self.index_html)
         self.assertIn("Deliverable Context", self.index_html)
-        self.assertIn("Version 1.0 – Research-Enabled Edition", self.index_html)
+        self.assertIn("Version 1.0", self.index_html)
         self.assertIn('class="skip-link"', self.index_html)
         self.assertIn('aria-live="polite"', self.index_html)
         self.assertIn('aria-live="assertive"', self.index_html)
@@ -234,7 +234,7 @@ class TestStaticRequirements(unittest.TestCase):
         self.assertIn("function exportAccessibleReport", self.app_js)
         self.assertIn("function exportCaseStudyReport", self.app_js)
         self.assertIn("function renderAuditPanel", self.app_js)
-        self.assertIn('const LAB_VERSION = "1.0.0-Research-Enabled"', self.app_js)
+        self.assertIn('const LAB_VERSION = "1.0.0"', self.app_js)
 
 
 if __name__ == "__main__":

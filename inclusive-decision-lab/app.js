@@ -1,5 +1,5 @@
-const LAB_VERSION = "1.0.0-Research-Enabled";
-const VERSION_LABEL = "Version 1.0 – Research-Enabled Edition";
+const LAB_VERSION = "1.0.0";
+const VERSION_LABEL = "Version 1.0";
 const INITIAL_INDICATORS = {
   accessibility: 55,
   legalRisk: 40,
@@ -47,6 +47,7 @@ const state = {
   history: [],
   hiddenEffects: [],
   reflection: null,
+  selectedChoice: null,
   awaitingNext: false,
   pendingEndResult: null,
   settings: {
@@ -60,7 +61,7 @@ const state = {
     anonymizedMode: false,
     researchMode: true,
     auditMode: false,
-    fontScale: 110,
+    fontScale: 100,
   },
   sessionUUID: "",
   participantCode: "",
@@ -81,9 +82,7 @@ const ui = {
   consentCheckbox: document.getElementById("consent-checkbox"),
   consentStatus: document.getElementById("consent-status"),
   beginSimulation: document.getElementById("begin-simulation"),
-  dashboard: document.getElementById("decision-dashboard"),
-  dashboardToggle: document.getElementById("dashboard-toggle"),
-  dashboardBackdrop: document.getElementById("dashboard-backdrop"),
+  dashboard: document.getElementById("indicators-panel"),
   roundCounter: document.getElementById("round-counter"),
   indicatorGrid: document.getElementById("indicator-grid"),
   scenarioCategory: document.getElementById("scenario-category"),
@@ -92,6 +91,9 @@ const ui = {
   scenarioDescription: document.getElementById("scenario-description"),
   roundOutcomeMessage: document.getElementById("round-outcome-message"),
   choiceList: document.getElementById("choice-list"),
+  choicePreview: document.getElementById("choice-preview"),
+  choicePreviewContent: document.getElementById("choice-preview-content"),
+  confirmDecision: document.getElementById("confirm-decision"),
   nextQuestion: document.getElementById("next-question"),
   reflectionPanel: document.getElementById("reflection-panel"),
   reflectionContent: document.getElementById("reflection-content"),
@@ -112,17 +114,12 @@ const ui = {
   readReflection: document.getElementById("read-reflection"),
   summarizeIndicators: document.getElementById("summarize-indicators"),
   stopReading: document.getElementById("stop-reading"),
-  researchPanel: document.getElementById("research-panel"),
-  sessionUUIDDisplay: document.getElementById("session-uuid-display"),
-  roleDisplay: document.getElementById("role-display"),
-  decisionTimeDisplay: document.getElementById("decision-time-display"),
   toggleHighContrast: document.getElementById("toggle-high-contrast"),
   fontScale: document.getElementById("font-scale"),
   fontScaleValue: document.getElementById("font-scale-value"),
   toggleEnhancedReadability: document.getElementById("toggle-enhanced-readability"),
   auditPanel: document.getElementById("audit-panel"),
   auditContent: document.getElementById("audit-content"),
-  activateResearchMode: document.getElementById("activate-research-mode"),
   tabButtons: Array.from(document.querySelectorAll('[role="tab"]')),
   tabPanels: Array.from(document.querySelectorAll('[role="tabpanel"]')),
 };
@@ -156,11 +153,6 @@ function formatToggle(button, label, on) {
 function setDashboardOpen(open) {
   state.dashboardOpen = open;
   document.body.classList.toggle("dashboard-open", open);
-  ui.dashboardToggle.setAttribute("aria-expanded", String(open));
-  ui.dashboardToggle.setAttribute("aria-label", open ? "Close decision dashboard" : "Open decision dashboard");
-  ui.dashboardToggle.querySelector("span[aria-hidden='true']").textContent = open ? "‹" : "›";
-  ui.dashboardToggle.querySelector(".dashboard-toggle-label").textContent = open ? "Hide Dashboard" : "Open Dashboard";
-  ui.dashboardBackdrop.hidden = !open;
 }
 
 function updateConsentUI() {
@@ -276,8 +268,8 @@ function renderDashboard() {
     const trend = value > previous ? "↑" : value < previous ? "↓" : "→";
     const status = getIndicatorStatus(key, value);
     const compactSummary = INDICATOR_META[key].positiveHigh
-      ? (value >= 70 ? "Currently supporting system resilience." : value >= 40 ? "Needs continued attention." : "Needs urgent corrective action.")
-      : (value <= 30 ? "Currently contained." : value <= 60 ? "Should be monitored closely." : "Creating significant governance pressure.");
+      ? (value >= 70 ? "Stable range." : value >= 40 ? "Needs attention." : "Critical pressure.")
+      : (value <= 30 ? "Contained." : value <= 60 ? "Needs watching." : "High pressure.");
     const article = document.createElement("article");
     article.className = "indicator-card";
     article.innerHTML = `
@@ -291,7 +283,7 @@ function renderDashboard() {
       <div class="progress" aria-hidden="true"><span style="width:${value}%"></span></div>
       <p class="indicator-brief">${compactSummary}</p>
       <details class="indicator-details">
-        <summary>What this means</summary>
+        <summary>Details</summary>
         <p>High value: ${INDICATOR_META[key].positiveHigh ? "more stable" : "more severe"} condition.</p>
         <p>Low value: ${INDICATOR_META[key].positiveHigh ? "more vulnerable" : "more stable"} condition.</p>
         <p>Why it matters: ${INDICATOR_META[key].meaning}</p>
@@ -300,8 +292,6 @@ function renderDashboard() {
     ui.indicatorGrid.appendChild(article);
   });
   ui.roundCounter.textContent = `Round ${Math.min(state.currentScenarioIndex + 1, TOTAL_ROUNDS)} of ${TOTAL_ROUNDS}`;
-  ui.sessionUUIDDisplay.textContent = state.userRole === "research" ? state.sessionUUID : "Restricted";
-  ui.roleDisplay.textContent = state.userRole === "research" ? "Research" : "Public";
 }
 
 function buildPlainSummary(delta) {
@@ -319,6 +309,39 @@ function buildPlainSummary(delta) {
   });
   const watch = worsened[0] || "Legal Risk";
   return { improved, worsened, watch };
+}
+
+function formatEffectValue(key, value) {
+  const direction = INDICATOR_META[key].positiveHigh
+    ? (value > 0 ? "improves" : "reduces")
+    : (value < 0 ? "improves" : "increases");
+  return `${INDICATOR_META[key].label} ${direction} by ${Math.abs(value)}`;
+}
+
+function buildChoicePreview(choice) {
+  const effects = Object.entries(choice.effects || {}).filter(([, value]) => value !== 0);
+  if (!effects.length) {
+    return `
+      <p><strong>Selected option:</strong> ${choice.text}</p>
+      <p>No immediate indicator change is shown for this option.</p>
+    `;
+  }
+  return `
+    <p><strong>Selected option:</strong> ${choice.text}</p>
+    <ul>
+      ${effects.map(([key, value]) => `<li>${formatEffectValue(key, value)}</li>`).join("")}
+    </ul>
+  `;
+}
+
+function selectChoice(choice) {
+  if (state.awaitingNext) return;
+  state.selectedChoice = choice;
+  Array.from(ui.choiceList.querySelectorAll("button")).forEach((button) => {
+    button.classList.toggle("is-preview-selected", button.dataset.choiceText === choice.text);
+  });
+  ui.choicePreviewContent.innerHTML = buildChoicePreview(choice);
+  ui.confirmDecision.disabled = false;
 }
 
 function scoreProjectedIndicators(indicators) {
@@ -344,8 +367,8 @@ function buildRecommendationRationale(choice, delta) {
   return "This option is recommended because it preserves the most stable overall governance position across the indicators.";
 }
 
-function getRecommendedChoice(scenario, baseIndicators) {
-  let best = null;
+function analyzeScenarioChoices(scenario, baseIndicators) {
+  const analyses = [];
   for (const option of scenario.choices) {
     const afterDirect = updateIndicators(baseIndicators, option.effects || {});
     const afterHidden = updateIndicators(afterDirect, option.hiddenEffects || {});
@@ -355,25 +378,59 @@ function getRecommendedChoice(scenario, baseIndicators) {
       delta[key] = afterDrift[key] - baseIndicators[key];
     });
     const score = scoreProjectedIndicators(afterDrift);
-    if (!best || score > best.score) {
-      best = {
-        choice: option,
-        score,
-        delta,
-        rationale: buildRecommendationRationale(option, delta),
-      };
-    }
+    analyses.push({
+      choice: option,
+      score,
+      delta,
+      rationale: buildRecommendationRationale(option, delta),
+    });
   }
-  return best;
+  return analyses.sort((a, b) => b.score - a.score);
+}
+
+function buildAlternativeExplanation(analysis, recommended) {
+  const summary = buildPlainSummary(analysis.delta);
+  const improved = summary.improved.join(", ");
+  const worsened = summary.worsened.join(", ");
+  if (!recommended) {
+    return analysis.rationale;
+  }
+  if (worsened) {
+    return `Not preferred because it creates more pressure in ${worsened}${improved ? ` even if it helps ${improved}` : ""}.`;
+  }
+  return "Not preferred because it produces a less stable overall outcome than the recommended response.";
+}
+
+function getRecommendedChoice(scenario, baseIndicators) {
+  return analyzeScenarioChoices(scenario, baseIndicators)[0] || null;
 }
 
 function buildStrategicReflection(choice, delta, hiddenText, scenario, indicatorBefore) {
   const summary = buildPlainSummary(delta);
-  const recommended = getRecommendedChoice(scenario, indicatorBefore);
+  const analyses = analyzeScenarioChoices(scenario, indicatorBefore);
+  const recommended = analyses[0] || null;
   const alignment = recommended?.choice?.text === choice.text
     ? "Your choice matched the recommended policy response for this scenario."
     : `A stronger policy response would have been: ${recommended?.choice?.text || "Not available"}.`;
-  return { summary, hiddenText, recommended, alignment };
+  const alternatives = analyses
+    .filter((analysis) => analysis.choice.text !== recommended?.choice?.text)
+    .map((analysis) => ({
+      text: analysis.choice.text,
+      explanation: buildAlternativeExplanation(analysis, recommended),
+    }));
+  return { summary, hiddenText, recommended, alignment, alternatives };
+}
+
+function buildHiddenEffectImpactList(hiddenDelta) {
+  const entries = Object.entries(hiddenDelta || {}).filter(([, value]) => value !== 0);
+  if (!entries.length) {
+    return "<p>No additional indicator shift was recorded for this hidden effect.</p>";
+  }
+  return `
+    <ul>
+      ${entries.map(([key, value]) => `<li>${formatEffectValue(key, value)}</li>`).join("")}
+    </ul>
+  `;
 }
 
 function renderReflection() {
@@ -381,7 +438,7 @@ function renderReflection() {
   ui.effectsPanel.hidden = state.settings.lowComplexity;
   if (!state.reflection) {
     ui.reflectionContent.innerHTML = "<p>Make a decision to generate a strategic reflection.</p>";
-    ui.effectsContent.innerHTML = "<p>Make a decision to reveal hidden downstream impacts.</p>";
+    ui.effectsContent.innerHTML = "<p>After you confirm a decision, this panel will explain the delayed downstream effect it triggered and which indicators it quietly pushed.</p>";
     return;
   }
   ui.reflectionContent.innerHTML = `
@@ -389,6 +446,14 @@ function renderReflection() {
       <p><strong>Recommended answer:</strong> ${state.reflection.recommended?.choice?.text || "Not available"}</p>
       <p><strong>Why:</strong> ${state.reflection.recommended?.rationale || "No recommendation rationale available."}</p>
       <p><strong>Comparison:</strong> ${state.reflection.alignment}</p>
+      ${state.reflection.alternatives?.length ? `
+        <div class="alternative-explanations">
+          <p><strong>Why not the other options:</strong></p>
+          <ul>
+            ${state.reflection.alternatives.map((option) => `<li><strong>${option.text}:</strong> ${option.explanation}</li>`).join("")}
+          </ul>
+        </div>
+      ` : ""}
     </div>
     <ul>
       <li>What improved: ${state.reflection.summary.improved.join(", ") || "No major improvement"}</li>
@@ -399,7 +464,12 @@ function renderReflection() {
   if (!state.settings.lowComplexity) {
     const lastEffect = state.hiddenEffects[state.hiddenEffects.length - 1];
     ui.effectsContent.innerHTML = lastEffect
-      ? `<p>${lastEffect.hiddenReveal}</p>`
+      ? `
+        <p><strong>Triggered by:</strong> ${lastEffect.choiceText}</p>
+        <p><strong>Hidden effect:</strong> ${lastEffect.hiddenReveal}</p>
+        <p><strong>Why it matters:</strong> This effect adds delayed pressure after the visible decision impact, so the consequence may appear broader than the initial choice suggested.</p>
+        ${buildHiddenEffectImpactList(lastEffect.hiddenDelta)}
+      `
       : "<p>No hidden effect recorded yet.</p>";
   }
 }
@@ -407,6 +477,7 @@ function renderReflection() {
 function renderScenario() {
   const scenario = state.scenarios[state.currentScenarioIndex];
   if (!scenario) return;
+  state.selectedChoice = null;
   state.awaitingNext = false;
   state.pendingEndResult = null;
   ui.scenarioCategory.textContent = scenario.category;
@@ -416,6 +487,8 @@ function renderScenario() {
   ui.choiceList.innerHTML = "";
   ui.roundOutcomeMessage.hidden = true;
   ui.roundOutcomeMessage.textContent = "";
+  ui.choicePreviewContent.innerHTML = "<p>Select an option to review its immediate indicator effects before you confirm your decision.</p>";
+  ui.confirmDecision.disabled = true;
   const renderedChoices = shuffleArray(scenario.choices);
   renderedChoices.forEach((choice, index) => {
     const button = document.createElement("button");
@@ -424,7 +497,7 @@ function renderScenario() {
     button.dataset.choiceText = choice.text;
     button.setAttribute("aria-describedby", "scenario-help");
     button.innerHTML = `<strong>${index + 1}. ${choice.text}</strong><small>Select this governance response.</small>`;
-    button.addEventListener("click", () => onDecision(choice, scenario));
+    button.addEventListener("click", () => selectChoice(choice));
     ui.choiceList.appendChild(button);
   });
   ui.nextQuestion.hidden = false;
@@ -573,7 +646,7 @@ function getDecisionTimeMs() {
 }
 
 function onDecision(choice, scenario) {
-  if (state.awaitingNext) return;
+  if (state.awaitingNext || !choice) return;
   const indicatorBefore = { ...state.indicators };
   const afterDirect = updateIndicators(state.indicators, choice.effects);
   const afterHidden = updateIndicators(afterDirect, choice.hiddenEffects || {});
@@ -585,7 +658,12 @@ function onDecision(choice, scenario) {
 
   state.lastIndicators = { ...state.indicators };
   state.indicators = afterDrift;
-  state.hiddenEffects.push({ hiddenReveal: choice.hiddenReveal || "No hidden effect available." });
+  state.hiddenEffects.push({
+    hiddenReveal: choice.hiddenReveal || "No hidden effect available.",
+    hiddenDelta: choice.hiddenEffects || {},
+    choiceText: choice.text,
+    scenarioTitle: scenario.title,
+  });
   state.reflection = buildStrategicReflection(choice, combinedDelta, choice.hiddenReveal || "", scenario, indicatorBefore);
 
   const decisionTimestamp = new Date().toISOString();
@@ -623,6 +701,7 @@ function onDecision(choice, scenario) {
   Array.from(ui.choiceList.querySelectorAll("button")).forEach((button) => {
     button.disabled = true;
     const buttonChoiceText = button.dataset.choiceText;
+    button.classList.remove("is-preview-selected");
     if (buttonChoiceText === recommendedText) {
       button.classList.add("is-correct");
     }
@@ -643,10 +722,12 @@ function onDecision(choice, scenario) {
       : result.reason;
     ui.nextQuestion.textContent = result.type === "failure" ? "View Failure Summary" : "View Final Summary";
     ui.nextQuestion.disabled = false;
+    ui.confirmDecision.disabled = true;
     return;
   }
   ui.nextQuestion.textContent = "Next Question";
   ui.nextQuestion.disabled = false;
+  ui.confirmDecision.disabled = true;
 }
 
 function advanceScenario() {
@@ -805,19 +886,7 @@ async function sha256(input) {
 }
 
 function syncResearchAccessUI() {
-  if (ui.toggleResearchMode) {
-    formatToggle(ui.toggleResearchMode, "Research Mode", state.settings.researchMode);
-    ui.toggleResearchMode.hidden = false;
-  }
-  if (ui.toggleAnonymizedMode) {
-    ui.toggleAnonymizedMode.hidden = false;
-  }
-  ui.researchPanel.hidden = !state.settings.researchMode;
-  ui.activateResearchMode.textContent = state.settings.researchMode ? "Deactivate Research Mode" : "Activate Research Mode";
-  ui.activateResearchMode.setAttribute(
-    "aria-label",
-    state.settings.researchMode ? "Deactivate Research Mode" : "Activate Research Mode"
-  );
+  // Research controls are not exposed in the deliverable UI.
 }
 
 function setResearchMode(enabled) {
@@ -962,19 +1031,12 @@ function bindEvents() {
     updateConsentUI();
   });
   ui.beginSimulation.addEventListener("click", beginSimulation);
+  ui.confirmDecision.addEventListener("click", () => {
+    const scenario = state.scenarios[state.currentScenarioIndex];
+    if (!scenario || !state.selectedChoice || state.awaitingNext) return;
+    onDecision(state.selectedChoice, scenario);
+  });
   ui.nextQuestion.addEventListener("click", advanceScenario);
-  ui.dashboardToggle.addEventListener("click", () => {
-    setDashboardOpen(!state.dashboardOpen);
-    if (state.dashboardOpen) {
-      ui.dashboard.querySelector("h2")?.focus?.();
-    } else {
-      ui.dashboardToggle.focus();
-    }
-  });
-  ui.dashboardBackdrop.addEventListener("click", () => {
-    setDashboardOpen(false);
-    ui.dashboardToggle.focus();
-  });
   ui.closeEndScreen.addEventListener("click", closeEndScreen);
   ui.restart.addEventListener("click", restartSimulation);
   if (ui.exportJSON) ui.exportJSON.addEventListener("click", exportResults);
@@ -988,7 +1050,6 @@ function bindEvents() {
     window.speechSynthesis.cancel();
     setSpeechState(false);
   });
-  ui.activateResearchMode.addEventListener("click", activateResearchAccess);
   document.addEventListener("keydown", (event) => {
     if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === "r") {
       event.preventDefault();
@@ -1016,11 +1077,6 @@ function bindEvents() {
       event.preventDefault();
       closeEndScreen();
     }
-    if (event.key === "Escape" && state.dashboardOpen) {
-      event.preventDefault();
-      setDashboardOpen(false);
-      ui.dashboardToggle.focus();
-    }
   });
 }
 
@@ -1031,7 +1087,6 @@ async function init() {
   applyVisualSettings();
   ui.endScreen.hidden = true;
   syncResearchAccessUI();
-  setDashboardOpen(false);
   if (ui.exportJSON) ui.exportJSON.hidden = true;
   if (ui.exportReport) ui.exportReport.hidden = true;
   if (ui.exportCaseStudy) ui.exportCaseStudy.hidden = true;
