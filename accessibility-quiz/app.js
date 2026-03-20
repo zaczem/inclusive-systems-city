@@ -4,8 +4,11 @@ var currentIndex = 0;
 var score = 0;
 var answers = [];
 var selectedDifficulty = 0;
+var selectedSession = null;
 var PREFERENCES_KEY = "accessibility_quiz_preferences_v1";
 var QUIZ_DATA_KEY = "accessibility_quiz_data_v1";
+var MASTERY_KEY = "accessibility_quiz_mastery_v1";
+var CONSENT_KEY = "accessibility_quiz_consent_v1";
 var preferences = {
   highContrast: false,
   enhancedReadability: false,
@@ -20,6 +23,11 @@ var quizData = {
   themes: {},
   finalScore: null,
 };
+
+function collapsePreferences() {
+  var menu = document.getElementById("preferences-menu");
+  if (menu) menu.removeAttribute("open");
+}
 
 function focusWithoutScroll(element) {
   if (!element || typeof element.focus !== "function") {
@@ -95,10 +103,17 @@ function getCurrentQuizSpeechText() {
   var questionData = roundQuestions[currentIndex];
   var parts = [
     "Question " + (currentIndex + 1) + " of " + roundQuestions.length + ".",
+    "Criterion: " + questionData.wcag + ".",
+    "Principle: " + questionData.principle + ".",
     "Theme: " + questionData.theme + ".",
-    questionData.question,
-    "Options:",
   ];
+
+  if (questionData.wcag_extract) {
+    parts.push("Normative text: " + questionData.wcag_extract);
+  }
+
+  parts.push(questionData.question);
+  parts.push("Options:");
 
   questionData.choices.forEach(function (choiceText, index) {
     parts.push("Option " + (index + 1) + ". " + choiceText + ".");
@@ -255,6 +270,114 @@ function getQuizData() {
       finalScore: null,
     };
   }
+}
+
+// --- Mastery tracking ---
+// Stores { "1.4.3 Contrast (Minimum)": { mastered: [12, 89], seen: [12, 45, 89] }, ... }
+function loadMastery() {
+  try {
+    var raw = window.localStorage.getItem(MASTERY_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function saveMastery(mastery) {
+  window.localStorage.setItem(MASTERY_KEY, JSON.stringify(mastery));
+}
+
+function recordMastery(questionData, isCorrect) {
+  var mastery = loadMastery();
+  var key = questionData.wcag;
+  if (!mastery[key]) {
+    mastery[key] = { mastered: [], seen: [] };
+  }
+  if (mastery[key].seen.indexOf(questionData.id) < 0) {
+    mastery[key].seen.push(questionData.id);
+  }
+  if (isCorrect && mastery[key].mastered.indexOf(questionData.id) < 0) {
+    mastery[key].mastered.push(questionData.id);
+  }
+  // If answered incorrectly, remove from mastered
+  if (!isCorrect) {
+    mastery[key].mastered = mastery[key].mastered.filter(function (id) {
+      return id !== questionData.id;
+    });
+  }
+  saveMastery(mastery);
+}
+
+function pickSmartQuestion(candidates, mastery) {
+  var key = candidates[0].wcag;
+  var entry = mastery[key] || { mastered: [], seen: [] };
+
+  // Priority 1: never seen
+  var unseen = candidates.filter(function (q) {
+    return entry.seen.indexOf(q.id) < 0;
+  });
+  if (unseen.length) {
+    return unseen[Math.floor(Math.random() * unseen.length)];
+  }
+
+  // Priority 2: seen but not mastered
+  var unmastered = candidates.filter(function (q) {
+    return entry.mastered.indexOf(q.id) < 0;
+  });
+  if (unmastered.length) {
+    return unmastered[Math.floor(Math.random() * unmastered.length)];
+  }
+
+  // All mastered — pick any
+  return candidates[Math.floor(Math.random() * candidates.length)];
+}
+
+function pickSmartPool(pool, count) {
+  var mastery = loadMastery();
+  var byCriterion = {};
+  pool.forEach(function (q) {
+    if (!byCriterion[q.wcag]) byCriterion[q.wcag] = [];
+    byCriterion[q.wcag].push(q);
+  });
+
+  // Score each criterion: lower = more needed
+  var criteriaScored = Object.keys(byCriterion).map(function (key) {
+    var entry = mastery[key] || { mastered: [], seen: [] };
+    var candidates = byCriterion[key];
+    var unseenCount = candidates.filter(function (q) {
+      return entry.seen.indexOf(q.id) < 0;
+    }).length;
+    var unmasteredCount = candidates.filter(function (q) {
+      return entry.mastered.indexOf(q.id) < 0;
+    }).length;
+    return {
+      key: key,
+      candidates: candidates,
+      score: unseenCount * 2 + unmasteredCount, // higher = more need
+    };
+  });
+
+  // Sort by most needed first, then shuffle ties
+  criteriaScored.sort(function (a, b) {
+    return b.score - a.score || (Math.random() - 0.5);
+  });
+
+  var picked = [];
+  var limit = Math.min(count, criteriaScored.length);
+  for (var i = 0; i < limit; i++) {
+    picked.push(pickSmartQuestion(criteriaScored[i].candidates, mastery));
+  }
+
+  // If we need more than criteria count, fill from remaining pool
+  if (count > picked.length) {
+    var pickedIds = picked.map(function (q) { return q.id; });
+    var remaining = shuffle(pool.filter(function (q) {
+      return pickedIds.indexOf(q.id) < 0;
+    }));
+    picked = picked.concat(remaining.slice(0, count - picked.length));
+  }
+
+  return shuffle(picked);
 }
 
 function getThemeInsight(theme) {
@@ -434,54 +557,35 @@ function renderAnswerFeedback(questionData, chosen, isCorrect) {
   var explanationElement = document.getElementById("explanation");
   explanationElement.innerHTML = "";
 
-  var lead = document.createElement("div");
-  lead.className = "feedback-lead";
-  lead.textContent = isCorrect
-    ? "Correct. " + questionData.explanation
-    : "Not quite. The best answer is: " + questionData.choices[questionData.correct] + ".";
-  explanationElement.appendChild(lead);
+  var divider = document.createElement("div");
+  divider.className = "feedback-divider";
+  var dividerIcon = document.createElement("span");
+  dividerIcon.className = "feedback-divider-icon " + (isCorrect ? "feedback-correct" : "feedback-incorrect");
+  dividerIcon.textContent = isCorrect ? "Correct" : "Incorrect";
+  divider.appendChild(dividerIcon);
+  var dividerLine = document.createElement("span");
+  dividerLine.className = "feedback-divider-line";
+  divider.appendChild(dividerLine);
+  explanationElement.appendChild(divider);
 
-  var whyCorrect = document.createElement("div");
-  whyCorrect.className = "feedback-block";
-  whyCorrect.innerHTML = "<strong>Why this is the main issue</strong><p>" + questionData.explanation + "</p>";
-  explanationElement.appendChild(whyCorrect);
+  var explanationBlock = document.createElement("div");
+  explanationBlock.className = "feedback-section";
+  var explanationText = document.createElement("p");
+  explanationText.textContent = questionData.explanation;
+  explanationBlock.appendChild(explanationText);
+  explanationElement.appendChild(explanationBlock);
 
-  var learningObjective = document.createElement("div");
-  learningObjective.className = "learning-objective";
-  learningObjective.textContent = "Learning objective: " + questionData.learning_objective;
-  explanationElement.appendChild(learningObjective);
+  var objectiveBlock = document.createElement("div");
+  objectiveBlock.className = "feedback-section feedback-objective";
+  var objectiveTitle = document.createElement("div");
+  objectiveTitle.className = "feedback-section-title";
+  objectiveTitle.textContent = "What you\u2019ve learned";
+  objectiveBlock.appendChild(objectiveTitle);
+  var objectiveText = document.createElement("p");
+  objectiveText.textContent = questionData.learning_objective;
+  objectiveBlock.appendChild(objectiveText);
+  explanationElement.appendChild(objectiveBlock);
 
-  var whyOthers = document.createElement("div");
-  whyOthers.className = "feedback-block";
-  var whyOthersTitle = document.createElement("strong");
-  whyOthersTitle.textContent = "Why the other options are not the main issue";
-  whyOthers.appendChild(whyOthersTitle);
-  var list = document.createElement("ul");
-  list.className = "feedback-list";
-
-  questionData.choices.forEach(function (choiceText, index) {
-    if (index === questionData.correct) {
-      return;
-    }
-    var item = document.createElement("li");
-    var prefix = index === chosen && !isCorrect ? "Your choice. " : "";
-    item.innerHTML = "<strong>" + choiceText + ":</strong> " + prefix + getChoiceNote(choiceText, questionData.choices[questionData.correct]);
-    list.appendChild(item);
-  });
-
-  whyOthers.appendChild(list);
-  explanationElement.appendChild(whyOthers);
-
-  var sourceDetails = getSourceDetails(questionData);
-  var basedOn = document.createElement("div");
-  basedOn.className = "feedback-block feedback-basis";
-  basedOn.innerHTML =
-    "<strong>What this answer is based on</strong>" +
-    "<p><strong>Principle:</strong> " + questionData.principle + ".</p>" +
-    "<p><strong>Standard:</strong> " + sourceDetails.standard + "</p>" +
-    "<p><strong>Supporting explanation:</strong> " + sourceDetails.explainer + "</p>" +
-    "<p><strong>How it was simplified for this quiz:</strong> " + sourceDetails.quizNote + "</p>";
-  explanationElement.appendChild(basedOn);
   explanationElement.classList.remove("hidden");
 }
 
@@ -508,6 +612,7 @@ function startPracticeWeakAreas() {
   document.getElementById("start-screen").classList.add("hidden");
   document.getElementById("results-screen").classList.add("hidden");
   document.getElementById("quiz-screen").classList.remove("hidden");
+  document.getElementById("quit-btn").classList.remove("hidden");
 
   renderQuestion();
   announceStatus("Practice round started for weaker themes.");
@@ -536,11 +641,7 @@ function prepareQuestionForRound(question) {
       isCorrect: index === question.correct,
     };
   });
-  var distractors = choices.filter(function (choice) {
-    return !choice.isCorrect;
-  });
-  var selectedDistractor = distractors[Math.floor(Math.random() * distractors.length)];
-  var shuffledChoices = shuffle(selectedDistractor ? [choices[question.correct], selectedDistractor] : choices.slice(0, 2));
+  var shuffledChoices = shuffle(choices);
   return {
     id: question.id,
     level: question.level,
@@ -548,6 +649,8 @@ function prepareQuestionForRound(question) {
     theme: question.theme,
     principle: question.principle,
     wcag: question.wcag,
+    wcag_url: question.wcag_url,
+    wcag_extract: question.wcag_extract,
     question: question.question,
     explanation: question.explanation,
     learning_objective: question.learning_objective,
@@ -561,30 +664,92 @@ function prepareQuestionForRound(question) {
 }
 
 function updateDifficultyCounts() {
+  var mastery = loadMastery();
   [1, 2, 3].forEach(function (difficulty) {
-    var count = allQuestions.filter(function (question) {
+    var pool = allQuestions.filter(function (question) {
       return question.difficulty === difficulty;
-    }).length;
+    });
+    var total = pool.length;
+    var masteredCount = 0;
+    pool.forEach(function (q) {
+      var entry = mastery[q.wcag];
+      if (entry && entry.mastered.indexOf(q.id) >= 0) {
+        masteredCount++;
+      }
+    });
     var element = document.getElementById("count-" + difficulty);
     if (element) {
-      element.textContent = count + " questions";
+      element.textContent = masteredCount + " / " + total + " mastered";
     }
   });
 }
 
 function selectDifficulty(diff) {
   selectedDifficulty = diff;
-  document.querySelectorAll(".diff-btn").forEach(function (button) {
-    button.classList.toggle("selected", Number(button.dataset.difficulty) === diff);
+  selectedSession = null;
+  document.querySelectorAll(".session-btn").forEach(function (button) {
+    button.classList.remove("selected");
+    button.disabled = false;
   });
-  var startButton = document.getElementById("start-btn");
-  startButton.disabled = false;
-  startButton.textContent = "Start Quiz";
-  announceStatus("Difficulty " + diff + " selected.");
+  updateDifficultyMastery();
+  announceStatus("Difficulty " + diff + " selected. Now choose session length.");
+}
+
+function updateDifficultyMastery() {
+  var el = document.getElementById("difficulty-mastery");
+  if (!selectedDifficulty || !allQuestions.length) {
+    el.textContent = "";
+    return;
+  }
+  var mastery = loadMastery();
+  var pool = allQuestions.filter(function (q) { return q.difficulty === selectedDifficulty; });
+  var masteredCount = 0;
+  pool.forEach(function (q) {
+    var entry = mastery[q.wcag];
+    if (entry && entry.mastered.indexOf(q.id) >= 0) masteredCount++;
+  });
+  el.textContent = masteredCount + " / " + pool.length + " questions mastered";
+}
+
+function selectSession(session) {
+  selectedSession = session;
+  document.querySelectorAll(".session-btn").forEach(function (button) {
+    button.classList.toggle("selected", button.dataset.session === String(session));
+  });
+  announceStatus("Starting session.");
+  if (!allQuestions.length) {
+    loadQuestions().then(function () {
+      updateDifficultyMastery();
+      startQuiz();
+    });
+  } else {
+    startQuiz();
+  }
+}
+
+function pickFullCoverage(pool) {
+  var mastery = loadMastery();
+  var byCriterion = {};
+  pool.forEach(function (question) {
+    var key = question.wcag;
+    if (!byCriterion[key]) {
+      byCriterion[key] = [];
+    }
+    byCriterion[key].push(question);
+  });
+  var picked = [];
+  Object.keys(byCriterion).forEach(function (key) {
+    picked.push(pickSmartQuestion(byCriterion[key], mastery));
+  });
+  return shuffle(picked);
 }
 
 function startQuiz() {
-  if (!selectedDifficulty) {
+  collapsePreferences();
+  if (!selectedSession) {
+    return;
+  }
+  if (selectedSession !== "full" && !selectedDifficulty) {
     return;
   }
 
@@ -594,9 +759,17 @@ function startQuiz() {
   var pool = allQuestions.filter(function (question) {
     return question.difficulty === selectedDifficulty;
   });
-  var count = Math.min(10, pool.length);
 
-  roundQuestions = shuffle(pool).slice(0, count).map(prepareQuestionForRound);
+  var selected;
+  if (selectedSession === "full") {
+    // Full Coverage uses ALL questions regardless of difficulty
+    selected = pickFullCoverage(allQuestions);
+  } else {
+    var count = Math.min(Number(selectedSession), pool.length);
+    selected = pickSmartPool(pool, count);
+  }
+
+  roundQuestions = selected.map(prepareQuestionForRound);
   currentIndex = 0;
   score = 0;
   answers = [];
@@ -604,6 +777,7 @@ function startQuiz() {
   document.getElementById("start-screen").classList.add("hidden");
   document.getElementById("results-screen").classList.add("hidden");
   document.getElementById("quiz-screen").classList.remove("hidden");
+  document.getElementById("quit-btn").classList.remove("hidden");
 
   renderQuestion();
   announceStatus("Simulator started with " + count + " questions.");
@@ -613,7 +787,7 @@ function renderQuestion() {
   var questionData = roundQuestions[currentIndex];
   var total = roundQuestions.length;
   document.getElementById("question-counter").textContent = "Question " + (currentIndex + 1) + " of " + total;
-  document.getElementById("score-bar").textContent = "Score " + score;
+  document.getElementById("score-bar").textContent = "Correct: " + score;
 
   var progressElement = document.getElementById("progress");
   progressElement.innerHTML = "";
@@ -628,18 +802,19 @@ function renderQuestion() {
     progressElement.appendChild(dot);
   }
 
-  var metaTagsElement = document.getElementById("meta-tags");
-  metaTagsElement.innerHTML = "";
-  [
-    ["tag-theme", questionData.theme],
-    ["tag-principle", questionData.principle],
-    ["tag-wcag", questionData.wcag],
-  ].forEach(function (metaEntry) {
-    var tag = document.createElement("span");
-    tag.className = "tag " + metaEntry[0];
-    tag.textContent = metaEntry[1];
-    metaTagsElement.appendChild(tag);
-  });
+  var wcagRef = document.getElementById("wcag-reference");
+  var wcagBody = document.getElementById("wcag-reference-body");
+  wcagRef.removeAttribute("open");
+  var wcagLink = questionData.wcag_url
+    ? '<a href="' + questionData.wcag_url + '" target="_blank" rel="noopener">' + questionData.wcag + '</a>'
+    : questionData.wcag;
+  wcagBody.innerHTML =
+    '<div class="wcag-ref-row"><span class="wcag-ref-label">Principle</span> ' + questionData.principle + '</div>' +
+    '<div class="wcag-ref-row"><span class="wcag-ref-label">Criterion</span> ' + wcagLink + '</div>' +
+    '<div class="wcag-ref-row"><span class="wcag-ref-label">Theme</span> ' + questionData.theme + '</div>' +
+    (questionData.wcag_extract
+      ? '<div class="wcag-ref-extract">' + questionData.wcag_extract + '</div>'
+      : '');
 
   var questionElement = document.getElementById("question");
   questionElement.textContent = questionData.question;
@@ -659,6 +834,8 @@ function renderQuestion() {
 
   document.getElementById("explanation").classList.add("hidden");
   document.getElementById("next-btn").classList.add("hidden");
+  isReading = false;
+  updateReadButton();
   focusWithoutScroll(questionElement);
 }
 
@@ -673,6 +850,7 @@ function selectAnswer(chosen) {
 
   answers.push({ correct: isCorrect, theme: questionData.theme });
   updateQuizDataForAnswer(questionData, chosen, isCorrect);
+  recordMastery(questionData, isCorrect);
 
   document.querySelectorAll(".choice-btn").forEach(function (button, index) {
     button.disabled = true;
@@ -699,15 +877,17 @@ function selectAnswer(chosen) {
     dots[currentIndex].className = "progress-dot " + (isCorrect ? "correct" : "wrong");
   }
 
-  document.getElementById("score-bar").textContent = "Score " + score;
+  document.getElementById("score-bar").textContent = "Correct: " + score;
   announceStatus(isCorrect ? "Correct answer selected." : "Incorrect answer selected.");
 }
 
 function showResults() {
+  collapsePreferences();
   stopSpeech();
   finalizeQuizData();
   document.getElementById("quiz-screen").classList.add("hidden");
   document.getElementById("results-screen").classList.remove("hidden");
+  document.getElementById("quit-btn").classList.add("hidden");
 
   var total = roundQuestions.length;
   var themeStats = {};
@@ -748,65 +928,24 @@ function showResults() {
   };
 
   var html =
-    "<h2>Simulation Complete</h2>" +
+    '<div class="results-header">' +
     '<div class="big-score ' + scoreClass + '">' + score + ' <span class="total">/ ' + total + "</span></div>" +
     '<p class="results-message">' + learningMessage + "</p>" +
-    '<div class="themes-section"><h3>Performance by Theme</h3>';
+    "</div>";
 
+  html += '<div class="themes-section"><h3>By Theme</h3>';
   themeEntries.forEach(function (entry) {
-      var theme = entry[0];
-      var stats = entry[1];
-      var themePct = Math.round((stats.correct / stats.total) * 100);
-      var themeClass = themePct === 100 ? "good" : themePct >= 50 ? "needs-work" : "bad";
-      html +=
-        '<div class="theme-item"><span>' + theme + '</span><span class="theme-score ' + themeClass + '">' +
-        stats.correct + "/" + stats.total + "</span></div>";
-    });
-
+    var theme = entry[0];
+    var stats = entry[1];
+    var themePct = Math.round((stats.correct / stats.total) * 100);
+    var themeClass = themePct === 100 ? "good" : themePct >= 50 ? "needs-work" : "bad";
+    html +=
+      '<div class="theme-item"><span>' + theme + '</span><span class="theme-score ' + themeClass + '">' +
+      stats.correct + "/" + stats.total + "</span></div>";
+  });
   html += "</div>";
 
-  html += '<div class="results-insight"><h3>Your main pattern</h3><p>' + getPatternMessage(themeEntries) + "</p></div>";
-
-  if (strengths.length > 0) {
-    html += '<div class="results-insight"><h3>You performed well in</h3><p>' +
-      strengths.map(function (entry) { return entry[0]; }).join(", ") +
-      "</p></div>";
-    html += '<div class="results-insight"><h3>What you did well</h3><ul class="results-list">';
-    strengths.forEach(function (entry) {
-      html += "<li><strong>" + entry[0] + ":</strong> " + getThemeInsight(entry[0]).meaning + "</li>";
-    });
-    html += "</ul></div>";
-  }
-
-  if (needsPractice.length > 0) {
-    html += '<div class="results-insight"><h3>You struggled with</h3><p>' +
-      needsPractice.slice(0, 2).map(function (entry) { return entry[0]; }).join(", ") +
-      "</p></div>";
-    html += '<div class="results-insight"><h3>What to review</h3><ul class="results-list">';
-    needsPractice.forEach(function (entry) {
-      var insight = getThemeInsight(entry[0]);
-      html += "<li><strong>" + entry[0] + ":</strong> " + insight.meaning + "</li>";
-    });
-    html += "</ul></div>";
-
-    html += '<div class="results-insight"><h3>Questions to remember next time</h3><ul class="results-list">';
-    needsPractice.forEach(function (entry) {
-      html += "<li>" + getThemeInsight(entry[0]).question + "</li>";
-    });
-    html += "</ul></div>";
-
-    html += '<div class="practice-note">Focus on: ' +
-      needsPractice.map(function (entry) { return entry[0]; }).join(", ") +
-      "</div>";
-  }
-
   html += '<div class="results-actions">';
-  if (speechSupported) {
-    html += '<div class="audio-controls" role="group" aria-label="Results speech controls">';
-    html += '<button class="secondary-btn compact-btn" id="read-results-btn" type="button">Read Results</button>';
-    html += '<button class="secondary-btn compact-btn" id="stop-results-btn" type="button">Stop</button>';
-    html += "</div>";
-  }
   if (needsPractice.length > 0) {
     html += '<button class="secondary-btn" id="practice-weak-btn" type="button">Practice Weak Areas</button>';
   }
@@ -815,12 +954,7 @@ function showResults() {
 
   document.getElementById("results").innerHTML = html;
   document.getElementById("play-again-btn").addEventListener("click", showStartScreen);
-  if (speechSupported) {
-    document.getElementById("read-results-btn").addEventListener("click", function () {
-      speakText(getResultsSpeechText());
-    });
-    document.getElementById("stop-results-btn").addEventListener("click", stopSpeech);
-  }
+  document.getElementById("read-results-btn").classList.remove("hidden");
   var practiceWeakButton = document.getElementById("practice-weak-btn");
   if (practiceWeakButton) {
     practiceWeakButton.addEventListener("click", startPracticeWeakAreas);
@@ -829,34 +963,79 @@ function showResults() {
 }
 
 function showStartScreen() {
+  collapsePreferences();
   stopSpeech();
   roundQuestions = [];
   currentIndex = 0;
   score = 0;
   answers = [];
   resultSummary = null;
+  selectedSession = null;
+  selectedDifficulty = 0;
+  document.getElementById("difficulty-select").value = "0";
+  document.getElementById("difficulty-mastery").textContent = "";
+  document.querySelectorAll(".session-btn").forEach(function (button) {
+    button.classList.remove("selected");
+    button.disabled = button.dataset.session !== "full";
+  });
   document.getElementById("results-screen").classList.add("hidden");
   document.getElementById("quiz-screen").classList.add("hidden");
   document.getElementById("start-screen").classList.remove("hidden");
   document.getElementById("explanation").classList.add("hidden");
   document.getElementById("next-btn").classList.add("hidden");
-  updateDifficultyCounts();
+  document.getElementById("quit-btn").classList.add("hidden");
+  document.getElementById("read-results-btn").classList.add("hidden");
+  document.getElementById("read-results-btn").textContent = "Read Aloud";
   announceStatus("Returned to start screen.");
 }
 
-document.getElementById("difficulty-selector").addEventListener("click", function (event) {
-  var button = event.target.closest(".diff-btn");
-  if (button) {
-    selectDifficulty(Number(button.dataset.difficulty));
+var isReadingStart = false;
+
+document.getElementById("read-start-btn").addEventListener("click", function () {
+  if (isReadingStart) {
+    stopSpeech();
+    isReadingStart = false;
+    document.getElementById("read-start-btn").textContent = "Read Aloud";
+  } else {
+    var text = "WCAG Practice. Build your understanding of WCAG 2.2 through realistic scenarios. " +
+      "Each question presents a situation where similar-sounding criteria must be distinguished. " +
+      "Wrong answers teach as much as right ones. " +
+      "Choose a difficulty level and session length to begin, or select Full Coverage to practice all criteria across all levels.";
+    speakText(text);
+    isReadingStart = true;
+    document.getElementById("read-start-btn").textContent = "Stop Reading";
   }
 });
 
-document.getElementById("start-btn").addEventListener("click", async function () {
-  if (!allQuestions.length) {
-    await loadQuestions();
+var isReadingResults = false;
+document.getElementById("read-results-btn").addEventListener("click", function () {
+  if (isReadingResults) {
+    stopSpeech();
+    isReadingResults = false;
+    this.textContent = "Read Aloud";
+  } else {
+    speakText(getResultsSpeechText());
+    isReadingResults = true;
+    this.textContent = "Stop Reading";
   }
-  updateDifficultyCounts();
-  startQuiz();
+});
+
+document.getElementById("difficulty-select").addEventListener("change", function (event) {
+  selectDifficulty(Number(event.target.value));
+});
+
+document.getElementById("session-selector").addEventListener("click", function (event) {
+  var button = event.target.closest(".session-btn");
+  if (button && !button.disabled) {
+    selectSession(button.dataset.session);
+  }
+});
+
+document.getElementById("session-selector-full").addEventListener("click", function (event) {
+  var button = event.target.closest(".session-btn");
+  if (button) {
+    selectSession(button.dataset.session);
+  }
 });
 
 document.getElementById("next-btn").addEventListener("click", function () {
@@ -872,20 +1051,83 @@ document.getElementById("quit-btn").addEventListener("click", function () {
   showStartScreen();
 });
 
+var isReading = false;
+
+function updateReadButton() {
+  var btn = document.getElementById("read-screen-btn");
+  if (isReading) {
+    btn.textContent = "Stop Reading";
+    btn.setAttribute("aria-label", "Stop reading");
+  } else {
+    btn.textContent = "Read Aloud";
+    btn.setAttribute("aria-label", "Read question aloud");
+  }
+}
+
 document.getElementById("read-screen-btn").addEventListener("click", function () {
-  speakText(getCurrentQuizSpeechText());
+  if (isReading) {
+    stopSpeech();
+    isReading = false;
+  } else {
+    speakText(getCurrentQuizSpeechText());
+    isReading = true;
+  }
+  updateReadButton();
 });
 
-document.getElementById("stop-reading-btn").addEventListener("click", stopSpeech);
+function hasConsent() {
+  try {
+    return window.localStorage.getItem(CONSENT_KEY) === "1";
+  } catch (e) {
+    return false;
+  }
+}
 
-loadQuestions()
-  .then(updateDifficultyCounts)
-  .catch(function () {
-    announceStatus("Unable to load simulator questions.");
-    var startButton = document.getElementById("start-btn");
-    startButton.textContent = "Questions failed to load";
-    startButton.disabled = true;
-  });
+function grantConsent() {
+  window.localStorage.setItem(CONSENT_KEY, "1");
+}
+
+function initApp() {
+  document.getElementById("consent-screen").classList.add("hidden");
+  document.getElementById("top-controls").classList.remove("hidden");
+  document.getElementById("start-screen").classList.remove("hidden");
+
+  loadPreferences();
+  applyPreferences();
+  initSpeech();
+
+  if (!speechSupported) {
+    document.getElementById("read-screen-btn").disabled = true;
+  }
+
+  loadQuestions()
+    .then(function () {})
+    .catch(function () {
+      announceStatus("Unable to load questions.");
+      var startButton = document.getElementById("start-btn");
+      startButton.textContent = "Questions failed to load";
+      startButton.disabled = true;
+    });
+}
+
+var isReadingConsent = false;
+
+document.getElementById("read-consent-btn").addEventListener("click", function () {
+  if (isReadingConsent) {
+    stopSpeech();
+    isReadingConsent = false;
+    document.getElementById("read-consent-btn").textContent = "Read Aloud";
+  } else {
+    speakText("WCAG Practice. Build your understanding of WCAG 2.2 through realistic scenarios. This app uses your browser's local storage to save your progress, preferences, and mastery data. No data is sent to any server — everything stays on your device. Press Accept and Continue to start.");
+    isReadingConsent = true;
+    document.getElementById("read-consent-btn").textContent = "Stop Reading";
+  }
+});
+
+document.getElementById("consent-btn").addEventListener("click", function () {
+  grantConsent();
+  initApp();
+});
 
 document.getElementById("toggle-high-contrast").addEventListener("click", function () {
   updatePreference("highContrast", !preferences.highContrast);
@@ -899,13 +1141,22 @@ document.getElementById("font-scale").addEventListener("input", function (event)
   updatePreference("fontScale", Number(event.target.value));
 });
 
-loadPreferences();
-applyPreferences();
-initSpeech();
+// Reset UI state on load (prevents stale browser form restoration)
+function resetStartScreenState() {
+  document.getElementById("difficulty-select").value = "0";
+  document.getElementById("difficulty-mastery").textContent = "";
+  document.querySelectorAll(".session-btn").forEach(function (button) {
+    button.classList.remove("selected");
+    button.disabled = button.dataset.session !== "full";
+  });
+  selectedDifficulty = 0;
+  selectedSession = null;
+}
 
-if (!speechSupported) {
-  document.getElementById("read-screen-btn").disabled = true;
-  document.getElementById("stop-reading-btn").disabled = true;
+// Boot: skip consent if already accepted
+if (hasConsent()) {
+  initApp();
+  resetStartScreenState();
 }
 
 window.getQuizData = getQuizData;

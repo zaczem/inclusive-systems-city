@@ -3,18 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Accessibility Decision Simulator</title>
+  <title>WCAG Practice</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to simulator</a>
 
   <main class="container" id="main-content">
-    <div class="top-controls">
-      <details class="preferences-menu">
+    <div class="card consent-screen" id="consent-screen">
+      <div class="start-header">
+        <h1>WCAG Practice</h1>
+        <button class="toolbar-btn" id="read-consent-btn" type="button" aria-label="Read screen aloud">Read Aloud</button>
+      </div>
+      <p class="consent-intro">Build your understanding of WCAG 2.2 through realistic scenarios.</p>
+      <div class="consent-body">
+        <p>This app uses your browser's local storage to save your progress, preferences, and mastery data. No data is sent to any server — everything stays on your device.</p>
+      </div>
+      <button class="start-btn" id="consent-btn" type="button">Accept &amp; Continue</button>
+    </div>
+
+    <div class="top-controls hidden" id="top-controls">
+      <details class="preferences-menu" id="preferences-menu">
         <summary aria-label="Interaction preferences">Interaction Preferences</summary>
         <div class="preferences-panel" aria-label="Quiz interaction preferences">
-          <button id="toggle-high-contrast" type="button" aria-pressed="false">High Contrast Theme: Off</button>
+          <div class="preferences-row">
+            <button id="toggle-high-contrast" type="button" aria-pressed="false">High Contrast: Off</button>
+            <button id="toggle-enhanced-readability" type="button" aria-pressed="false">Readability: Off</button>
+          </div>
           <label class="preferences-slider" for="font-scale">
             <span>Font scale</span>
             <div class="slider-row">
@@ -22,53 +37,65 @@
               <output id="font-scale-value" for="font-scale">100%</output>
             </div>
           </label>
-          <button id="toggle-enhanced-readability" type="button" aria-pressed="false">Enhanced Readability Mode: Off</button>
         </div>
       </details>
+      <button class="toolbar-btn hidden" id="read-results-btn" type="button" aria-label="Read results aloud">Read Aloud</button>
+      <button class="quit-btn hidden" id="quit-btn" type="button">Quit</button>
     </div>
 
-    <div class="card start-screen" id="start-screen">
-      <h1>Accessibility Decision Simulator</h1>
-      <p class="start-intro">You are part of a design review team before a product is released.</p>
+    <div class="card start-screen hidden" id="start-screen">
+      <div class="start-header">
+        <h1>WCAG Practice</h1>
+        <button class="toolbar-btn" id="read-start-btn" type="button" aria-label="Read screen aloud">Read Aloud</button>
+      </div>
+      <p class="start-intro">Build your understanding of <a href="https://www.w3.org/TR/WCAG22/" target="_blank" rel="noopener">WCAG 2.2</a> through realistic scenarios.</p>
       <div class="story-panel">
-        <p>Your task is to identify accessibility issues that may block real users.</p>
-        <p>Each scenario reflects real-world problems based on WCAG and inclusive design principles.</p>
-        <p>Your goal is not just to find issues, but to understand their impact.</p>
+        <p>Each question presents a situation where similar-sounding criteria must be distinguished. Wrong answers teach as much as right ones.</p>
       </div>
-      <div class="difficulty-selector" id="difficulty-selector" role="group" aria-label="Select difficulty">
-        <button class="diff-btn" data-difficulty="1" type="button">
-          <span class="diff-label">Beginner</span>
-          <span class="diff-desc">Fundamentals</span>
-          <span class="diff-count" id="count-1"></span>
+      <div class="difficulty-picker">
+        <label class="difficulty-label" for="difficulty-select">Choose difficulty for Quick or Standard mode</label>
+        <div class="difficulty-row">
+          <select class="difficulty-select" id="difficulty-select">
+            <option value="0" disabled selected>Choose level</option>
+            <option value="1">Beginner — Fundamentals</option>
+            <option value="2">Intermediate — Applied knowledge</option>
+            <option value="3">Advanced — Expert scenarios</option>
+          </select>
+          <span class="difficulty-mastery" id="difficulty-mastery"></span>
+        </div>
+      </div>
+      <div class="session-selector" id="session-selector" role="group" aria-label="Select session length">
+        <button class="session-btn" data-session="10" type="button" disabled>
+          <span class="session-label">Quick</span>
+          <span class="session-desc">10 questions</span>
         </button>
-        <button class="diff-btn" data-difficulty="2" type="button">
-          <span class="diff-label">Intermediate</span>
-          <span class="diff-desc">Applied knowledge</span>
-          <span class="diff-count" id="count-2"></span>
-        </button>
-        <button class="diff-btn" data-difficulty="3" type="button">
-          <span class="diff-label">Advanced</span>
-          <span class="diff-desc">Expert scenarios</span>
-          <span class="diff-count" id="count-3"></span>
+        <button class="session-btn" data-session="25" type="button" disabled>
+          <span class="session-label">Standard</span>
+          <span class="session-desc">25 questions</span>
         </button>
       </div>
-      <button class="start-btn" id="start-btn" type="button" disabled>Select a difficulty to start</button>
+      <div class="or-divider"><span>or</span></div>
+      <div class="session-selector" id="session-selector-full" role="group" aria-label="Full coverage">
+        <button class="session-btn session-btn-full" data-session="full" type="button">
+          <span class="session-label">Full Coverage</span>
+          <span class="session-desc">All criteria, all levels</span>
+        </button>
+      </div>
     </div>
 
     <div class="card hidden" id="quiz-screen">
       <div class="quiz-nav">
-        <div class="quiz-nav-main">
+        <div class="quiz-nav-left">
           <div class="question-counter" id="question-counter"></div>
-          <div class="score-bar" id="score-bar"></div>
+          <button class="toolbar-btn" id="read-screen-btn" type="button" aria-label="Read question aloud">Read Aloud</button>
         </div>
-        <button class="quit-btn" id="quit-btn" type="button">Quit</button>
+        <div class="score-bar" id="score-bar"></div>
       </div>
       <div class="progress" id="progress" aria-hidden="true"></div>
-      <div class="meta-tags" id="meta-tags"></div>
-      <div class="audio-controls" role="group" aria-label="Speech controls">
-        <button class="secondary-btn compact-btn" id="read-screen-btn" type="button">Read</button>
-        <button class="secondary-btn compact-btn" id="stop-reading-btn" type="button">Stop</button>
-      </div>
+      <details class="wcag-reference" id="wcag-reference">
+        <summary>Study Material</summary>
+        <div class="wcag-reference-body" id="wcag-reference-body"></div>
+      </details>
       <div class="question" id="question" tabindex="-1"></div>
       <div class="choices" id="choices"></div>
       <div class="explanation-box hidden" id="explanation" aria-live="polite"></div>
@@ -80,6 +107,12 @@
     </div>
 
     <div class="status-region" id="status-region" aria-live="polite" aria-atomic="true"></div>
+
+    <footer class="site-footer" aria-hidden="true">
+      <span>Designed by Zacharoula Zempili</span>
+      <span>PhD Researcher, KTH Royal Institute of Technology</span>
+      <span>v1.0</span>
+    </footer>
   </main>
 
   <script src="app.js"></script>
